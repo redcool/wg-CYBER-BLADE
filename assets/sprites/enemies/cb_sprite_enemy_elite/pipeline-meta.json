@@ -1,0 +1,175 @@
+{
+  "target": "creature",
+  "mode": "idle",
+  "prompt": "",
+  "role": "",
+  "input": "H:\\ai_works\\buffPrj1\\assets\\sprites\\enemies\\cb_sprite_enemy_elite_00001_.png",
+  "threshold": 90,
+  "edge_threshold": 130,
+  "duration": 300,
+  "rows": 2,
+  "cols": 2,
+  "cell_size": 128,
+  "fit_scale": 0.85,
+  "trim_border": 4,
+  "edge_clean_depth": 3,
+  "align": "center",
+  "shared_scale": true,
+  "component_mode": "largest",
+  "component_padding": 0,
+  "min_component_area": 1,
+  "edge_touch_margin": 0,
+  "frame_labels": [
+    "idle-1",
+    "idle-2",
+    "idle-3",
+    "idle-4"
+  ],
+  "frames": [
+    {
+      "grid": [
+        0,
+        0
+      ],
+      "source_box": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 62895,
+      "selected_component_bbox": [
+        49,
+        30,
+        463,
+        476
+      ],
+      "crop_bbox": [
+        49,
+        30,
+        463,
+        476
+      ],
+      "edge_touch": false,
+      "output_size": [
+        95,
+        102
+      ],
+      "paste_position": [
+        16,
+        13
+      ]
+    },
+    {
+      "grid": [
+        0,
+        1
+      ],
+      "source_box": [
+        512,
+        0,
+        1024,
+        512
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 106457,
+      "selected_component_bbox": [
+        14,
+        43,
+        488,
+        470
+      ],
+      "crop_bbox": [
+        14,
+        43,
+        488,
+        470
+      ],
+      "edge_touch": false,
+      "output_size": [
+        108,
+        98
+      ],
+      "paste_position": [
+        10,
+        15
+      ]
+    },
+    {
+      "grid": [
+        1,
+        0
+      ],
+      "source_box": [
+        0,
+        512,
+        512,
+        1024
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 73687,
+      "selected_component_bbox": [
+        35,
+        33,
+        476,
+        472
+      ],
+      "crop_bbox": [
+        35,
+        33,
+        476,
+        472
+      ],
+      "edge_touch": false,
+      "output_size": [
+        101,
+        100
+      ],
+      "paste_position": [
+        13,
+        14
+      ]
+    },
+    {
+      "grid": [
+        1,
+        1
+      ],
+      "source_box": [
+        512,
+        512,
+        1024,
+        1024
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 92151,
+      "selected_component_bbox": [
+        35,
+        38,
+        473,
+        468
+      ],
+      "crop_bbox": [
+        35,
+        38,
+        473,
+        468
+      ],
+      "edge_touch": false,
+      "output_size": [
+        100,
+        98
+      ],
+      "paste_position": [
+        14,
+        15
+      ]
+    }
+  ],
+  "edge_touch_frames": []
+}

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>CYBER BLADE - 赛博土豆</title>
+    <link rel="stylesheet" href="style.css?v=5.1">
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- 开始菜单 + 角色选择 -->
+    <div id="menuOverlay" class="overlay">
+        <div class="menu-content">
+            <h1 class="game-title">CYBER BLADE</h1>
+            <p class="subtitle">赛博土豆 · 无限构筑</p>
+
+            <div id="charSelectOverlay" class="char-select-section">
+                <h3 class="section-title">选择角色</h3>
+                <div id="charList" class="char-list"></div>
+            </div>
+
+            <button id="startBtn" class="cyber-btn">开始挑战</button>
+            <div class="controls-hint">
+                <p><span class="key">WASD</span> 移动 · <span class="key">↔</span> 自动攻击</p>
+                <p>杀敌拾金 → 商店购买武器道具 → 无限挑战</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 武器选择（选择角色后出发前） -->
+    <div id="weaponSelectOverlay" class="overlay hidden">
+        <div class="menu-content weapon-select-content">
+            <h1 class="weapon-select-title">🗡️ 选择初始武器</h1>
+            <p class="subtitle" id="weaponSelectHint">选择一个基础武器开始挑战</p>
+            <div id="weaponSelectGrid" class="weapon-select-grid"></div>
+            <button id="weaponSelectSkip" class="cyber-btn-secondary">基础手枪 · 跳过</button>
+        </div>
+    </div>
+
+    <!-- 游戏结束 -->
+    <div id="gameOverOverlay" class="overlay hidden">
+        <div class="menu-content gameover-content">
+            <h1 class="game-over-title">💀 系统崩溃</h1>
+            <p class="wave-reached">阵亡于第 <span id="finalLevel">0</span> 关</p>
+            <div class="final-stats gameover-scroll">
+                <p>角色: <span id="finalChar">赛博游侠</span></p>
+                <p>击杀数: <span id="finalKills">0</span></p>
+                <p>收集材料: <span id="finalMaterials">0</span></p>
+                <div class="final-weapons-section">
+                    <p class="section-label">本局武器</p>
+                    <div id="finalWeapons" class="final-weapons"></div>
+                </div>
+                <div id="newUnlockSection" class="new-unlock-section hidden">
+                    <p class="section-label">🔓 新解锁!</p>
+                    <div id="newUnlocks" class="new-unlocks"></div>
+                </div>
+            </div>
+            <button id="restartBtn" class="cyber-btn">再来一局</button>
+        </div>
+    </div>
+
+    <!-- ==================== 商店（Brotato 风格布局） ==================== -->
+    <div id="shopOverlay" class="overlay hidden">
+        <div class="shop-content">
+            <!-- 顶栏：角色 + 关卡 + 金币 -->
+            <div class="shop-topbar">
+                <span class="shop-char" id="shopCharInfo">🤖 赛博游侠</span>
+                <span class="shop-title">🛒 黑市交易 <span class="shop-wave">第 <span id="shopLevel">1</span> 关</span></span>
+                <span class="shop-mats">🪙 <span id="shopMaterials">0</span></span>
+            </div>
+
+            <!-- 装备武器条（最多6格） -->
+            <div class="shop-weapon-strip">
+                <span class="strip-label">装备武器</span>
+                <div id="equippedWeapons" class="equipped-weapons-row"></div>
+            </div>
+
+            <!-- 主区域：左商店 + 右属性（Brotato 风格） -->
+            <div class="shop-main-row">
+                <!-- 左：商店物品混合网格 -->
+                <div class="shop-items-panel">
+                    <div class="panel-title">
+                        <span>🛒 商品</span>
+                        <span class="refresh-area">
+                            <button class="refresh-btn disabled" id="refreshShopBtn">🔄 🪙1</button>
+                        </span>
+                    </div>
+                    <div id="shopItemsGrid" class="shop-items-grid"></div>
+                    <div id="shopError" class="shop-error hidden"></div>
+                </div>
+                <!-- 右：角色属性面板 -->
+                <div class="shop-stats-panel">
+                    <div class="panel-title">📊 属性</div>
+                    <div id="playerStats" class="player-stats-list"></div>
+                </div>
+            </div>
+
+            <!-- 已购道具条 -->
+            <div class="shop-owned-row">
+                <span class="owned-label">📦 已购道具</span>
+                <div id="ownedItems" class="owned-items-display"></div>
+            </div>
+
+            <!-- 羁绊展示 -->
+            <div id="synergyDisplay" class="shop-synergy-row"></div>
+
+            <!-- 继续按钮 -->
+            <button id="shopContinueBtn" class="cyber-btn">进入下一关</button>
+        </div>
+    </div>
+
+    <!-- 宝箱奖励选择 -->
+    <div id="chestRewardOverlay" class="overlay hidden">
+        <div class="chest-reward-content">
+            <h2 class="chest-reward-title">📦 宝箱!</h2>
+            <p class="chest-reward-info">选择一个奖励</p>
+            <div id="chestRewardChoices" class="chest-reward-choices"></div>
+        </div>
+    </div>
+
+    <!-- 升级选择 -->
+    <div id="levelUpOverlay" class="overlay hidden">
+        <div class="levelup-content">
+            <h2 class="levelup-title">⬆ 升级!</h2>
+            <p class="levelup-info">等级 <span id="levelNum">1</span></p>
+            <div id="levelUpChoices" class="levelup-choices"></div>
+        </div>
+    </div>
+
+    <!-- HUD -->
+    <!-- 战斗日志 -->
+    <div id="combatLog" class="combat-log hidden">
+        <div class="combat-log-header">📋 战斗日志</div>
+        <div id="combatLogEntries" class="combat-log-entries"></div>
+    </div>
+
+    <div id="hud" class="hidden">
+        <div class="hud-top">
+            <!-- 左：角色信息单行 -->
+            <div class="hud-top-left">
+                <span id="hudCharName" class="hud-char-name">剑客</span>
+                <span class="hud-sep">|</span>
+                <div class="hud-health-compact">
+                    <div class="health-bar-bg">
+                        <div id="healthBar" class="health-bar-fill"></div>
+                    </div>
+                    <span id="healthText" class="hud-value hud-hp-text">100/100</span>
+                </div>
+                <span class="hud-sep">|</span>
+                <div class="hud-xp-compact">
+                    <div class="xp-bar-bg">
+                        <div id="xpBar" class="xp-bar-fill"></div>
+                    </div>
+                </div>
+                <span id="hudLevelIcon" class="hud-level-icon">⬆ Lv.<span id="hudLevelNum">1</span></span>
+                <span class="hud-sep">|</span>
+                <span id="hudChestIcon" class="hud-chest-icon">📦 ×<span id="hudChestCount">0</span></span>
+            </div>
+            <!-- 中：关卡 + 倒计时 -->
+            <div class="hud-center">
+                <span id="hudLevelTag" class="hud-level-tag">第 <span id="levelCount">1</span> 关</span>
+                <div id="waveTimer" class="hud-timer">30</div>
+            </div>
+            <!-- 右：击杀 + 金币 -->
+            <div class="hud-right">
+                <span id="hudKills" class="hud-kills">💀 <span id="killCount">0</span></span>
+                <span class="hud-materials">🪙 <span id="materialCount">0</span></span>
+            </div>
+        </div>
+        <div id="hudSynergies" class="hud-synergies"></div>
+    </div>
+
+    <script src="src/input.js?v=5.1"></script>
+    <script src="src/stats.js?v=5.1"></script>
+    <script src="src/unlock.js?v=5.1"></script>
+    <script src="src/character.js?v=5.1"></script>
+    <script src="src/assets.js?v=5.1"></script>
+    <script src="src/bullet.js?v=5.1"></script>
+    <script src="src/particle.js?v=5.1"></script>
+    <script src="src/player.js?v=5.1"></script>
+    <script src="src/enemy.js?v=5.1"></script>
+    <script src="src/wave.js?v=5.1"></script>
+    <script src="src/shop.js?v=5.1"></script>
+    <script src="src/ui.js?v=5.1"></script>
+    <script src="src/renderer.js?v=5.1"></script>
+    <script src="src/combatlog.js?v=5.1"></script>
+    <script src="src/main.js?v=5.1"></script>
+</body>
+</html>
