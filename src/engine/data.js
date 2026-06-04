@@ -54,7 +54,7 @@ const DataLoader = {
      * @returns {Promise<void>}
      */
     async preloadAll() {
-        const names = ['characters', 'characterLevel', 'weapons', 'items', 'enemies', 'bosses', 'waves', 'level_duration', 'weaponStats', 'charStats', 'difficulty', 'debug', 'levelUpCards', 'rarityColors'];
+        const names = ['characters', 'characterLevel', 'weapons', 'items', 'enemies', 'bosses', 'waves', 'level_duration', 'weaponStats', 'charStats', 'difficulty', 'debug', 'levelUpCards', 'rarityColors', 'audio', 'classes'];
         await Promise.all(names.map(n => this.load(n)));
         console.log('[DataLoader] 全部数据预加载完成');
     },

@@ -1,6 +1,40 @@
 // ============================================================
 // wave.js - 关卡系统（无限关卡，难度逐关递增）
 // ============================================================
+const _WAVE_STR = {
+    chest_tier1_name: '一级',
+    chest_tier2_name: '二级',
+    chest_spawn_log: '掉落{0}宝箱',
+    chest_spawn_event: '📦 宝箱!',
+    chest_materials_name: '金币袋',
+    chest_materials_desc_tier1: '获得 20~40 金币',
+    chest_materials_desc_tier2: '获得 50~80 金币',
+    chest_hpHeal_name: '生命恢复',
+    chest_hpHeal_desc_tier1: '恢复 35% 最大生命',
+    chest_hpHeal_desc_tier2: '恢复 50% 最大生命',
+    chest_armorUp_name: '护甲提升',
+    chest_armorUp_desc_tier1: '护甲 +5',
+    chest_armorUp_desc_tier2: '护甲 +8',
+    chest_speedUp_name: '疾风',
+    chest_speedUp_desc_tier1: '移速 +25',
+    chest_speedUp_desc_tier2: '移速 +40',
+    chest_attackSpeed_name: '攻速提升',
+    chest_attackSpeed_desc: '攻速 +15%',
+    chest_regen_name: '再生',
+    chest_regen_desc_tier1: '生命回复 +1/秒',
+    chest_regen_desc_tier2: '生命回复 +2/秒',
+    chest_tempDamage_name: '狂怒',
+    chest_tempDamage_desc: '攻击力 +30% 持续本关',
+    chest_xpBoost_name: '经验加成',
+    chest_xpBoost_desc: '获得大量经验值',
+    chest_critBoost_name: '暴击强化',
+    chest_critBoost_desc: '暴击 +6%',
+    chest_lifeSteal_name: '生命偷取',
+    chest_lifeSteal_desc: '偷取 +4%'
+};
+if (typeof DataLoader !== 'undefined') {
+    DataLoader.load('wave_charsData').then(d => { if (d) Object.assign(_WAVE_STR, d); }).catch(() => {});
+}
 const WaveSystem = {
     currentLevel: 0,
     waveTimer: 0,
@@ -297,9 +331,9 @@ const ChestSystem = {
             bobPhase: Math.random() * Math.PI * 2
         });
         if (typeof CombatLogSystem !== 'undefined') {
-            const tierName = tier === 2 ? '二级' : '一级';
-            CombatLogSystem.addLog('📦', `掉落${tierName}宝箱`, '#ffcc00');
-            CombatLogSystem.addEventText(x, y - 15, '📦 宝箱!', '#ffcc00', 14);
+            const tierName = tier === 2 ? _WAVE_STR.chest_tier2_name : _WAVE_STR.chest_tier1_name;
+            CombatLogSystem.addLog('📦', _WAVE_STR.chest_spawn_log.replace('{0}', tierName), '#ffcc00');
+            CombatLogSystem.addEventText(x, y - 15, _WAVE_STR.chest_spawn_event, '#ffcc00', 14);
         }
     },
 
@@ -354,33 +388,33 @@ const ChestSystem = {
         const isBossTier = tier === 2;
 
         const baseOptions = [
-            { id: 'materials', name: '金币袋', desc: isBossTier ? '获得 50~80 金币' : '获得 20~40 金币', icon: '🪙',
+            { id: 'materials', name: _WAVE_STR.chest_materials_name, desc: isBossTier ? _WAVE_STR.chest_materials_desc_tier2 : _WAVE_STR.chest_materials_desc_tier1, icon: '🪙',
               apply: () => { p.materials += isBossTier ? (50 + Math.floor(Math.random() * 31)) : (20 + Math.floor(Math.random() * 21)); StatsSystem.clampPlayer(p); } },
-            { id: 'hpHeal', name: '生命恢复', desc: isBossTier ? '恢复 50% 最大生命' : '恢复 35% 最大生命', icon: '❤️',
+            { id: 'hpHeal', name: _WAVE_STR.chest_hpHeal_name, desc: isBossTier ? _WAVE_STR.chest_hpHeal_desc_tier2 : _WAVE_STR.chest_hpHeal_desc_tier1, icon: '❤️',
               apply: () => { PlayerSystem.heal(Math.floor(p.maxHp * (isBossTier ? 0.50 : 0.35))); } },
-            { id: 'armorUp', name: '护甲提升', desc: isBossTier ? '护甲 +8' : '护甲 +5', icon: '🛡️',
+            { id: 'armorUp', name: _WAVE_STR.chest_armorUp_name, desc: isBossTier ? _WAVE_STR.chest_armorUp_desc_tier2 : _WAVE_STR.chest_armorUp_desc_tier1, icon: '🛡️',
               apply: () => { p.armor = Math.min(100, p.armor + (isBossTier ? 8 : 5)); } },
-            { id: 'speedUp', name: '疾风', desc: isBossTier ? '移速 +40' : '移速 +25', icon: '⚡',
+            { id: 'speedUp', name: _WAVE_STR.chest_speedUp_name, desc: isBossTier ? _WAVE_STR.chest_speedUp_desc_tier2 : _WAVE_STR.chest_speedUp_desc_tier1, icon: '⚡',
               apply: () => { p.speed = Math.min(400, p.speed + (isBossTier ? 40 : 25)); } },
-            { id: 'attackSpeed', name: '攻速提升', desc: '攻速 +15%', icon: '⚡',
+            { id: 'attackSpeed', name: _WAVE_STR.chest_attackSpeed_name, desc: _WAVE_STR.chest_attackSpeed_desc, icon: '⚡',
               apply: () => { p.attackSpeed = Math.min(5.0, p.attackSpeed * 1.15); } },
-            { id: 'regen', name: '再生', desc: isBossTier ? '生命回复 +2/秒' : '生命回复 +1/秒', icon: '💚',
+            { id: 'regen', name: _WAVE_STR.chest_regen_name, desc: isBossTier ? _WAVE_STR.chest_regen_desc_tier2 : _WAVE_STR.chest_regen_desc_tier1, icon: '💚',
               apply: () => { p.hpRegen += isBossTier ? 2.0 : 1.0; } },
         ];
 
         const bossOptions = [
-            { id: 'tempDamage', name: '狂怒', desc: '攻击力 +30% 持续本关', icon: '🗡️',
+            { id: 'tempDamage', name: _WAVE_STR.chest_tempDamage_name, desc: _WAVE_STR.chest_tempDamage_desc, icon: '🗡️',
               apply: () => { p.damage = Math.floor(p.damage * 1.30); StatsSystem.clampPlayer(p); } },
-            { id: 'xpBoost', name: '经验加成', desc: '获得大量经验值', icon: '⬆️',
+            { id: 'xpBoost', name: _WAVE_STR.chest_xpBoost_name, desc: _WAVE_STR.chest_xpBoost_desc, icon: '⬆️',
               apply: () => {
                   const xpGain = Math.floor(StatsSystem.xpForLevel(p.level) * 0.35);
                   if (PlayerSystem.addXP(xpGain)) {
                       if (typeof GameEngine !== 'undefined') GameEngine.levelUpPending = true;
                   }
               } },
-            { id: 'critBoost', name: '暴击强化', desc: '暴击 +6%', icon: '💥',
+            { id: 'critBoost', name: _WAVE_STR.chest_critBoost_name, desc: _WAVE_STR.chest_critBoost_desc, icon: '💥',
               apply: () => { p.critChance = Math.min(0.8, p.critChance + 0.06); } },
-            { id: 'lifeSteal', name: '生命偷取', desc: '偷取 +4%', icon: '🩸',
+            { id: 'lifeSteal', name: _WAVE_STR.chest_lifeSteal_name, desc: _WAVE_STR.chest_lifeSteal_desc, icon: '🩸',
               apply: () => { p.lifeSteal = Math.min(0.5, p.lifeSteal + 0.04); } },
         ];
 

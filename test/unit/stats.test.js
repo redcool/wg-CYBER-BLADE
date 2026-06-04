@@ -26,14 +26,15 @@ describe('StatsSystem - 四层伤害公式（内部方法）', () => {
         expect(d).toBe(30);
     });
 
-    it('S3: _calcFlatDamage 按 Tag 映射 melee → meleeDamage', () => {
+    it('S3: _calcFlatDamage 按 Tag 映射 melee → meleeDamage（TYPE B 扁平化: F=0）', () => {
         const p = { ...player, meleeDamage: 10, rangedDamage: 5 };
-        expect(StatsSystem._calcFlatDamage(meleeWeapon, p)).toBe(10);
+        // TYPE B 模式中 Flat 层折叠进 Base，_calcFlatDamage 返回 0
+        expect(StatsSystem._calcFlatDamage(meleeWeapon, p)).toBe(0);
     });
 
-    it('S4: _calcFlatDamage 按 Tag 映射 ranged → rangedDamage', () => {
+    it('S4: _calcFlatDamage 按 Tag 映射 ranged → rangedDamage（TYPE B 扁平化: F=0）', () => {
         const p = { ...player, meleeDamage: 10, rangedDamage: 5 };
-        expect(StatsSystem._calcFlatDamage(rangedWeapon, p)).toBe(5);
+        expect(StatsSystem._calcFlatDamage(rangedWeapon, p)).toBe(0);
     });
 
     it('S5: _calcFlatDamage Tag 无映射（如 economy）返回 0', () => {
@@ -121,11 +122,11 @@ describe('StatsSystem - calcDamage（Math.random mock）', () => {
         expect(dmg).toBe(30);
     });
 
-    it('S17: calcDamage Base+Flat', () => {
+    it('S17: calcDamage Base+Flat（TYPE B: Flat 折叠进 Base）', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0.5); // 不暴击
         const p2 = { ...p, _baseDamage: 15, meleeDamage: 10, critChance: 0 };
         const dmg = StatsSystem.calcDamage(meleeWeapon, p2, baseTarget);
-        // B=15, F=10, P=1, C=1, S=1 → 25
+        // TYPE B: B=15*1.0+10=25, F=0, P=1, C=1, S=1 → 25
         expect(dmg).toBe(25);
     });
 
@@ -149,7 +150,7 @@ describe('StatsSystem - calcDamage（Math.random mock）', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0); // 暴击
         const p2 = { ...p, _baseDamage: 15, meleeDamage: 5, damagePercent: 0.5, critChance: 1.0, critDamage: 2.0, berserkerBlood: true, hp: 10, maxHp: 100 };
         const dmg = StatsSystem.calcDamage(meleeWeapon, p2, baseTarget);
-        // B=15, F=5, P=1.5, C=2.0, S=1.3 → round(20×1.5×2.0×1.3)=round(78)=78
+        // TYPE B: B=15*1.0+5(flat)=20, F=0, P=1.5, C=2.0, S=1.3 → round(20×1.5×2.0×1.3)=round(78)=78
         expect(dmg).toBe(78);
     });
 
@@ -311,24 +312,14 @@ describe('StatsSystem - getDisplayStats', () => {
         expect(armorEntry.note).toContain('减伤');
     });
 
-    it('S46: getDisplayStats 不显示 deprecated 零值字段', () => {
+    it('S46: getDisplayStats deprecated 字段已全部移除', () => {
         const p = { ...basePlayer, maxHp: 100 };
         const result = StatsSystem.getDisplayStats(p);
-        // basePlayer 中 damage=0, bulletPierce=0 → 应被隐藏
-        // critMultiplier=2.0, bulletCount=1, bulletSpeed=500, pickupRange=60 → 非零，仍会显示
-        const zeroDeprecated = result.filter(r =>
-            (r.id === 'damage' || r.id === 'bulletPierce') && r.raw === 0
-        );
-        expect(zeroDeprecated).toHaveLength(0);
-        // 非零 deprecated 字段仍然显示
-        expect(result.find(r => r.id === 'critMultiplier')).toBeDefined();
-    });
-
-    it('S47: getDisplayStats deprecated 非零值仍显示', () => {
-        const p = { ...basePlayer, maxHp: 100, damage: 0.5 };
-        const result = StatsSystem.getDisplayStats(p);
-        const dmgEntry = result.find(r => r.id === 'damage');
-        expect(dmgEntry).toBeDefined();
+        // 所有 _deprecated statDefs 已移除，不存在 deprecated 字段
+        const deprecatedIds = ['damage', 'critMultiplier', 'bulletCount', 'bulletPierce', 'bulletSpeed'];
+        for (const id of deprecatedIds) {
+            expect(result.find(r => r.id === id)).toBeUndefined();
+        }
     });
 
     it('S48: getDisplayStats 按 category 顺序排序', () => {

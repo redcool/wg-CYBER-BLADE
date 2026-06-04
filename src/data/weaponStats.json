@@ -20,11 +20,6 @@
     "英文名": "attack speed"
   },
   {
-    "key": "meleeRange",
-    "中文名": "近战范围",
-    "英文名": "melee range"
-  },
-  {
     "key": "attackRange",
     "中文名": "射程",
     "英文名": "attack range"
@@ -81,7 +76,7 @@
   },
   {
     "key": "burnMaxStacks",
-    "中文名": "灼烧层数",
+    "中文名": "灼烧层",
     "英文名": "burn stacks"
   },
   {
@@ -96,7 +91,7 @@
   },
   {
     "key": "healOnHit",
-    "中文名": "击中回血",
+    "中文名": "吸血",
     "英文名": "heal on hit"
   },
   {

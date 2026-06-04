@@ -59,8 +59,9 @@ describe('WaveSystem - 配置', () => {
         WaveSystem.currentLevel = 4;
         WaveSystem.startNextLevel(); // 第5波
         expect(WaveSystem.currentLevel).toBe(5);
-        // budget = 10 * 2.0 * 5 = 100, minus 10 for boss = 90
-        expect(WaveSystem._remainingBudget).toBe(90);
+        // budgetScale = min(6, 1 + (5-1) * 0.3) = 2.2
+        // budget = 10 * 2.0 * 2.2 = 44, minus 10 for boss = 34
+        expect(WaveSystem._remainingBudget).toBe(34);
         expect(WaveSystem._bossWaveBudget).toBe(10);
         expect(WaveSystem._bossSpawned).toBe(false);
     });
@@ -69,8 +70,9 @@ describe('WaveSystem - 配置', () => {
         WaveSystem.currentLevel = 15;
         WaveSystem.startNextLevel(); // 第16波
         // budgetMul = 4 + (16-15) * 0.5 = 4.5
-        // budget = 10 * 4.5 * 16 = 720
-        expect(WaveSystem._remainingBudget).toBe(720);
+        // budgetScale = min(6, 1 + (16-1) * 0.3) = min(6, 5.5) = 5.5
+        // budget = 10 * 4.5 * 5.5 = 247.5 → 247
+        expect(WaveSystem._remainingBudget).toBe(247);
     });
 
     it('W4: 从 _waveConfigs 读取配置', async () => {
@@ -190,14 +192,12 @@ describe('ENEMY_TIERS', () => {
         expect(ENEMY_TIERS[1].cost).toBe(1);
         expect(ENEMY_TIERS[2].cost).toBe(3);
         expect(ENEMY_TIERS[3].cost).toBe(5);
-        expect(ENEMY_TIERS[4].cost).toBe(10);
     });
 
     it('W15: 层级包含正确类型', () => {
-        expect(ENEMY_TIERS[1].types).toContain('chaser_basic');
+        expect(ENEMY_TIERS[1].types).toContain('basic');
         expect(ENEMY_TIERS[2].types).toContain('tank');
-        expect(ENEMY_TIERS[3].types).toContain('swarm');
-        expect(ENEMY_TIERS[4].types).toContain('boss');
+        expect(ENEMY_TIERS[3].types).toContain('elite');
     });
 });
 
@@ -346,10 +346,10 @@ describe('WaveSystem - _spawnBatch', () => {
     });
 
     it('W32: _getCostForType 正确', () => {
-        expect(WaveSystem._getCostForType('chaser_basic')).toBe(1);
+        expect(WaveSystem._getCostForType('basic')).toBe(1);
         expect(WaveSystem._getCostForType('tank')).toBe(3);
-        expect(WaveSystem._getCostForType('swarm')).toBe(5);
-        expect(WaveSystem._getCostForType('boss')).toBe(10);
+        expect(WaveSystem._getCostForType('elite')).toBe(5);
+        expect(WaveSystem._getCostForType('boss')).toBe(1); // 未在 ENEMY_TIERS 中定义，走默认
         expect(WaveSystem._getCostForType('unknown')).toBe(1);
     });
 });

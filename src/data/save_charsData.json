@@ -1,0 +1,10 @@
+{
+  "no_file": "未选择文件",
+  "need_json": "请选择 .json 存档文件",
+  "invalid_file": "无效的存档文件",
+  "parse_error": "文件解析失败: {0}",
+  "read_error": "文件读取失败",
+  "imported": "存档已导入 ({0} 项数据)",
+  "save_fail": "[SaveSystem] 保存失败:",
+  "load_fail": "[SaveSystem] 加载失败:"
+}

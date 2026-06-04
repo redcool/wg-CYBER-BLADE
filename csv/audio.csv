@@ -1,0 +1,61 @@
+# audio.csv — 音频配置表
+# 列: category,id,type,file,name,categoryTag
+# category: bgm=BGM曲目, sfx_type=type→seId映射, sfx_file=seId→文件名映射
+# - bgm:  id=曲目ID,  file=音频文件路径,  name=显示名称
+# - sfx_type:  id=seId,  type=play()形参名,  name=描述
+# - sfx_file:  id=seId,  file=音效文件名(相对sounds/),  name=描述,  categoryTag=战斗/界面
+
+category,id,type,file,name,categoryTag
+# ===== BGM 曲目 =====
+bgm,combat1,,sounds/bgm_1.m4a,战斗主题1,
+bgm,combat2,,sounds/bgm_2.m4a,战斗主题2,
+# ===== SFX type → seId 映射 =====
+sfx_type,se_shoot,shoot,,射击,
+sfx_type,se_laser,laser,,激光,
+sfx_type,se_enemy_hit,enemy_hit,,命中敌人,
+sfx_type,se_hurt,hurt,,玩家受伤,
+sfx_type,se_enemy_die,enemy_die,,敌人死亡,
+sfx_type,se_explosion,explosion,,爆炸,
+sfx_type,se_coin,coin,,金币收集,
+sfx_type,se_pickup,pickup,,拾取物品,
+sfx_type,se_levelup,levelup,,升级,
+sfx_type,se_click,click,,界面点击,
+sfx_type,se_melee_slash,melee_slash,,近战轻击,
+sfx_type,se_melee_heavy,melee_heavy,,近战重击,
+sfx_type,se_cannon,cannon,,火炮,
+sfx_type,se_cannon_shot,cannon_shot,,火炮射击,
+sfx_type,se_gunshot,gunshot,,标准枪声,
+sfx_type,se_pistol,pistol,,手枪,
+sfx_type,se_heavy_gun,heavy_gun,,重型枪声,
+sfx_type,se_arrow,arrow,,弓箭,
+sfx_type,se_fire,fire,,火焰,
+sfx_type,se_ice,ice,,冰霜,
+sfx_type,se_lightning,lightning,,闪电,
+sfx_type,se_magic,magic,,魔法,
+sfx_type,se_spear,spear,,长枪,
+sfx_type,se_axe,axe,,斧头,
+# ===== SFX seId → 文件名 映射 =====
+sfx_file,se_shoot,,se_Shoot.wav,射击,combat
+sfx_file,se_laser,,se_Laser.wav,激光,combat
+sfx_file,se_enemy_hit,,se_Hit1.wav,命中敌人,combat
+sfx_file,se_hurt,,se_Hit1.wav,玩家受伤,combat
+sfx_file,se_enemy_die,,se_Hit1.wav,敌人死亡,combat
+sfx_file,se_explosion,,se_explosion.m4a,爆炸,combat
+sfx_file,se_coin,,se_Coin.wav,金币收集,pickup
+sfx_file,se_pickup,,se_PowerUp3.wav,拾取物品,pickup
+sfx_file,se_levelup,,se_levelUp.wav,升级,system
+sfx_file,se_click,,se_Click.wav,界面点击,ui
+sfx_file,se_melee_slash,,se_lightSwordSlice1.m4a,近战轻击(横扫),combat
+sfx_file,se_melee_heavy,,se_violentSwordSlice.m4a,近战重击(突刺),combat
+sfx_file,se_cannon,,se_cannonFire.m4a,火炮(爆炸武器),combat
+sfx_file,se_cannon_shot,,se_cannonShot02.m4a,火炮射击,combat
+sfx_file,se_gunshot,,se_gunShot.m4a,标准枪声,combat
+sfx_file,se_pistol,,se_pistolShot.m4a,手枪射击(默认),combat
+sfx_file,se_heavy_gun,,se_heavy-gunshot.m4a,重型枪声(霰弹),combat
+sfx_file,se_arrow,,se-arrowSwish.m4a,弓箭,combat
+sfx_file,se_fire,,se_fireball.m4a,火焰喷射,combat
+sfx_file,se_ice,,se_iced-magic.m4a,冰霜魔法,combat
+sfx_file,se_lightning,,se_lightning.m4a,闪电(连锁),combat
+sfx_file,se_magic,,se_sci-fi-launch.m4a,魔法发射(追踪),combat
+sfx_file,se_spear,,se_spearThrust.m4a,长枪突刺,combat
+sfx_file,se_axe,,se_axeSlash.m4a,斧头挥砍,combat

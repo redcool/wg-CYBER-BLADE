@@ -14,14 +14,26 @@
  *   medic → tech    (最佳匹配：辅助/治疗→工程)
  *   lance → melee   (最佳匹配：骑枪→近战)
  */
+// 从 tags_charsData.json 加载标签中文名，运行时会被 DataLoader 数据覆盖
+const _TAG_STR = {
+    melee: '近战', ranged: '远程', fire: '火焰',
+    explosive: '爆炸', crit: '暴击', tech: '工程', economy: '经济',
+};
+// 运行时从 JSON 更新字符串（如无 DataLoader 则使用硬编码 fallback）
+if (typeof DataLoader !== 'undefined') {
+    DataLoader.load('tags_charsData').then(d => {
+        if (d) { _TAG_STR.melee = d.melee; _TAG_STR.ranged = d.ranged; _TAG_STR.fire = d.fire; _TAG_STR.explosive = d.explosive; _TAG_STR.crit = d.crit; _TAG_STR.tech = d.tech; _TAG_STR.economy = d.economy; }
+    }).catch(() => {});
+}
+
 const TAG_DEFS = {
-    melee:     { id: 'melee',     name: '近战',   icon: '⚔️' },
-    ranged:    { id: 'ranged',    name: '远程',   icon: '🏹' },
-    fire:      { id: 'fire',      name: '火焰',   icon: '🔥' },
-    explosive: { id: 'explosive', name: '爆炸',   icon: '💥' },
-    crit:      { id: 'crit',      name: '暴击',   icon: '💢' },
-    tech:      { id: 'tech',      name: '工程',   icon: '🤖' },
-    economy:   { id: 'economy',   name: '经济',   icon: '💰' },
+    melee:     { id: 'melee',     name: _TAG_STR.melee,     icon: '⚔️' },
+    ranged:    { id: 'ranged',    name: _TAG_STR.ranged,    icon: '🏹' },
+    fire:      { id: 'fire',      name: _TAG_STR.fire,      icon: '🔥' },
+    explosive: { id: 'explosive', name: _TAG_STR.explosive, icon: '💥' },
+    crit:      { id: 'crit',      name: _TAG_STR.crit,      icon: '💢' },
+    tech:      { id: 'tech',      name: _TAG_STR.tech,      icon: '🤖' },
+    economy:   { id: 'economy',   name: _TAG_STR.economy,   icon: '💰' },
 };
 
 /** 旧→新标签名映射表 */

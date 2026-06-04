@@ -176,6 +176,8 @@ const CSV2JSON = {
             { name: 'debug',csv: 'csv/debug.csv',json: 'src/data/debug.json',schema: debugSchema },
             { name: 'levelUpCards',csv: 'csv/levelUpCards.csv',json: 'src/data/levelUpCards.json',schema: levelUpCardsSchema },
             { name: 'rarityColors',csv: 'csv/rarityColors.csv',json: 'src/data/rarityColors.json',schema: rarityColorsSchema },
+            { name: 'audio',csv: 'csv/audio.csv',json: 'src/data/audio.json',schema: audioSchema },
+            { name: 'classes',csv: 'csv/classes.csv',json: 'src/data/classes.json',schema: classSchema },
         ];
 
         let success = 0;
@@ -258,10 +260,10 @@ const characterLevelSchema = {
  *     cooldown_lv1,cooldown_lv2,cooldown_lv3,cooldown_lv4,
  *     attackRangeMult,speedMult,
  *     critChanceAdd,critDamageAdd,armorAdd,hpRegenAdd,maxHpAdd,lifeStealAdd,
- *     bulletCount,bulletSpeed,attackRange,spread,pierce,meleeRange,
+ *     bulletCount,bulletSpeed,bulletMaxRange,attackRange,spread,pierce,
  *     burnDps,burnMaxStacks,chainCount,splashRadius,homingStrength,
  *     slowAmount,slowDuration,healOnHit,auraHeal,auraRadius,sprayCone,
- *     behavior,class,knockback
+ *     behavior,class,knockback,magSize,reloadTime
  */
 const weaponSchema = {
     id: 'string',
@@ -294,7 +296,6 @@ const weaponSchema = {
     attackRange: 'number',
     spread: 'number',
     pierce: 'number',
-    meleeRange: 'number',
     burnDps: 'number',
     burnMaxStacks: 'number',
     chainCount: 'number',
@@ -445,23 +446,25 @@ const debugSchema = {
 };
 
 /**
- * levelUpCards.csv Schema
- * 升级抽卡配置表（每行 = 一个卡牌的一个等级）
- * statAdd/statMult: 管道符分隔的 key:value 对
+ * levelUpCards.csv Schema v2 (Brotato-style)
+ * 每行 = 一张独立卡片（可反复出现）
+ * tier: I|II|III|IV — 卡片等级
+ * statField: 属性字段名
+ * statValue: 属性增加值
  * tags: 管道符分隔的流派标签
- * actionType: weaponLevelUp|weaponQualityUp|addWeaponSlot|addPassive
+ * unlockLevel: 角色等级解锁条件
+ * actionType: weaponLevelUp|weaponQualityUp|addWeaponSlot
  */
 const levelUpCardsSchema = {
     id: 'string',
-    level: 'number',
     name: 'string',
     desc: 'string',
     icon: 'string',
-    rarity: 'string',
-    category: 'string',
+    tier: 'string',
+    statField: 'string',
+    statValue: 'number',
     tags: 'array',
-    statAdd: 'string',
-    statMult: 'string',
+    unlockLevel: 'number',
     actionType: 'string',
     actionValue: 'string',
 };
@@ -483,6 +486,32 @@ const rarityColorsSchema = {
     bg: 'string',
 };
 
+/**
+ * audio.csv Schema
+ * 列: category,id,type,file,name,categoryTag
+ * category: bgm=BGM曲目, sfx_type=type→seId映射, sfx_file=seId→文件名映射
+ */
+const audioSchema = {
+    category: 'string',
+    id: 'string',
+    type: 'string',
+    file: 'string',
+    name: 'string',
+    categoryTag: 'string',
+};
+
+/**
+ * classes.csv Schema
+ * 列: id,中文名,英文名,描述
+ * 武器类别（Class）定义表，前端 UI 通过 id 查找对应的显示名和描述
+ */
+const classSchema = {
+    id: 'string',
+    '中文名': 'string',
+    '英文名': 'string',
+    '描述': 'string',
+};
+
 // ============================================================
 // 入口
 // ============================================================
@@ -491,4 +520,4 @@ if (require.main === module) {
     process.exit(ok ? 0 : 1);
 }
 
-module.exports = { CSV2JSON, characterSchema, characterLevelSchema, weaponSchema, itemSchema, enemySchema, bossSchema, waveSchema, weaponStatSchema, charStatSchema, difficultySchema, debugSchema, levelUpCardsSchema, rarityColorsSchema };
+module.exports = { CSV2JSON, characterSchema, characterLevelSchema, weaponSchema, itemSchema, enemySchema, bossSchema, waveSchema, weaponStatSchema, charStatSchema, difficultySchema, debugSchema, levelUpCardsSchema, rarityColorsSchema, audioSchema, classSchema };

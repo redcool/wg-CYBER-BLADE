@@ -12,7 +12,7 @@ const PlayerSystem = {
             // 当前战斗属性（基础值，会被角色+武器修正）
             hp: 100,
             maxHp: 100,
-            speed: 200,
+            speed: 500,
             damage: 15,
             attackSpeed: 1.0,
             attackRange: 300,
@@ -27,6 +27,7 @@ const PlayerSystem = {
             bulletPierce: 0,
             bulletSpeed: 500,
             lifeSteal: 0,
+            knockback: 0,
             hpRegen: 0.5,
             // 新属性
             xpGain: 0,
@@ -90,86 +91,10 @@ const PlayerSystem = {
         // 初始化羁绊状态
         p._synergyMods = {};
         p._activeSynergies = [];
-        p._affixMods = {};
-        p._lastClassBonuses = {};
-        p._lastClassCounts = {};
         // 计算初始羁绊加成
         this._updateSynergies();
         this.player = p;
         return p;
-    },
-
-    /** BroTato-style Weapon Class 套装加成定义
-     *  key = 武器类别, value = { stat: perWeaponBonus }
-     *  每装备一件同类别武器, 该属性获得一次线性叠加
-     */
-    _CLASS_BONUSES: {
-        'Blade':     { attackSpeed: 0.03 },           // +3% 攻速/件
-        'Blunt':     { damagePercent: 0.05 },          // +5% 伤害/件
-        'Precise':   { critChance: 0.03 },             // +3% 暴击率/件
-        'Elemental': { elementalDamage: 5 },           // +5 元素伤害/件
-        'Heavy':     { damagePercent: 0.05, speed: -0.02 }, // +5%伤害 -2%移速/件
-        'Medical':   { hpRegen: 2 },                   // +2 HP回复/件
-        'Support':   { attackRange: 0.03 },            // +3% 攻击范围/件
-        'Primitive': { damagePercent: 0.02, attackSpeed: 0.02 }, // +2%伤害 +2%攻速/件
-    },
-
-    /** 统计玩家装备中各武器类别的数量
-     *  @param {Object} player
-     *  @returns {Object} { 'Blade': 2, 'Blunt': 1, ... }
-     */
-    _countWeaponClasses(player) {
-        const counts = {};
-        if (!player || !player.weapons) return counts;
-        const weaponPool = (typeof ShopSystem !== 'undefined' ? ShopSystem.allWeapons : []) || [];
-        for (const w of player.weapons) {
-            const def = weaponPool.find(d => d.id === w.id);
-            const cls = (def && def.class) || (player.weaponParams[w.id] && player.weaponParams[w.id].class) || 'Primitive';
-            counts[cls] = (counts[cls] || 0) + 1;
-        }
-        return counts;
-    },
-
-    /** 计算武器类别套装加成总值
-     *  @param {Object} classCounts - _countWeaponClasses 返回值
-     *  @returns {Object} { stat: value, ... }
-     */
-    _computeClassBonuses(classCounts) {
-        const bonuses = {};
-        for (const [cls, count] of Object.entries(classCounts)) {
-            const clsBonuses = this._CLASS_BONUSES[cls];
-            if (!clsBonuses) continue;
-            for (const [stat, perUnit] of Object.entries(clsBonuses)) {
-                bonuses[stat] = (bonuses[stat] || 0) + perUnit * count;
-            }
-        }
-        return bonuses;
-    },
-
-    /** 词条ID → 玩家属性映射 */
-    _AFFIX_MAP: {
-        damagePct: { stat: 'damage', op: 'mult' },
-        attackSpeedPct: { stat: 'attackSpeed', op: 'mult' },
-        critChancePct: { stat: 'critChance', op: 'add' },
-        critMultiplierAdd: { stat: 'critMultiplier', op: 'add' },
-        lifeStealPct: { stat: 'lifeSteal', op: 'add' },
-        armor: { stat: 'armor', op: 'add' },
-        hpRegenPct: { stat: 'hpRegen', op: 'add' },
-        maxHp: { stat: 'maxHp', op: 'add' },
-        attackRangePct: { stat: 'attackRange', op: 'mult' },
-        bulletSpeedPct: { stat: 'bulletSpeed', op: 'mult' },
-        bulletPierceAdd: { stat: 'bulletPierce', op: 'add' },
-    },
-
-    /** 计算所有武器词条加成总和 */
-    _computeAffixBonuses(p) {
-        const bonuses = {};
-        for (const w of (p.weapons || [])) {
-            for (const aff of (w.affixes || [])) {
-                bonuses[aff.id] = (bonuses[aff.id] || 0) + aff.value;
-            }
-        }
-        return bonuses;
     },
 
     /** 重新计算武器羁绊加成 */
@@ -240,64 +165,7 @@ const PlayerSystem = {
         p._synergyMods = newMods;
         p._activeSynergies = synergies;
 
-        // 4.25) Weapon Class 套装加成 — 反转旧 + 计算新
-        const prevClass = p._lastClassBonuses || {};
-        if (prevClass.damagePercent) p.damage /= (1 + prevClass.damagePercent);
-        if (prevClass.attackSpeed) p.attackSpeed /= (1 + prevClass.attackSpeed);
-        if (prevClass.critChance) p.critChance = Math.max(0, p.critChance - prevClass.critChance);
-        if (prevClass.speed) p.speed = Math.max(50, p.speed - prevClass.speed);
-        if (prevClass.hpRegen) p.hpRegen = Math.max(0, p.hpRegen - prevClass.hpRegen);
-        if (prevClass.attackRange) p.attackRange = StatsSystem.clampStat('attackRange', p.attackRange / (1 + prevClass.attackRange));
-        if (prevClass.elementalDamage) p.elementalDamage = Math.max(0, p.elementalDamage - prevClass.elementalDamage);
-
-        const classCounts = this._countWeaponClasses(p);
-        const classBonuses = this._computeClassBonuses(classCounts);
-        if (classBonuses.damagePercent) p.damage *= (1 + classBonuses.damagePercent);
-        if (classBonuses.attackSpeed) p.attackSpeed *= (1 + classBonuses.attackSpeed);
-        if (classBonuses.critChance) p.critChance = Math.min(0.8, p.critChance + classBonuses.critChance);
-        if (classBonuses.speed) p.speed = Math.max(50, p.speed + classBonuses.speed);
-        if (classBonuses.hpRegen) p.hpRegen += classBonuses.hpRegen;
-        if (classBonuses.attackRange) p.attackRange = StatsSystem.clampStat('attackRange', p.attackRange * (1 + classBonuses.attackRange));
-        if (classBonuses.elementalDamage) p.elementalDamage += classBonuses.elementalDamage;
-        p._lastClassBonuses = classBonuses;
-        p._lastClassCounts = classCounts;
-
-        // 4.5) 反转之前的词条加成
-        const prevAffix = p._affixMods || {};
-        for (const [key, val] of Object.entries(prevAffix)) {
-            const map = this._AFFIX_MAP[key];
-            if (!map) continue;
-            if (map.op === 'mult') {
-                p[map.stat] /= (1 + val);
-            } else if (map.op === 'add') {
-                if (map.stat === 'maxHp') {
-                    p.maxHp -= val;
-                    p.hp = Math.min(p.hp, p.maxHp);
-                } else {
-                    p[map.stat] -= val;
-                }
-            }
-        }
-
-        // 5.5) 计算新的词条加成
-        const newAffix = this._computeAffixBonuses(p);
-        for (const [key, val] of Object.entries(newAffix)) {
-            const map = this._AFFIX_MAP[key];
-            if (!map) continue;
-            if (map.op === 'mult') {
-                p[map.stat] *= (1 + val);
-            } else if (map.op === 'add') {
-                if (map.stat === 'maxHp') {
-                    p.maxHp += val;
-                    p.hp = Math.min(p.hp + val, p.maxHp);
-                } else {
-                    p[map.stat] += val;
-                }
-            }
-        }
-        p._affixMods = newAffix;
-
-        // 6) 钳制所有属性到合法范围
+        // 5) 钳制所有属性到合法范围
         StatsSystem.clampPlayer(p);
     },
 
@@ -312,7 +180,6 @@ const PlayerSystem = {
             const def = weaponPool.find(d => d.id === w.id);
             if (def) {
                 const level = w.level || 1;
-                const quality = w.quality || 'T1';
                 const params = {
                     behavior: def.behavior || 'bullet',
                     bulletCount: def.bulletCount || 1,
@@ -323,15 +190,15 @@ const PlayerSystem = {
                     splashRadius: def.splashRadius || 0,
                     homingStrength: def.homingStrength || 0,
                     level: level,
-                    quality: quality,
                     healOnHit: def.healOnHit || 0,
                     auraHeal: def.auraHeal || 0,
                     auraRadius: def.auraRadius || 0,
                     burnDps: def.burnDps || 0,
                     burnMaxStacks: def.burnMaxStacks || 0,
-                    meleeRange: def.meleeRange || 0,
                     critBounce: def.critBounce || 0,
                     attackRange: def.attackRange || 0,
+                    bulletMaxRange: def.bulletMaxRange || 0,
+                    meleeRange: def.meleeRange || 0,
                     tag: def.tag || '',
                     // 新字段: 暴击独立面板
                     critChanceAdd: def.critChanceAdd || 0,
@@ -343,7 +210,6 @@ const PlayerSystem = {
                     // 存储原始 def 引用和等级, 供 FormulaSystem 使用
                     _weaponDef: def,
                     _weaponLevel: level,
-                    _weaponQuality: quality,
                 };
                 p.weaponParams[w.id] = params;
                 // 圣光盾光环参数写到玩家身上，供 update 使用
@@ -417,15 +283,16 @@ const PlayerSystem = {
             // Range 系统: attackRange stat 作为全武器射程乘数 (300 = 1.0x)
             const rangeMult = (p.attackRange || 300) / 300;
             const range = isMelee 
-                ? (params.meleeRange || 60) * rangeMult
+                ? (params.attackRange || 60) * rangeMult
                 : (params.attackRange || p.attackRange) * rangeMult;
 
-            // 找范围内最近敌人
+            // 找范围内最近敌人（以武器轨道位置为圆心）
+            const weaponPos = positions[i] || { x: p.x, y: p.y };
             let nearest = null;
             let nearDist = Infinity;
             for (const e of enemiesArray) {
                 if (!e.alive) continue;
-                const dx2 = e.x - p.x, dy2 = e.y - p.y;
+                const dx2 = e.x - weaponPos.x, dy2 = e.y - weaponPos.y;
                 const dist = Math.sqrt(dx2 * dx2 + dy2 * dy2);
                 if (dist < range && dist < nearDist) {
                     nearDist = dist;
@@ -433,11 +300,11 @@ const PlayerSystem = {
                 }
             }
 
-            // 无敌人时自动攻击医药箱
+            // 无敌人时自动攻击医药箱（以武器轨道位置为圆心）
             if (!nearest && typeof MedkitSystem !== 'undefined' && MedkitSystem.crates.length > 0) {
                 for (const crate of MedkitSystem.crates) {
                     if (!crate.alive) continue;
-                    const dx2 = crate.x - p.x, dy2 = crate.y - p.y;
+                    const dx2 = crate.x - weaponPos.x, dy2 = crate.y - weaponPos.y;
                     const dist = Math.sqrt(dx2 * dx2 + dy2 * dy2);
                     const crateRange = isMelee ? (range + (crate.radius || 18)) : range;
                     if (dist < crateRange && dist < nearDist) {
@@ -464,8 +331,7 @@ const PlayerSystem = {
                 if (magSize > 0) {
                     if (w.shotsFired == null) w.shotsFired = 0;
                     w.cooldownTimer = cd; // 先设置正常 CD
-                    const wPos = positions[i] || { x: p.x, y: p.y };
-                    this._fireWeapon(w.id, params, nearest, wPos, nearDist);
+                    this._fireWeapon(w.id, params, nearest, weaponPos, nearDist);
                     w.shotsFired++;
                     if (w.shotsFired >= magSize) {
                         w.cooldownTimer = rawDef.reloadTime || 1.0; // 换弹冷却
@@ -474,8 +340,7 @@ const PlayerSystem = {
                 } else {
                     // 无弹匣武器: 保持原有行为
                     w.cooldownTimer = cd;
-                    const wPos = positions[i] || { x: p.x, y: p.y };
-                    this._fireWeapon(w.id, params, nearest, wPos, nearDist);
+                    this._fireWeapon(w.id, params, nearest, weaponPos, nearDist);
                 }
             }
         }
@@ -612,7 +477,8 @@ const PlayerSystem = {
             if (weaponDef && weaponDef.tag === 'lance') {
                 actualBehavior = 'melee_thrust';
             } else {
-                const meleeRange = params.meleeRange || 60;
+                const rangeMult = (p.attackRange || 300) / 300;
+                const meleeRange = (params.attackRange || 60) * rangeMult;
                 actualBehavior = (targetDist < meleeRange * 0.45) ? 'melee_sweep' : 'melee_thrust';
             }
         }
@@ -780,7 +646,7 @@ const PlayerSystem = {
     _fireShock(angle, params, target, weaponId, spawnX, spawnY, weaponDef) {
         const p = this.player;
         const dmg = StatsSystem.calcDamage(weaponDef, p, target, params);
-        const range = params.meleeRange || 120;
+        const range = params.attackRange || 120;
         const pierceCount = params.pierce || 3;
         const halfWidth = 15; // 窄宽度 ~30px
         let hits = 0;
@@ -831,10 +697,12 @@ const PlayerSystem = {
             }
             const result = EnemySystem.takeDamage(e, dmg);
 
-            // 击退（使用武器自身击退值, 默认骑枪600/其他400）
-            const kbStr = params.knockback > 0 ? params.knockback : (isLance ? 600 : 400);
-            e.knockbackX += dx / dist * kbStr;
-            e.knockbackY += dy / dist * kbStr;
+            // 击退（使用武器自身击退值, 默认骑枪600/其他400；精英/Boss 免疫击退）
+            if (!e.isElite && !e.isBoss) {
+                const kbStr = (params.knockback > 0 ? params.knockback : (isLance ? 600 : 400)) + (p.knockback || 0);
+                e.knockbackX += dx / dist * kbStr;
+                e.knockbackY += dy / dist * kbStr;
+            }
 
             // 燃烧效果
             if (params.burnDps > 0 && e.alive) {
@@ -981,7 +849,9 @@ const PlayerSystem = {
     _fireMeleeSweep(angle, params, target, weaponId, weaponPos, weaponDef) {
         const p = this.player;
         const dmg = StatsSystem.calcDamage(weaponDef, p, target, params);
-        const meleeRange = params.meleeRange || (weaponDef ? weaponDef.meleeRange : 60) || 60;
+        // 与 detection 保持一致的 rangeMult
+        const rangeMult = (p.attackRange || 300) / 300;
+        const meleeRange = (params.attackRange || (weaponDef ? weaponDef.attackRange : 60) || 60) * rangeMult;
         // 延迟执行，配合动画
         p._sweepPending = {
             damage: dmg,
@@ -989,7 +859,9 @@ const PlayerSystem = {
             angle: angle,
             weaponId: weaponId,
             params: params,
-            timer: 0.15
+            timer: 0.15,
+            weaponX: weaponPos ? weaponPos.x : p.x,
+            weaponY: weaponPos ? weaponPos.y : p.y
         };
         // 起手粒子特效
         const sx = weaponPos ? weaponPos.x : p.x + Math.cos(angle) * 20;
@@ -1001,32 +873,39 @@ const PlayerSystem = {
     _fireMeleeThrust(angle, params, target, weaponId, weaponPos, weaponDef) {
         const p = this.player;
         const dmg = StatsSystem.calcDamage(weaponDef, p, target, params);
-        const meleeRange = params.meleeRange || (weaponDef ? weaponDef.meleeRange : 60) || 60;
+        // 与 detection 保持一致的 rangeMult
+        const rangeMult = (p.attackRange || 300) / 300;
+        const meleeRange = (params.attackRange || (weaponDef ? weaponDef.attackRange : 60) || 60) * rangeMult;
         const pierceCount = params.pierce || (weaponDef ? weaponDef.pierce : 0) || 3;
         const halfWidth = 15;
-        let hits = 0;
 
-        // 非骑枪冲刺贴脸
+        // 以武器轨道位置为圆心判定距离
+        const originX = weaponPos ? weaponPos.x : p.x;
+        const originY = weaponPos ? weaponPos.y : p.y;
+
+        // 突刺冲刺距离（固定值，不随 attackRange 缩放）
         const isLance = weaponDef && weaponDef.tag === 'lance';
         if (!isLance) {
             p.knockbackX = 0; p.knockbackY = 0;
-            const dashStr = meleeRange * 4;
+            const dashStr = Math.min(meleeRange * 1.5, 300);
             p._thrustDashX = Math.cos(angle) * dashStr;
             p._thrustDashY = Math.sin(angle) * dashStr;
             p._thrustDashTimer = 0.15;
         }
 
-        // 按距离排序
+        // 按距离原点排序
         const enemiesInRange = EnemySystem.enemies.filter(e => e.alive);
         enemiesInRange.sort((a, b) => {
-            const da = (a.x - p.x) ** 2 + (a.y - p.y) ** 2;
-            const db = (b.x - p.x) ** 2 + (b.y - p.y) ** 2;
+            const da = (a.x - originX) ** 2 + (a.y - originY) ** 2;
+            const db = (b.x - originX) ** 2 + (b.y - originY) ** 2;
             return da - db;
         });
 
+        const dmgCycles = params.bulletCount || 1;
+        let enemyHits = 0;
         for (const e of enemiesInRange) {
-            if (hits >= pierceCount) break;
-            const dx = e.x - p.x, dy = e.y - p.y;
+            if (enemyHits >= pierceCount) break;
+            const dx = e.x - originX, dy = e.y - originY;
             const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist > meleeRange) continue;
 
@@ -1037,27 +916,32 @@ const PlayerSystem = {
             const perpendicularDist = Math.abs(Math.sin(diff) * dist);
             if (perpendicularDist > halfWidth && Math.abs(diff) > 0.25) continue;
 
-            hits++;
-            if (typeof CombatLogSystem !== 'undefined') {
-                if (p._lastCrit) { CombatLogSystem.addCritDamage(e.x, e.y, dmg); CombatLogSystem.logCrit(dmg); }
-                else { CombatLogSystem.addDamage(e.x, e.y, dmg); }
-            }
-            const result = EnemySystem.takeDamage(e, dmg);
-
-            const kbStr = params.knockback > 0 ? params.knockback : (isLance ? 600 : 400);
-            e.knockbackX += dx / dist * kbStr;
-            e.knockbackY += dy / dist * kbStr;
-
-            if (params.burnDps > 0 && e.alive) {
-                this._applyBurn(e, params.burnDps, 3.0, params.burnMaxStacks || 3);
-            }
-
-            const hitColor = isLance ? '#ff88ff' : '#00ccff';
-            ParticleSystem.emit(e.x, e.y, 5, { speed: 80, color: hitColor, life: 0.2, size: 4, type: 'spark' });
-            ParticleSystem.emit(e.x, e.y, 3, { speed: 50, color: '#ffffff', life: 0.15, size: 6, type: 'glow' });
-
-            if (result === -1 && typeof GameEngine !== 'undefined') {
-                GameEngine._handleEnemyKill(e, dmg);
+            enemyHits++;
+            // bulletCount = 每次突刺对每个敌人造成多次伤害
+            for (let cycle = 0; cycle < dmgCycles; cycle++) {
+                if (!e.alive) break;
+                const result = EnemySystem.takeDamage(e, dmg);
+                if (cycle === 0) {
+                    // 仅第一次命中: 击退 + 燃烧 + 粒子
+                    if (typeof CombatLogSystem !== 'undefined') {
+                        if (p._lastCrit) { CombatLogSystem.addCritDamage(e.x, e.y, dmg); CombatLogSystem.logCrit(dmg); }
+                        else { CombatLogSystem.addDamage(e.x, e.y, dmg); }
+                    }
+                    const kbStr = (params.knockback > 0 ? params.knockback : (isLance ? 600 : 400)) + (p.knockback || 0);
+                    if (kbStr > 0 && !e.isElite && !e.isBoss) {
+                        e.knockbackX += dx / dist * kbStr;
+                        e.knockbackY += dy / dist * kbStr;
+                    }
+                    if (params.burnDps > 0 && e.alive) {
+                        this._applyBurn(e, params.burnDps, 3.0, params.burnMaxStacks || 3);
+                    }
+                    const hitColor = isLance ? '#ff88ff' : '#00ccff';
+                    ParticleSystem.emit(e.x, e.y, 5, { speed: 80, color: hitColor, life: 0.2, size: 4, type: 'spark' });
+                    ParticleSystem.emit(e.x, e.y, 3, { speed: 50, color: '#ffffff', life: 0.15, size: 6, type: 'glow' });
+                }
+                if (result === -1 && typeof GameEngine !== 'undefined') {
+                    GameEngine._handleEnemyKill(e, dmg);
+                }
             }
         }
 
@@ -1075,11 +959,14 @@ const PlayerSystem = {
         const angle = sweepPending.angle || 0;
         const spreadAngle = Math.PI;
         const weaponId = sweepPending.weaponId || 'sword';
-        let hits = 0;
+        const dmgCycles = sweepPending.params ? (sweepPending.params.bulletCount || 1) : 1;
+        // 以武器轨道位置为圆心判定距离
+        const originX = sweepPending.weaponX || player.x;
+        const originY = sweepPending.weaponY || player.y;
 
         const enemiesInRange = EnemySystem.enemies.filter(e => e.alive);
         for (const e of enemiesInRange) {
-            const dx = e.x - player.x, dy = e.y - player.y;
+            const dx = e.x - originX, dy = e.y - originY;
             const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist > meleeRange) continue;
 
@@ -1089,35 +976,40 @@ const PlayerSystem = {
             if (diff < -Math.PI) diff += Math.PI * 2;
             if (Math.abs(diff) > spreadAngle / 2) continue;
 
-            hits++;
-            if (typeof CombatLogSystem !== 'undefined') {
-                CombatLogSystem.addDamage(e.x, e.y, dmg);
-            }
-            const result = EnemySystem.takeDamage(e, dmg);
-
-            const sweepKb = sweepPending.params && sweepPending.params.knockback > 0 ? sweepPending.params.knockback : 350;
-            e.knockbackX += dx / dist * sweepKb;
-            e.knockbackY += dy / dist * sweepKb;
-
-            ParticleSystem.emit(e.x, e.y, 4, { speed: 60, color: '#88ccff', life: 0.2, size: 3, type: 'spark' });
-            ParticleSystem.emit(e.x, e.y, 2, { speed: 40, color: '#ffffff', life: 0.15, size: 5, type: 'glow' });
-
-            if (result === -1 && typeof GameEngine !== 'undefined') {
-                GameEngine._handleEnemyKill(e, dmg);
+            // bulletCount = 每次横扫对每个敌人造成多次伤害
+            for (let cycle = 0; cycle < dmgCycles; cycle++) {
+                if (!e.alive) break;
+                const result = EnemySystem.takeDamage(e, dmg);
+                if (cycle === 0) {
+                    // 仅第一次命中击退+粒子（避免视觉堆叠）
+                    const sweepKb = (sweepPending.params && sweepPending.params.knockback > 0 ? sweepPending.params.knockback : 350) + (player.knockback || 0);
+                    if (sweepKb > 0 && !e.isElite && !e.isBoss) {
+                        e.knockbackX += dx / dist * sweepKb;
+                        e.knockbackY += dy / dist * sweepKb;
+                    }
+                    if (typeof CombatLogSystem !== 'undefined') {
+                        CombatLogSystem.addDamage(e.x, e.y, dmg);
+                    }
+                    ParticleSystem.emit(e.x, e.y, 4, { speed: 60, color: '#88ccff', life: 0.2, size: 3, type: 'spark' });
+                    ParticleSystem.emit(e.x, e.y, 2, { speed: 40, color: '#ffffff', life: 0.15, size: 5, type: 'glow' });
+                }
+                if (result === -1 && typeof GameEngine !== 'undefined') {
+                    GameEngine._handleEnemyKill(e, dmg);
+                }
             }
         }
 
-        // 横扫大弧面特效
+        // 横扫大弧面特效（以武器位置为圆心）
         const step = spreadAngle / 10;
         for (let i = 0; i <= 10; i++) {
             const a = angle - spreadAngle / 2 + step * i;
             ParticleSystem.emit(
-                player.x + Math.cos(a) * meleeRange * 0.6,
-                player.y + Math.sin(a) * meleeRange * 0.6,
+                originX + Math.cos(a) * meleeRange * 0.6,
+                originY + Math.sin(a) * meleeRange * 0.6,
                 2, { speed: 40, color: '#88ccff', life: 0.3, size: 3, type: 'spark' }
             );
         }
-        ParticleSystem.emit(player.x, player.y, 8, { speed: 80, color: '#88ccff', life: 0.4, size: 5, type: 'spark' });
+        ParticleSystem.emit(originX, originY, 8, { speed: 80, color: '#88ccff', life: 0.4, size: 5, type: 'spark' });
     },
 
     /** 对敌人施加燃烧效果 */

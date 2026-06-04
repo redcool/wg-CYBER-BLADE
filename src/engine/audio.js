@@ -3,15 +3,11 @@
 // ============================================================
 
 /**
- * 从 sounds/tracks.json 动态加载
- * 格式: [{ id, file, name }]
- */
-/**
- * BGM 曲目列表（从 sounds/tracks.json 动态加载）
- * init() 时会预填充默认曲目，异步加载会覆盖/追加更多曲目
+ * BGM 曲目列表（从 data/audio.json 动态加载，参见 _loadAudioConfig）
+ * init() 会预填充默认曲目，异步加载 audio.json 后会替换
  */
 const BGM_TRACKS = [
-    // 默认曲目（立即可用，异步加载 tracks.json 后会替换）
+    // 默认曲目（立即可用，异步加载 audio.json 后会替换）
     { id: 'combat1', file: 'sounds/bgm_1.m4a', name: '战斗主题1' }
 ];
 
@@ -34,6 +30,10 @@ const AudioSystem = {
     _currentTrackId: null, // 当前曲目 ID
     _tracksLoaded: false,  // 是否已加载清单
 
+    // ---- 数据驱动配置 ----
+    _sfxTypeMap: {},       // { type: seId } 从 audio.json sfx_type 行构建
+    _sfxFileMap: {},       // { seId: {file, categoryTag} } 从 audio.json sfx_file 行构建
+
     // ---- SFX 文件音效 ----
     _sfxBuffers: {},       // { seId: AudioBuffer }
     _sfxTableLoaded: false, // 音效表是否已加载
@@ -55,11 +55,8 @@ const AudioSystem = {
             // 从配置文件加载音量设置
             this._loadVolumeConfig();
 
-            // 异步加载 BGM 曲目清单
-            this._loadBGMTracks();
-
-            // 异步加载音效表 + 预缓冲 wav 文件
-            this._loadSFXTable();
+            // 统一加载音频配置（BGM 清单 + SFX type→seId 映射 + SFX 文件预缓冲）
+            this._loadAudioConfig();
         } catch (e) {
             console.warn('[AudioSystem] Web Audio API 不可用:', e);
         }
@@ -101,19 +98,51 @@ const AudioSystem = {
         if (this._sfxGain) this._sfxGain.gain.value = this._sfxVolume;
     },
 
-    /** 从 sounds/tracks.json 加载 BGM 曲目列表 */
-    async _loadBGMTracks() {
+    /**
+     * 从 audio.json 统一加载音频配置
+     * 包括: BGM 曲目清单、SFX type→seId 映射、SFX 文件预缓冲
+     */
+    async _loadAudioConfig() {
         try {
-            const resp = await fetch('sounds/tracks.json');
-            if (resp.ok) {
-                const tracks = await resp.json();
-                BGM_TRACKS.length = 0;
-                BGM_TRACKS.push(...tracks);
-                this._tracksLoaded = true;
-                console.log('[AudioSystem] BGM 曲目清单已加载:', BGM_TRACKS.length, '首');
+            let data;
+            if (typeof DataLoader !== 'undefined') {
+                data = await DataLoader.load('audio');
+            }
+            if (!data || data.length === 0) {
+                const resp = await fetch('src/data/audio.json');
+                if (resp.ok) data = await resp.json();
+            }
+            if (!data || data.length === 0) return;
+
+            // 清空旧数据
+            BGM_TRACKS.length = 0;
+            this._sfxTypeMap = {};
+            this._sfxFileMap = {};
+
+            // 按 category 分类处理
+            for (const entry of data) {
+                if (entry.category === 'bgm') {
+                    BGM_TRACKS.push({ id: entry.id, file: entry.file, name: entry.name });
+                } else if (entry.category === 'sfx_type') {
+                    this._sfxTypeMap[entry.type] = entry.id;
+                } else if (entry.category === 'sfx_file') {
+                    this._sfxFileMap[entry.id] = { file: entry.file, category: entry.categoryTag };
+                }
+            }
+
+            this._tracksLoaded = true;
+            this._sfxTableLoaded = true;
+            console.log('[AudioSystem] 音频配置已加载:',
+                BGM_TRACKS.length, 'BGM,',
+                Object.keys(this._sfxTypeMap).length, 'SFX 类型,',
+                Object.keys(this._sfxFileMap).length, 'SFX 文件');
+
+            // 预缓冲 SFX 文件
+            for (const [seId, info] of Object.entries(this._sfxFileMap)) {
+                if (info.file) this._preloadSFX(seId, info.file);
             }
         } catch (e) {
-            console.warn('[AudioSystem] 无法加载 tracks.json，使用空列表:', e.message);
+            console.warn('[AudioSystem] 无法加载音频配置:', e.message);
         }
     },
 
@@ -129,36 +158,9 @@ const AudioSystem = {
     // ============================================================
     // 音效播放
     // ============================================================
-    /** play type → 音效表 seId 映射 */
+    /** play type → 音效表 seId 映射（从 audio.json 数据驱动） */
     _getSEId(type) {
-        const map = {
-            'shoot': 'se_shoot',
-            'laser': 'se_laser',
-            'enemy_hit': 'se_enemy_hit',
-            'hurt': 'se_hurt',
-            'enemy_die': 'se_enemy_die',
-            'explosion': 'se_explosion',
-            'coin': 'se_coin',
-            'pickup': 'se_pickup',
-            'levelup': 'se_levelup',
-            'click': 'se_click',
-            'melee_slash': 'se_melee_slash',
-            'melee_heavy': 'se_melee_heavy',
-            'cannon': 'se_cannon',
-            'cannon_shot': 'se_cannon_shot',
-            // ---- 新增武器音效 ----
-            'gunshot': 'se_gunshot',
-            'pistol': 'se_pistol',
-            'heavy_gun': 'se_heavy_gun',
-            'arrow': 'se_arrow',
-            'fire': 'se_fire',
-            'ice': 'se_ice',
-            'lightning': 'se_lightning',
-            'magic': 'se_magic',
-            'spear': 'se_spear',
-            'axe': 'se_axe'
-        };
-        return map[type] || null;
+        return this._sfxTypeMap[type] || null;
     },
 
     /**
@@ -838,7 +840,7 @@ const AudioSystem = {
     },
 
     // ============================================================
-    // 背景音乐：从 tracks.json 动态加载曲目列表
+    // 背景音乐：从 data/audio.json 动态加载曲目列表
     // ============================================================
 
     /**
@@ -1045,32 +1047,7 @@ const AudioSystem = {
     // 文件音效：加载 + 播放
     // ============================================================
 
-    /** 从 data/soundEffectTable.md 加载音效映射表并预缓冲 wav 文件 */
-    async _loadSFXTable() {
-        try {
-            const resp = await fetch('data/soundEffectTable.md');
-            if (!resp.ok) throw new Error('HTTP ' + resp.status);
-            const text = await resp.text();
-            const lines = text.split('\n').filter(l => {
-                const t = l.trim();
-                return t.length > 0 && !t.startsWith('#');
-            });
-            for (const line of lines) {
-                const parts = splitCSVLine(line);
-                if (parts.length < 2) continue;
-                const seId = parts[0].trim();
-                const file = parts[1].trim();
-                if (!seId || !file) continue;
-                this._preloadSFX(seId, file);
-            }
-            this._sfxTableLoaded = true;
-            console.log('[AudioSystem] 音效表已加载，预缓冲中...');
-        } catch (e) {
-            console.warn('[AudioSystem] 无法加载音效表，使用程序化音效:', e.message);
-        }
-    },
-
-    /** 预缓冲单个 wav 文件 */
+    /** 预缓冲单个音效文件 */
     async _preloadSFX(seId, file) {
         try {
             const resp = await fetch('sounds/' + file);

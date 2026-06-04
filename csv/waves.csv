@@ -2,17 +2,26 @@
 # 格式: CSV (逗号分隔), 以 # 开头的行为注释行
 # 可在 Excel / Google Sheets 中直接编辑
 #
-# 列顺序 (7列):
-# waveNumber, minBudget, maxBudget, availableBehaviors, availableMechanics,
-# spawnPattern, specialRule
-#
-# 难度曲线: wave 1 = budget 8~10, wave 20 = budget 200~220
-# maxBudget 近似 = minBudget + 10%
-#
-# availableBehaviors: 用 | 分隔可选敌人行为 (chase|fast|ranged|explode|heal|mortar|blink)
-# availableMechanics: 用 | 分隔特殊机制 (splitter|shielded|leech|reflect|freeze)
-# spawnPattern: random|circle|line|wave|ambush
-# specialRule: bossEvery5|doubleSpawn|healingReduced 或空
+# ====== 列说明 (7列) ======
+# waveNumber:          波次编号 (1=第1波, 依此类推)
+# minBudget:           生成预算最小值 (决定本波出怪总数/强度下限)
+# maxBudget:           生成预算最大值 (上限, 约 = minBudget + 10%)
+#                      难度曲线: wave 1=8~10, wave 20=200~220
+# availableBehaviors:  可选敌人行为, 用 | 分隔
+#                      chase|fast|ranged|explode|heal|mortar|blink
+# availableMechanics:  可选特殊机制, 用 | 分隔
+#                      splitter|shielded|leech|reflect|freeze
+#                      空 = 本波无特殊机制敌人
+# spawnPattern:        生成阵型
+#   random  随机散布 (默认)
+#   circle  环绕生成
+#   line    列队生成
+#   wave    波状生成
+#   ambush  伏击 (从暗处生成)
+# specialRule:         特殊规则 (空=无)
+#   bossEvery5    每5波出Boss
+#   doubleSpawn   双倍生成
+#   healingReduced 治疗效果减半
 #
 # 注: 波次生成逻辑在 wave.js 中实现，本表为配置骨架
 #

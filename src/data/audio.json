@@ -1,0 +1,402 @@
+[
+  {
+    "category": "bgm",
+    "id": "combat1",
+    "type": "",
+    "file": "sounds/bgm_1.m4a",
+    "name": "战斗主题1",
+    "categoryTag": ""
+  },
+  {
+    "category": "bgm",
+    "id": "combat2",
+    "type": "",
+    "file": "sounds/bgm_2.m4a",
+    "name": "战斗主题2",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_shoot",
+    "type": "shoot",
+    "file": "",
+    "name": "射击",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_laser",
+    "type": "laser",
+    "file": "",
+    "name": "激光",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_enemy_hit",
+    "type": "enemy_hit",
+    "file": "",
+    "name": "命中敌人",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_hurt",
+    "type": "hurt",
+    "file": "",
+    "name": "玩家受伤",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_enemy_die",
+    "type": "enemy_die",
+    "file": "",
+    "name": "敌人死亡",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_explosion",
+    "type": "explosion",
+    "file": "",
+    "name": "爆炸",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_coin",
+    "type": "coin",
+    "file": "",
+    "name": "金币收集",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_pickup",
+    "type": "pickup",
+    "file": "",
+    "name": "拾取物品",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_levelup",
+    "type": "levelup",
+    "file": "",
+    "name": "升级",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_click",
+    "type": "click",
+    "file": "",
+    "name": "界面点击",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_melee_slash",
+    "type": "melee_slash",
+    "file": "",
+    "name": "近战轻击",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_melee_heavy",
+    "type": "melee_heavy",
+    "file": "",
+    "name": "近战重击",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_cannon",
+    "type": "cannon",
+    "file": "",
+    "name": "火炮",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_cannon_shot",
+    "type": "cannon_shot",
+    "file": "",
+    "name": "火炮射击",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_gunshot",
+    "type": "gunshot",
+    "file": "",
+    "name": "标准枪声",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_pistol",
+    "type": "pistol",
+    "file": "",
+    "name": "手枪",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_heavy_gun",
+    "type": "heavy_gun",
+    "file": "",
+    "name": "重型枪声",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_arrow",
+    "type": "arrow",
+    "file": "",
+    "name": "弓箭",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_fire",
+    "type": "fire",
+    "file": "",
+    "name": "火焰",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_ice",
+    "type": "ice",
+    "file": "",
+    "name": "冰霜",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_lightning",
+    "type": "lightning",
+    "file": "",
+    "name": "闪电",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_magic",
+    "type": "magic",
+    "file": "",
+    "name": "魔法",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_spear",
+    "type": "spear",
+    "file": "",
+    "name": "长枪",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_type",
+    "id": "se_axe",
+    "type": "axe",
+    "file": "",
+    "name": "斧头",
+    "categoryTag": ""
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_shoot",
+    "type": "",
+    "file": "se_Shoot.wav",
+    "name": "射击",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_laser",
+    "type": "",
+    "file": "se_Laser.wav",
+    "name": "激光",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_enemy_hit",
+    "type": "",
+    "file": "se_Hit1.wav",
+    "name": "命中敌人",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_hurt",
+    "type": "",
+    "file": "se_Hit1.wav",
+    "name": "玩家受伤",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_enemy_die",
+    "type": "",
+    "file": "se_Hit1.wav",
+    "name": "敌人死亡",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_explosion",
+    "type": "",
+    "file": "se_explosion.m4a",
+    "name": "爆炸",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_coin",
+    "type": "",
+    "file": "se_Coin.wav",
+    "name": "金币收集",
+    "categoryTag": "pickup"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_pickup",
+    "type": "",
+    "file": "se_PowerUp3.wav",
+    "name": "拾取物品",
+    "categoryTag": "pickup"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_levelup",
+    "type": "",
+    "file": "se_levelUp.wav",
+    "name": "升级",
+    "categoryTag": "system"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_click",
+    "type": "",
+    "file": "se_Click.wav",
+    "name": "界面点击",
+    "categoryTag": "ui"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_melee_slash",
+    "type": "",
+    "file": "se_lightSwordSlice1.m4a",
+    "name": "近战轻击(横扫)",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_melee_heavy",
+    "type": "",
+    "file": "se_violentSwordSlice.m4a",
+    "name": "近战重击(突刺)",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_cannon",
+    "type": "",
+    "file": "se_cannonFire.m4a",
+    "name": "火炮(爆炸武器)",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_cannon_shot",
+    "type": "",
+    "file": "se_cannonShot02.m4a",
+    "name": "火炮射击",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_gunshot",
+    "type": "",
+    "file": "se_gunShot.m4a",
+    "name": "标准枪声",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_pistol",
+    "type": "",
+    "file": "se_pistolShot.m4a",
+    "name": "手枪射击(默认)",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_heavy_gun",
+    "type": "",
+    "file": "se_heavy-gunshot.m4a",
+    "name": "重型枪声(霰弹)",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_arrow",
+    "type": "",
+    "file": "se-arrowSwish.m4a",
+    "name": "弓箭",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_fire",
+    "type": "",
+    "file": "se_fireball.m4a",
+    "name": "火焰喷射",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_ice",
+    "type": "",
+    "file": "se_iced-magic.m4a",
+    "name": "冰霜魔法",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_lightning",
+    "type": "",
+    "file": "se_lightning.m4a",
+    "name": "闪电(连锁)",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_magic",
+    "type": "",
+    "file": "se_sci-fi-launch.m4a",
+    "name": "魔法发射(追踪)",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_spear",
+    "type": "",
+    "file": "se_spearThrust.m4a",
+    "name": "长枪突刺",
+    "categoryTag": "combat"
+  },
+  {
+    "category": "sfx_file",
+    "id": "se_axe",
+    "type": "",
+    "file": "se_axeSlash.m4a",
+    "name": "斧头挥砍",
+    "categoryTag": "combat"
+  }
+]

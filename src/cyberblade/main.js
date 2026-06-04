@@ -77,10 +77,6 @@ GameEngine.startGame = function(startWeaponId, difficulty) {
             p.weapons = [{ id: 'pistol', level: 1, quality: 'T1' }];
         }
     }
-    // 初始化初始武器的词条
-    for (const w of p.weapons) {
-        if (!w.affixes) ShopSystem._initWeaponAffixes(w);
-    }
     // 初始化武器参数
     if (!p.weaponParams) p.weaponParams = {};
     for (const w of p.weapons) {
@@ -103,7 +99,7 @@ GameEngine.startGame = function(startWeaponId, difficulty) {
         if (GameEngine.levelUpPending) {
             GameEngine.levelUpPending = false;
             GameEngine.state = 'levelup';
-            LevelUpSystem.generateCards(pp, WaveSystem.currentLevel || 0);
+            LevelUpSystem.generateCards(pp, pp.level || 1);
             UISystem.showLevelUp();
         } else {
             GameEngine.state = 'shopping';
@@ -202,7 +198,7 @@ GameEngine._updatePlaying = function(dt) {
             this.levelUpPending = false;
             this.state = 'levelup';
             if (typeof AudioSystem !== 'undefined') AudioSystem.pauseBGM();
-            LevelUpSystem.generateCards(player, WaveSystem.currentLevel || 0);
+            LevelUpSystem.generateCards(player, player.level || 1);
             UISystem.showLevelUp();
         } else {
             this.state = 'shopping';
@@ -456,7 +452,7 @@ GameEngine.onLevelUpClosed = function() {
         p.level++;
         p.xpToNext = StatsSystem.xpForLevel(p.level);
         this.state = 'levelup';
-        LevelUpSystem.generateCards(p, WaveSystem.currentLevel || 0);
+        LevelUpSystem.generateCards(p, p.level || 1);
         UISystem.showLevelUp();
         return;
     }

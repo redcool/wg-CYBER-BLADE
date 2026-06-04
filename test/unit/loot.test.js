@@ -99,7 +99,7 @@ global.ItemSystem = {
 
 // Mock ShopSystem
 global.ShopSystem = {
-    qualityDefs: { T1: { name: '普通', damageMult: 1.0, minWave: 1, rollWeight: 45, costMult: 1.0 } },
+
     biasedSelect: (pool, biasWeights) => {
         if (!pool || pool.length === 0) return null;
         // Weighted random selection similar to real implementation
@@ -288,8 +288,7 @@ describe('LootSystem - 选择奖励', () => {
         expect(player.weapons[0].id).toBe('plasma');
         expect(player.weapons[0].level).toBe(1);
 
-        // 验证调用 ShopSystem 方法初始化词条和参数
-        expect(global.ShopSystem._initWeaponAffixes).toHaveBeenCalled();
+        // 验证调用 ShopSystem 更新武器参数
         expect(global.ShopSystem._updateWeaponParams).toHaveBeenCalled();
     });
 

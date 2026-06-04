@@ -192,6 +192,7 @@ body {
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s ease;
+    overflow: hidden;
 }
 .char-icon-card:hover {
     border-color: rgba(255, 136, 68, 0.6);
@@ -224,6 +225,8 @@ body {
 .char-icon-card img {
     width: 65%;
     height: 65%;
+    max-width: 100%;
+    max-height: 100%;
     border-radius: 6px;
     object-fit: cover;
 }
@@ -789,6 +792,11 @@ body {
 .hud-stat.levelup-pending {
     animation: pulse-glow 0.6s ease-in-out infinite alternate;
 }
+.level-display {
+    margin-left: 6px;
+    color: #00ff88;
+    font-weight: 700;
+}
 @keyframes pulse-glow {
     from { filter: brightness(1); }
     to   { filter: brightness(1.8); }
@@ -1005,7 +1013,7 @@ body {
 
 /* === 商店（Brotato 风格） === */
 .shop-content {
-    max-width: 820px;
+    max-width: 960px;
     max-height: 90vh;
     overflow-y: auto;
     padding: 24px 28px;
@@ -1352,11 +1360,11 @@ body {
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 8px;
-    padding: 10px 12px;
+    padding: 8px 10px;
 }
 .shop-items-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
 }
 
@@ -1365,7 +1373,7 @@ body {
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
-    padding: 14px 10px 10px;
+    padding: 8px 6px 6px;
     cursor: pointer;
     pointer-events: all;
     transition: all 0.25s ease;
@@ -1374,7 +1382,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
+    gap: 2px;
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
@@ -1420,29 +1428,30 @@ body {
 .mixed-card .mc-icon {
     display: flex;
     justify-content: center;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     width: 100%;
 }
 .mixed-card .mc-icon img {
-    width: 56px;
-    height: 56px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     object-fit: cover;
 }
 .mixed-card .mc-icon .item-placeholder {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     opacity: 0.4;
 }
 .mixed-card .mc-type-badge {
     position: absolute;
-    top: 4px;
-    left: 4px;
-    font-size: 0.45em;
-    padding: 1px 5px;
-    border-radius: 3px;
+    top: 3px;
+    left: 3px;
+    font-size: 0.4em;
+    padding: 1px 4px;
+    border-radius: 2px;
     font-family: 'Orbitron', monospace;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
 }
 .mixed-card.weapon-card .mc-type-badge {
     background: rgba(255, 100, 0, 0.2);
@@ -1458,16 +1467,16 @@ body {
 /* 品质边框标签 */
 .mixed-card .mc-quality-badge {
     position: absolute;
-    top: 4px;
-    right: 4px;
-    font-size: 0.45em;
+    top: 3px;
+    right: 3px;
+    font-size: 0.4em;
     font-family: 'Orbitron', monospace;
     font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 3px;
+    padding: 1px 4px;
+    border-radius: 2px;
     background: rgba(0, 0, 0, 0.7);
     border: 1px solid currentColor;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     z-index: 2;
     line-height: 1.2;
 }
@@ -1478,36 +1487,50 @@ body {
 }
 .mixed-card .mc-name {
     font-family: 'Orbitron', monospace;
-    font-size: 0.6em;
+    font-size: 0.52em;
     font-weight: 700;
     color: #00ffff;
     text-align: center;
-    margin-bottom: 1px;
+    margin-bottom: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
+    line-height: 1.3;
 }
 .mixed-card .mc-tag {
     display: inline-block;
-    font-size: 0.45em;
-    padding: 0 4px;
+    font-size: 0.4em;
+    padding: 0 3px;
     border-radius: 2px;
     border: 1px solid currentColor;
     opacity: 0.6;
     font-family: 'Orbitron', monospace;
-    margin: 0 auto 2px;
+    margin: 0 auto 1px;
     text-align: center;
     width: fit-content;
+    line-height: 1.3;
+}
+.mixed-card .mc-class-badge {
+    display: inline-block;
+    font-size: 0.45em;
+    padding: 0 3px;
+    border-radius: 2px;
+    opacity: 0.7;
+    margin: 0 auto 1px;
+    text-align: center;
+    width: fit-content;
+    line-height: 1.3;
+    background: rgba(255,255,255,0.06);
 }
 .mixed-card .mc-desc {
-    font-size: 0.52em;
+    font-size: 0.45em;
     color: rgba(255, 255, 255, 0.4);
     text-align: center;
     line-height: 1.2;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
     width: 100%;
-    height: 2.6em;
+    height: 1.8em;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: thin;
@@ -1516,7 +1539,7 @@ body {
 }
 .mixed-card .mc-stats-grid {
     width: 100%;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 .mixed-card .mc-stats-grid .stats-grid {
     display: grid;
@@ -1524,15 +1547,13 @@ body {
     gap: 2px 6px;
 }
 .mixed-card .mc-stats-grid .stats-grid .stat-item {
-    font-size: 0.52em;
+    font-size: 0.45em;
     color: rgba(255, 255, 255, 0.6);
     background: rgba(255, 255, 255, 0.04);
-    padding: 1px 4px;
+    padding: 1px 3px;
     border-radius: 3px;
     text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    word-break: break-word;
 }
 .mixed-card .mc-stats-grid .stats-grid .stat-item b {
     color: #ff8833;
@@ -1542,11 +1563,11 @@ body {
     text-align: center;
     width: 100%;
     margin-top: auto;
-    padding: 3px 0 2px;
+    padding: 2px 0 1px;
 }
 .mixed-card .mc-price-row .mc-cost {
     font-family: 'Orbitron', monospace;
-    font-size: 0.65em;
+    font-size: 0.55em;
     color: #ffcc00;
     font-weight: 700;
 }
@@ -1557,13 +1578,13 @@ body {
 }
 .mixed-card .mc-lock {
     display: inline-block;
-    font-size: 0.55em;
+    font-size: 0.45em;
     cursor: pointer;
     pointer-events: all;
     opacity: 0.35;
     transition: all 0.2s ease;
-    padding: 2px 8px;
-    border-radius: 4px;
+    padding: 1px 6px;
+    border-radius: 3px;
     border: 1px solid transparent;
 }
 .mixed-card .mc-lock:hover {
@@ -1586,25 +1607,26 @@ body {
     text-align: center;
 }
 .mixed-card .mc-owned {
-    font-size: 0.45em;
+    font-size: 0.4em;
     color: rgba(255,255,255,0.3);
     text-align: center;
     width: 100%;
+    line-height: 1.2;
 }
 .mixed-card .mc-count-badge {
     position: absolute;
-    top: 4px;
-    right: 4px;
-    font-size: 0.5em;
+    top: 2px;
+    right: 2px;
+    font-size: 0.45em;
     font-family: 'Orbitron', monospace;
     background: rgba(0, 255, 136, 0.2);
     color: #00ff88;
-    padding: 1px 5px;
-    border-radius: 8px;
+    padding: 0 4px;
+    border-radius: 6px;
     border: 1px solid rgba(0, 255, 136, 0.3);
     font-weight: 700;
     z-index: 2;
-    line-height: 1.2;
+    line-height: 1.3;
 }
 
 /* 右面板刷新区 */
@@ -1875,7 +1897,7 @@ body {
 
 /* === Level Up === */
 .levelup-content {
-    max-width: 460px;
+    max-width: 500px;
 }
 
 .levelup-title {
@@ -1899,34 +1921,119 @@ body {
 }
 
 .levelup-choice {
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(0, 255, 136, 0.2);
     border-radius: 8px;
-    padding: 12px 16px;
+    padding: 10px 14px;
     cursor: pointer;
     pointer-events: all;
     transition: all 0.3s ease;
     text-align: left;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
 }
+/* Brotato 风格 Tier 颜色 */
+.levelup-choice.tier-I  { background: rgba(170,170,170,0.08); border: 1px solid rgba(170,170,170,0.25); }
+.levelup-choice.tier-II { background: rgba(79,195,247,0.08); border: 1px solid rgba(79,195,247,0.25); }
+.levelup-choice.tier-III { background: rgba(206,147,216,0.08); border: 1px solid rgba(206,147,216,0.25); }
+.levelup-choice.tier-IV { background: rgba(255,213,79,0.08); border: 1px solid rgba(255,213,79,0.25); }
 
 .levelup-choice:hover {
-    border-color: #00ff88;
-    background: rgba(0, 255, 136, 0.1);
     transform: translateX(5px);
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
 }
+.levelup-choice.tier-I:hover  { border-color: #aaa;  background: rgba(170,170,170,0.15); box-shadow: 0 0 16px rgba(170,170,170,0.15); }
+.levelup-choice.tier-II:hover { border-color: #4fc3f7; background: rgba(79,195,247,0.15); box-shadow: 0 0 16px rgba(79,195,247,0.15); }
+.levelup-choice.tier-III:hover { border-color: #ce93d8; background: rgba(206,147,216,0.15); box-shadow: 0 0 16px rgba(206,147,216,0.15); }
+.levelup-choice.tier-IV:hover { border-color: #ffd54f; background: rgba(255,213,79,0.15); box-shadow: 0 0 16px rgba(255,213,79,0.15); }
 
 .levelup-choice-name {
     font-family: 'Orbitron', monospace;
-    font-size: 0.85em;
+    font-size: 0.9em;
     font-weight: 700;
-    color: #00ff88;
-    margin-bottom: 2px;
 }
+.levelup-choice.tier-I  .levelup-choice-name { color: #ccc; }
+.levelup-choice.tier-II .levelup-choice-name { color: #4fc3f7; }
+.levelup-choice.tier-III .levelup-choice-name { color: #ce93d8; }
+.levelup-choice.tier-IV .levelup-choice-name { color: #ffd54f; }
 
 .levelup-choice-desc {
     font-size: 0.8em;
     color: rgba(255, 255, 255, 0.6);
+    line-height: 1.3;
+}
+
+/* 卡牌图标区（左侧） */
+.levelup-card-icon-wrap {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.levelup-card-icon {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+}
+.levelup-card-emoji {
+    font-size: 2.4em;
+    line-height: 1;
+}
+
+/* 卡牌信息区（右侧 2 行） */
+.levelup-card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+/* 卡牌头部行（Tier 徽标 + 名称） */
+.levelup-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.levelup-card-tier {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.55em;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    line-height: 1.4;
+    flex-shrink: 0;
+}
+.levelup-choice.tier-I  .levelup-card-tier { color: #aaa; background: rgba(170,170,170,0.15); border: 1px solid rgba(170,170,170,0.3); }
+.levelup-choice.tier-II .levelup-card-tier { color: #4fc3f7; background: rgba(79,195,247,0.15); border: 1px solid rgba(79,195,247,0.3); }
+.levelup-choice.tier-III .levelup-card-tier { color: #ce93d8; background: rgba(206,147,216,0.15); border: 1px solid rgba(206,147,216,0.3); }
+.levelup-choice.tier-IV .levelup-card-tier { color: #ffd54f; background: rgba(255,213,79,0.15); border: 1px solid rgba(255,213,79,0.3); }
+
+/* 重掷按钮 */
+.levelup-reroll {
+    margin-top: 12px;
+    text-align: center;
+}
+.reroll-btn {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.75em;
+    padding: 6px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    pointer-events: all;
+    transition: all 0.2s ease;
+}
+.reroll-btn:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
 }
 
 /* === Scrollbar === */
@@ -2032,14 +2139,15 @@ body {
 
 /* 商店卡片词条提示 */
 .mixed-card .weapon-affixes {
-    margin: 2px 0;
+    margin: 1px 0;
 }
 
 .mixed-card .weapon-affix {
-    font-size: 0.48em;
+    font-size: 0.42em;
     color: rgba(255, 255, 255, 0.4);
     background: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 255, 255, 0.06);
+    padding: 1px 4px;
 }
 
 /* === 战斗日志 === */
@@ -2115,7 +2223,7 @@ body {
 @media (max-width: 600px) {
     .menu-content, .shop-content, .levelup-content { padding: 20px 16px; }
     .game-title { font-size: 2em; }
-    .shop-items { grid-template-columns: 1fr; }
+    .shop-items-grid { grid-template-columns: repeat(2, 1fr); }
     .char-grid { grid-template-columns: repeat(5, 1fr); gap: 5px; }
     .weapon-select-grid { grid-template-columns: repeat(5, 1fr); gap: 5px; }
     .char-icon-card { border-radius: 8px; }

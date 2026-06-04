@@ -1,6 +1,42 @@
 // ============================================================
 // cyberblade/ui.js - UI系统（角色选择+商店+结算）
 // ============================================================
+// UI中文显示字符串（从 ui_charsData.json 加载，运行时覆盖）
+const _UI_STR = {
+    toast_save_ok:'💾 存档保存成功', toast_save_fail:'❌ 保存失败',
+    toast_load_ok:'📂 存档加载成功', toast_load_none:'📂 没有找到存档',
+    toast_export_ok:'📤 存档已导出',
+    weapon_select_hint:'{0} · 选择一个初始武器',
+    char_fallback_name:'赛博游侠',
+    unlock_new_weapon:'🔓 新武器: {0} {1}',
+    unlock_new_char:'🔓 新角色: {0} {1}',
+    shop_char_info:'⚔️ 赛博游侠',
+    shop_empty:'暂无商品，点击刷新',
+    type_weapon:'武器', type_item:'道具',
+    owned_equipped:'已装备', owned_held:'已持 ×{0}',
+    lock_locked:'🔒 已锁定', lock_unlock:'🔓 锁定',
+    owned_empty:'暂无',
+    synergy_empty:'⚡ 暂无激活羁绊',
+
+    shop_no_gold:'🪙 金币不足，需要 {0}',
+    shop_sold:'🗑️ 已卖出 {0}，退款 {1} 🪙',
+    reroll_btn:'🔄 重掷',
+    levelup_reroll_cost:'（{0} 材料）', levelup_reroll_free:'（免费）',
+    mod_damage:'{0}%伤害', mod_attackSpeed:'{0}%攻速',
+    mod_moveSpeed:'{0}%移速', mod_range:'{0}%射程',
+    gold_label:'金币',
+    chest_reward_fallback:'奖励',
+    diff_bonus_enemy:'怪物属性 ×{0}',
+    diff_bonus_spawn:'刷新速度 ×{0}',
+    diff_bonus_elite:'精英每{0}关',
+    diff_bonus_boss:'Boss: {0}关',
+    diff_bonus_new_enemy:'新增敌人: {0}',
+    diff_bonus_none:'无特殊加成',
+};
+if (typeof DataLoader !== 'undefined') {
+    DataLoader.load('ui_charsData').then(d => { if (d) Object.assign(_UI_STR, d); }).catch(() => {});
+}
+
 // 角色属性格式化映射（代码逻辑，不在数据层）
 const _CHAR_FMT = {
     dodge: v => `${(v * 100).toFixed(0)}%`,
@@ -48,9 +84,6 @@ const UISystem = {
 
     init() {
         document.getElementById('startBtn').addEventListener('click', () => {
-            if (!CharacterSystem.selectedCharacterId) {
-                CharacterSystem.selectedCharacterId = 'default';
-            }
             this._showWeaponSelect();
         });
         document.getElementById('restartBtn').addEventListener('click', () => {
@@ -133,7 +166,7 @@ const UISystem = {
     },
 
     _showWeaponSelect() {
-        const charId = CharacterSystem.selectedCharacterId || 'default';
+        const charId = CharacterSystem.selectedCharacterId;
         const ch = CharacterSystem.allCharacters.find(c => c.id === charId);
         if (!ch) return;
 
@@ -142,7 +175,7 @@ const UISystem = {
         document.getElementById('weaponSelectOverlay').classList.remove('hidden');
 
         document.getElementById('weaponSelectHint').textContent =
-            `${ch.name} · 选择一个初始武器`;
+            _UI_STR.weapon_select_hint.replace('{0}', ch.name);
 
         const affinities = ch.tags || ch.weaponAffinities || [];
         const normalizeWeaponTag = (t) => ({ gun: 'ranged', bow: 'ranged', magic: 'fire', medic: 'tech', lance: 'melee' }[t] || t);
@@ -182,6 +215,12 @@ const UISystem = {
         const tagStr = tagDef ? `${tagDef.icon} ${tagDef.name}` : weapon.tag || '—';
         const tagColor = tagDef ? this._tagColor(tagDef.id) : '#ffffff';
 
+        // 武器类别 Class 显示
+        const cache = typeof DataLoader !== 'undefined' && DataLoader._cache;
+        const classDefs = (cache && cache.classes) || [];
+        const weaponClass = classDefs.find(c => c.id === weapon.class);
+        const classStr = weaponClass ? `⚜ ${weaponClass['中文名']}` : weapon.class || '';
+
         // 构建属性列表（数据驱动，非0即显示，2列）
         const statLines = [];
         for (const def of this._weaponStatDefs) {
@@ -197,7 +236,7 @@ const UISystem = {
             <div class="weapon-detail-avatar">${AssetSystem.weaponIconHTML(weapon.id, 72)}</div>
             <div class="weapon-detail-info">
                 <div class="weapon-detail-name">${weapon.name}</div>
-                <div class="weapon-detail-tag" style="color:${tagColor}">${tagStr}</div>
+                <div class="weapon-detail-tag" style="color:${tagColor}">${tagStr}${classStr ? ' · ' + classStr : ''}</div>
                 <div class="weapon-detail-desc">${weapon.desc || ''}</div>
                 <div class="weapon-detail-stats">
                     ${statLines.join('\n')}
@@ -287,10 +326,10 @@ const UISystem = {
 
         // 构建属性标签
         const bonuses = [];
-        if (d.enemyMult > 1) bonuses.push(`怪物属性 ×${d.enemyMult.toFixed(1)}`);
-        if (d.spawnRate > 1) bonuses.push(`生成速率 ×${d.spawnRate.toFixed(1)}`);
-        if (d.eliteInterval > 0) bonuses.push(`精英每${d.eliteInterval}关`);
-        if (d.bossWaves && d.bossWaves.length > 0) bonuses.push(`Boss: ${d.bossWaves.join('、')}关`);
+        if (d.enemyMult > 1) bonuses.push(_UI_STR.diff_bonus_enemy.replace('{0}', d.enemyMult.toFixed(1)));
+        if (d.spawnRate > 1) bonuses.push(_UI_STR.diff_bonus_spawn.replace('{0}', d.spawnRate.toFixed(1)));
+        if (d.eliteInterval > 0) bonuses.push(_UI_STR.diff_bonus_elite.replace('{0}', d.eliteInterval));
+        if (d.bossWaves && d.bossWaves.length > 0) bonuses.push(_UI_STR.diff_bonus_boss.replace('{0}', d.bossWaves.join('、')));
         if (d.newEnemyTypes && d.newEnemyTypes.length > 0) {
             // 从 enemies 数据查找中文名
             const enemyDefs = this._getEnemyDefs();
@@ -298,9 +337,9 @@ const UISystem = {
                 const def = enemyDefs.find(e => e.id === eid);
                 return def ? def.name : eid;
             });
-            bonuses.push(`新敌人: ${names.join('、')}`);
+            bonuses.push(_UI_STR.diff_bonus_new_enemy.replace('{0}', names.join('、')));
         }
-        if (bonuses.length === 0) bonuses.push('无额外加成');
+        if (bonuses.length === 0) bonuses.push(_UI_STR.diff_bonus_none);
 
         if (bonusesEl) bonusesEl.innerHTML = bonuses.map(b => `<span class="diff-detail-bonus">${b}</span>`).join('');
     },
@@ -353,9 +392,9 @@ const UISystem = {
         if (saveBtn) {
             saveBtn.addEventListener('click', () => {
                 if (typeof SaveSystem !== 'undefined' && SaveSystem.save()) {
-                    this._showToast('💾 存档保存成功');
+                    this._showToast(_UI_STR.toast_save_ok);
                 } else {
-                    this._showToast('❌ 保存失败');
+                    this._showToast(_UI_STR.toast_save_fail);
                 }
             });
         }
@@ -365,9 +404,9 @@ const UISystem = {
             loadBtn.addEventListener('click', () => {
                 if (typeof SaveSystem !== 'undefined' && SaveSystem.load()) {
                     this._renderCharSelect();
-                    this._showToast('📂 存档加载成功');
+                    this._showToast(_UI_STR.toast_load_ok);
                 } else {
-                    this._showToast('📂 没有找到存档');
+                    this._showToast(_UI_STR.toast_load_none);
                 }
             });
         }
@@ -377,7 +416,7 @@ const UISystem = {
             exportBtn.addEventListener('click', () => {
                 if (typeof SaveSystem !== 'undefined') {
                     SaveSystem.exportToFile();
-                    this._showToast('📤 存档已导出');
+                    this._showToast(_UI_STR.toast_export_ok);
                 }
             });
         }
@@ -475,14 +514,14 @@ const UISystem = {
             let unlockDesc = '';
             const cond = ch.unlockCondition;
             if (cond) {
-                if (cond.type === 'maxLevel') unlockDesc = `通关第 ${cond.value} 关解锁`;
-                else if (cond.type === 'totalKills') unlockDesc = `累计击杀 ${cond.value} 解锁`;
+                if (cond.type === 'maxLevel') unlockDesc = _UI_STR.unlock_level.replace('{0}', cond.value);
+                else if (cond.type === 'totalKills') unlockDesc = _UI_STR.unlock_kills.replace('{0}', cond.value);
             }
             detail.innerHTML = `
                 <div class="char-detail-avatar locked">🔒</div>
                 <div class="char-detail-info">
                     <div class="char-detail-name locked">???</div>
-                    <div class="char-detail-desc">${unlockDesc || '未解锁'}</div>
+                    <div class="char-detail-desc">${unlockDesc || _UI_STR.unlock_locked}</div>
                 </div>
             `;
         }
@@ -655,14 +694,14 @@ const UISystem = {
 
     /**
      * 从武器对象中提取各维度原始值
-     * 攻速 = 1/cooldown (高=快), 射程 = max(attackRange, meleeRange)
+     * 攻速 = 1/cooldown (高=快), 射程 = attackRange
      */
     _getWeaponRadarValues(w) {
         return {
             damage:      w.damage_lv1 || w.damage_lv2 || 0,
             attackSpeed: w.cooldown_lv1 > 0 ? +(1 / w.cooldown_lv1).toFixed(2) : 1,
             bulletSpeed: w.bulletSpeed || 0,
-            range:       Math.max(w.attackRange || 0, w.meleeRange || 0),
+            range:       w.attackRange || 0,
             pierce:      w.pierce || 0,
             bulletCount: w.bulletCount || 1,
         };
@@ -814,7 +853,7 @@ const UISystem = {
         document.getElementById('finalKills').textContent = p ? p.kills : 0;
         document.getElementById('finalMaterials').textContent = p ? p.materials : 0;
         document.getElementById('finalChar').textContent = CharacterSystem.selectedCharacterId ?
-            CharacterSystem.allCharacters.find(c => c.id === CharacterSystem.selectedCharacterId)?.name || '赛博游侠' : '赛博游侠';
+            CharacterSystem.allCharacters.find(c => c.id === CharacterSystem.selectedCharacterId)?.name || _UI_STR.char_fallback_name : _UI_STR.char_fallback_name;
 
         const weaponContainer = document.getElementById('finalWeapons');
         weaponContainer.innerHTML = '';
@@ -838,10 +877,14 @@ const UISystem = {
                 div.className = 'new-unlock';
                 if (ul.type === 'weapon') {
                     const def = ShopSystem.allWeapons.find(w => w.id === ul.id);
-                    div.innerHTML = `🔓 新武器: ${def ? AssetSystem.weaponIconHTML(def.id) + ' ' + def.name : ul.id}`;
+                    const iconHtml = def ? AssetSystem.weaponIconHTML(def.id) : '';
+                    const wName = def ? def.name : ul.id;
+                    div.innerHTML = _UI_STR.unlock_new_weapon.replace('{0}', iconHtml).replace('{1}', wName);
                 } else if (ul.type === 'character') {
                     const def = CharacterSystem.allCharacters.find(c => c.id === ul.id);
-                    div.innerHTML = `🔓 新角色: ${def ? AssetSystem.charIconHTML(def.id) + ' ' + def.name : ul.id}`;
+                    const iconHtml = def ? AssetSystem.charIconHTML(def.id) : '';
+                    const cName = def ? def.name : ul.id;
+                    div.innerHTML = _UI_STR.unlock_new_char.replace('{0}', iconHtml).replace('{1}', cName);
                 }
                 unlockContainer.appendChild(div);
                 setTimeout(() => div.classList.add('show'), 100);
@@ -864,7 +907,7 @@ const UISystem = {
         this._errorTimer = null;
 
         const char = CharacterSystem.allCharacters.find(c => c.id === CharacterSystem.selectedCharacterId);
-        document.getElementById('shopCharInfo').innerHTML = `${char ? AssetSystem.charIconHTML(char.id) + ' ' + char.name : '⚔️ 赛博游侠'}`;
+        document.getElementById('shopCharInfo').innerHTML = `${char ? AssetSystem.charIconHTML(char.id) + ' ' + char.name : _UI_STR.shop_char_info}`;
         document.getElementById('shopLevel').textContent = WaveSystem.currentLevel;
 
         this.updateShop(p);
@@ -884,37 +927,37 @@ const UISystem = {
         for (const [key, val] of Object.entries(bonus)) {
             switch (key) {
                 // 新标签系统（TagSystem）
-                case 'damagePercent': parts.push(`伤害+${Math.round(val * 100)}%`); break;
-                case 'lifeSteal': parts.push(`吸血+${Math.round(val * 100)}%`); break;
-                case 'armor': parts.push(`护甲+${val}`); break;
-                case 'knockback': parts.push(`击退+${val}`); break;
-                case 'attackRange': parts.push(`射程+${Math.round(val * 100)}%`); break;
-                case 'bulletSpeed': parts.push(`弹速+${Math.round(val * 100)}%`); break;
-                case 'bulletCount': parts.push(`子弹+${val}`); break;
-                case 'elementalDamage': parts.push(`元素伤+${Math.round(val * 100)}%`); break;
-                case 'burnDps': parts.push(`灼烧+${val}/s`); break;
-                case 'burningSpread': parts.push('灼烧扩散'); break;
-                case 'explosionSize': parts.push(`爆炸范围+${Math.round(val * 100)}%`); break;
-                case 'explosionDamage': parts.push(`爆炸伤+${Math.round(val * 100)}%`); break;
-                case 'chainExplosion': parts.push('连锁爆炸'); break;
-                case 'critChance': parts.push(`暴击+${Math.round(val * 100)}%`); break;
-                case 'critDamage': parts.push(`暴伤+${Math.round(val * 100)}%`); break;
-                case 'onCritLightning': parts.push('暴击落雷'); break;
-                case 'engineering': parts.push(`工程+${val}`); break;
-                case 'turretCount': parts.push(`炮塔+${val}`); break;
-                case 'turretDamage': parts.push(`炮塔伤+${Math.round(val * 100)}%`); break;
-                case 'luck': parts.push(`运气+${val}`); break;
-                case 'xpGain': parts.push(`经验+${Math.round(val * 100)}%`); break;
-                case 'materialGain': parts.push(`材料+${Math.round(val * 100)}%`); break;
-                case 'goldToDamage': parts.push('金币转伤害'); break;
+                case 'damagePercent': parts.push(_UI_STR.synergy_damagePercent.replace('{0}', Math.round(val * 100))); break;
+                case 'lifeSteal': parts.push(_UI_STR.synergy_lifeSteal.replace('{0}', Math.round(val * 100))); break;
+                case 'armor': parts.push(_UI_STR.synergy_armor.replace('{0}', val)); break;
+                case 'knockback': parts.push(_UI_STR.synergy_knockback.replace('{0}', val)); break;
+                case 'attackRange': parts.push(_UI_STR.synergy_attackRange.replace('{0}', Math.round(val * 100))); break;
+                case 'bulletSpeed': parts.push(_UI_STR.synergy_bulletSpeed.replace('{0}', Math.round(val * 100))); break;
+                case 'bulletCount': parts.push(_UI_STR.synergy_bulletCount.replace('{0}', val)); break;
+                case 'elementalDamage': parts.push(_UI_STR.synergy_elementalDamage.replace('{0}', Math.round(val * 100))); break;
+                case 'burnDps': parts.push(_UI_STR.synergy_burnDps.replace('{0}', val)); break;
+                case 'burningSpread': parts.push(_UI_STR.synergy_burningSpread); break;
+                case 'explosionSize': parts.push(_UI_STR.synergy_explosionSize.replace('{0}', Math.round(val * 100))); break;
+                case 'explosionDamage': parts.push(_UI_STR.synergy_explosionDamage.replace('{0}', Math.round(val * 100))); break;
+                case 'chainExplosion': parts.push(_UI_STR.synergy_chainExplosion); break;
+                case 'critChance': parts.push(_UI_STR.synergy_critChance.replace('{0}', Math.round(val * 100))); break;
+                case 'critDamage': parts.push(_UI_STR.synergy_critDamage.replace('{0}', Math.round(val * 100))); break;
+                case 'onCritLightning': parts.push(_UI_STR.synergy_onCritLightning); break;
+                case 'engineering': parts.push(_UI_STR.synergy_engineering.replace('{0}', val)); break;
+                case 'turretCount': parts.push(_UI_STR.synergy_turretCount.replace('{0}', val)); break;
+                case 'turretDamage': parts.push(_UI_STR.synergy_turretDamage.replace('{0}', Math.round(val * 100))); break;
+                case 'luck': parts.push(_UI_STR.synergy_luck.replace('{0}', val)); break;
+                case 'xpGain': parts.push(_UI_STR.synergy_xpGain.replace('{0}', Math.round(val * 100))); break;
+                case 'materialGain': parts.push(_UI_STR.synergy_materialGain.replace('{0}', Math.round(val * 100))); break;
+                case 'goldToDamage': parts.push(_UI_STR.synergy_goldToDamage); break;
                 // 旧兼容
-                case 'damageMult': parts.push(`伤害+${Math.round(val * 100)}%`); break;
-                case 'attackSpeedMult': parts.push(`攻速+${Math.round(val * 100)}%`); break;
-                case 'bulletSpeedMult': parts.push(`弹速+${Math.round(val * 100)}%`); break;
-                case 'bulletPierceAdd': parts.push(`穿透+${val}`); break;
-                case 'critChanceAdd': parts.push(`暴击+${Math.round(val * 100)}%`); break;
-                case 'lifeStealAdd': parts.push(`吸血+${Math.round(val * 100)}%`); break;
-                case 'critMultiplierAdd': parts.push(`暴伤+${Math.round(val * 100)}%`); break;
+                case 'damageMult': parts.push(_UI_STR.synergy_damageMult.replace('{0}', Math.round(val * 100))); break;
+                case 'attackSpeedMult': parts.push(_UI_STR.synergy_attackSpeedMult.replace('{0}', Math.round(val * 100))); break;
+                case 'bulletSpeedMult': parts.push(_UI_STR.synergy_bulletSpeedMult.replace('{0}', Math.round(val * 100))); break;
+                case 'bulletPierceAdd': parts.push(_UI_STR.synergy_bulletPierceAdd.replace('{0}', val)); break;
+                case 'critChanceAdd': parts.push(_UI_STR.synergy_critChanceAdd.replace('{0}', Math.round(val * 100))); break;
+                case 'lifeStealAdd': parts.push(_UI_STR.synergy_lifeStealAdd.replace('{0}', Math.round(val * 100))); break;
+                case 'critMultiplierAdd': parts.push(_UI_STR.synergy_critMultiplierAdd.replace('{0}', Math.round(val * 100))); break;
                 default:
                     if (typeof val === 'boolean') {
                         parts.push(val ? key : '');
@@ -973,40 +1016,12 @@ const UISystem = {
             const tagDef = TagSystem.getTagDef(def.tag);
             const tagHtml = tagDef ? `<span class="slot-tag" style="color:${this._tagColor(tagDef.id)}">${tagDef.icon}</span>` : '';
 
-            const quality = w.quality || 'T1';
-            const qColor = ShopSystem.qualityDefs[quality] ? ShopSystem.qualityDefs[quality].color : '#aaaaaa';
-            const affixHtml = (w.affixes || []).map(a => {
-                const adef = ShopSystem.affixDefs[a.id];
-                const hlType = w._affixHighlights && w._affixHighlights[a.id];
-                const hlClass = hlType ? ` weapon-affix-${hlType}` : '';
-                return `<span class="weapon-affix weapon-affix-${quality}${hlClass}" style="border-left: 2px solid ${qColor};">${adef ? adef.icon : '📋'} ${adef ? adef.desc(a.value) : a.id}</span>`;
-            }).join('');
-
             div.innerHTML = `
                 ${AssetSystem.weaponIconHTML(def.id)}
                 ${tagHtml}
                 <span class="slot-level">Lv.${level}</span>
-                <span class="slot-reroll" data-idx="${idx}">🔄</span>
                 <span class="slot-sell" data-idx="${idx}">✕</span>
-                ${affixHtml ? `<div class="weapon-affixes">
-                    <div class="weapon-affix-reroll">🔄 重随: 🪙${ShopSystem.getRerollCost(w)}</div>
-                    ${affixHtml}
-                </div>` : ''}
             `;
-
-            const rerollBtn = div.querySelector('.slot-reroll');
-            rerollBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const result = ShopSystem.rerollAffixes(w, player);
-                if (result) {
-                    this.updateShop(player);
-                    this._showShopError(`🔄 词条已重随: 🪙${result.cost}`);
-                    ParticleSystem.pickup(player.x, player.y);
-                } else {
-                    const cost = ShopSystem.getRerollCost(w);
-                    this._showShopError(`🪙 金币不足，需要 ${cost}`);
-                }
-            });
 
             const sellBtn = div.querySelector('.slot-sell');
             sellBtn.addEventListener('click', (e) => {
@@ -1065,7 +1080,7 @@ const UISystem = {
             this.updateShop(player);
             ParticleSystem.pickup(player.x, player.y);
             const refund = def ? Math.floor(def.cost / 2) + 1 : 0;
-            this._showShopError(`🗑️ 已卖出 ${def ? def.name : ''}，退款 ${refund} 🪙`);
+            this._showShopError(_UI_STR.shop_sold.replace('{0}', def ? def.name : '').replace('{1}', refund));
         }
     },
 
@@ -1092,7 +1107,7 @@ const UISystem = {
         allItems.push({
             _type: 'level',
             icon: '⬆️',
-            label: '等级',
+            label: _UI_STR.stat_label_level,
             valueHtml: `<span class="stat-value warning">Lv.${player.level}</span><span class="stat-xp">XP ${Math.round(player.xp)}/${player.xpToNext}</span>`
         });
 
@@ -1100,7 +1115,7 @@ const UISystem = {
         allItems.push({
             _type: 'hp',
             icon: '❤️',
-            label: '生命',
+            label: _UI_STR.stat_label_hp,
             valueHtml: `<span class="stat-value danger">${Math.round(player.hp)}/${Math.round(player.maxHp)}</span>`
         });
 
@@ -1191,7 +1206,7 @@ const UISystem = {
         container.innerHTML = '';
         const items = ShopSystem.items;
         if (items.length === 0) {
-            container.innerHTML = '<div class="items-empty">暂无商品，点击刷新</div>';
+            container.innerHTML = `<div class="items-empty">${_UI_STR.shop_empty}</div>`;
             return;
         }
 
@@ -1211,7 +1226,7 @@ const UISystem = {
             if (!canAfford) div.classList.add('too-expensive');
             if (item.locked) div.classList.add('locked-card');
 
-            let qualityBadgeHtml = '';
+            let rarityBadgeHtml = '';
             if (isWeapon) {
                 const rarity = item.rarity || 'common';
                 const rDef = ShopSystem.RARITY[rarity];
@@ -1219,28 +1234,33 @@ const UISystem = {
                     const col = rDef.color;
                     div.style.borderColor = col;
                     div.style.boxShadow = `0 0 10px ${col}22, inset 0 0 6px ${col}11`;
-                    qualityBadgeHtml = `<span class="mc-quality-badge" style="color:${col}">${rDef.name}</span>`;
+                    rarityBadgeHtml = `<span class="mc-quality-badge" style="color:${col}">${rDef.name}</span>`;
                 }
             }
 
-            const typeLabel = isWeapon ? '武器' : '道具';
+            const typeLabel = isWeapon ? _UI_STR.type_weapon : _UI_STR.type_item;
             const iconHtml = isWeapon ? AssetSystem.weaponIconHTML(item.id) : AssetSystem.itemIconHTML(item.id, 44);
             const tagDef = TagSystem.getTagDef(item.tag);
-            const tagHtml = tagDef ? `<div class="mc-tag" style="color:${this._tagColor(tagDef.id)}">${tagDef.icon}${tagDef.name}</div>` : '';
+            let tagHtml = tagDef ? `<div class="mc-tag" style="color:${this._tagColor(tagDef.id)}">${tagDef.icon}${tagDef.name}</div>` : '';
+            if (isWeapon) {
+                const classDefs = (typeof DataLoader !== 'undefined' && DataLoader._cache && DataLoader._cache.classes) || [];
+                const wClass = classDefs.find(c => c.id === item.class);
+                if (wClass) tagHtml += `<span class="mc-class-badge">⚜${wClass['中文名']}</span>`;
+            }
             const countBadge = !isWeapon && count > 0 ? `<span class="mc-count-badge">×${count}</span>` : '';
 
             const modParts = [];
             if (item.mods) {
-                if (item.mods.damageMult) modParts.push(`${item.mods.damageMult > 0 ? '+' : ''}${Math.round(item.mods.damageMult * 100)}%伤害`);
-                if (item.mods.attackSpeedMult) modParts.push(`${item.mods.attackSpeedMult > 0 ? '+' : ''}${Math.round(item.mods.attackSpeedMult * 100)}%攻速`);
-                if (item.mods.speedMult) modParts.push(`${item.mods.speedMult > 0 ? '+' : ''}${Math.round(item.mods.speedMult * 100)}%移速`);
-                if (item.mods.attackRangeMult) modParts.push(`${item.mods.attackRangeMult > 0 ? '+' : ''}${Math.round((item.mods.attackRangeMult - 1) * 100)}%射程`);
+                if (item.mods.damageMult) modParts.push((item.mods.damageMult > 0 ? '+' : '') + _UI_STR.mod_damage.replace('{0}', Math.round(Math.abs(item.mods.damageMult * 100))));
+                if (item.mods.attackSpeedMult) modParts.push((item.mods.attackSpeedMult > 0 ? '+' : '') + _UI_STR.mod_attackSpeed.replace('{0}', Math.round(Math.abs(item.mods.attackSpeedMult * 100))));
+                if (item.mods.speedMult) modParts.push((item.mods.speedMult > 0 ? '+' : '') + _UI_STR.mod_moveSpeed.replace('{0}', Math.round(Math.abs(item.mods.speedMult * 100))));
+                if (item.mods.attackRangeMult) modParts.push((item.mods.attackRangeMult > 0 ? '+' : '') + _UI_STR.mod_range.replace('{0}', Math.round(Math.abs((item.mods.attackRangeMult - 1) * 100))));
             }
             let descText, isStatsGrid;
             if (isWeapon) {
                 // 数据驱动武器属性显示（仅非0值，CSS grid 2列，竖直对齐）
                 const statParts = [];
-                const shopKeys = ['damage_lv1', 'cooldown_lv1', 'attackRange', 'meleeRange', 'bulletCount', 'pierce', 'splashRadius', 'homingStrength', 'burnDps', 'chainCount', 'critChanceAdd', 'critDamageAdd', 'speedMult', 'lifeStealAdd', 'armorAdd', 'maxHpAdd', 'hpRegenAdd', 'knockback', 'sprayCone', 'slowAmount', 'slowDuration', 'healOnHit'];
+                const shopKeys = ['damage_lv1', 'cooldown_lv1', 'attackRange', 'bulletCount', 'pierce', 'splashRadius', 'homingStrength', 'burnDps', 'chainCount', 'critChanceAdd', 'critDamageAdd', 'speedMult', 'lifeStealAdd', 'armorAdd', 'maxHpAdd', 'hpRegenAdd', 'knockback', 'sprayCone', 'slowAmount', 'slowDuration', 'healOnHit'];
                 for (const key of shopKeys) {
                     const val = item[key];
                     if (val === undefined || val === null || val === 0 || val === '') continue;
@@ -1255,24 +1275,21 @@ const UISystem = {
                 isStatsGrid = false;
                 descText = modParts.length > 0 ? modParts.join(' · ') : item.desc;
             }
-            const ownedText = isWeapon ? (ownedHas ? `<div class="mc-owned">已装备</div>` : '') : (count > 0 ? `<div class="mc-owned">已持 ×${count}</div>` : '');
-            const affixHint = isWeapon ? '<div class="weapon-affixes"><span class="weapon-affix">📋购买后生成1个随机词条</span></div>' : '';
-
+            const ownedText = isWeapon ? (ownedHas ? `<div class="mc-owned">${_UI_STR.owned_equipped}</div>` : '') : (count > 0 ? `<div class="mc-owned">${_UI_STR.owned_held.replace('{0}', count)}</div>` : '');
             div.innerHTML = `
                 <span class="mc-type-badge">${typeLabel}</span>
-                ${qualityBadgeHtml}
+                ${rarityBadgeHtml}
                 ${countBadge}
                 <div class="mc-icon">${iconHtml}</div>
                 <div class="mc-name">${item.name}</div>
                 ${tagHtml}
                 <div class="${isStatsGrid ? 'mc-stats-grid' : 'mc-desc'}">${descText}</div>
                 ${ownedText}
-                ${affixHint}
                 <div class="mc-price-row">
                     <span class="mc-cost">${this._getDisplayCost(player, item.cost)}</span>
                 </div>
                 <div class="mc-lock-row">
-                    <span class="mc-lock ${item.locked ? 'locked' : ''}">${item.locked ? '🔒 已锁定' : '🔓 锁定'}</span>
+                    <span class="mc-lock ${item.locked ? 'locked' : ''}">${item.locked ? _UI_STR.lock_locked : _UI_STR.lock_unlock}</span>
                 </div>
             `;
 
@@ -1308,7 +1325,7 @@ const UISystem = {
         const container = document.getElementById('ownedItems');
         container.innerHTML = '';
         if (!player.items || player.items.length === 0) {
-            container.innerHTML = '<span class="owned-empty">暂无</span>';
+            container.innerHTML = `<span class="owned-empty">${_UI_STR.owned_empty}</span>`;
             return;
         }
         const countMap = {};
@@ -1332,7 +1349,7 @@ const UISystem = {
         container.innerHTML = '';
         const synergies = player._activeSynergies || (player.weapons ? TagSystem.getActiveSynergies(player.weapons) : []);
         if (synergies.length === 0) {
-            container.innerHTML = '<span class="shop-synergy-empty">⚡ 暂无激活羁绊</span>';
+            container.innerHTML = `<span class="shop-synergy-empty">${_UI_STR.synergy_empty}</span>`;
             return;
         }
         for (const syn of synergies) {
@@ -1356,22 +1373,90 @@ const UISystem = {
         document.getElementById('levelNum').textContent = p.level;
         const container = document.getElementById('levelUpChoices');
         container.innerHTML = '';
-        const options = [...StatsSystem.levelUpOptions].sort(() => Math.random() - 0.5).slice(0, 3);
-        for (const opt of options) {
+        const cards = LevelUpSystem.getCurrentCards();
+        for (const card of cards) {
             const div = document.createElement('div');
-            div.className = 'levelup-choice';
-            div.innerHTML = `
-                <div class="levelup-choice-name">${opt.icon} ${opt.name}</div>
-                <div class="levelup-choice-desc">${opt.desc}</div>
-            `;
+            div.className = `levelup-choice tier-${card.tier}`;
+            div.dataset.cardId = card.id;
+
+            // 卡片图标：先试 PNG，失败则 fallback 到 emoji
+            const iconField = card.statField || card.actionType || 'default';
+            const iconWrap = document.createElement('div');
+            iconWrap.className = 'levelup-card-icon-wrap';
+            const img = document.createElement('img');
+            img.className = 'levelup-card-icon';
+            img.src = `assets/levelUpCards/${iconField}.png`;
+            img.alt = card.name;
+            img.style.display = 'none';
+            const emoji = document.createElement('span');
+            emoji.className = 'levelup-card-emoji';
+            emoji.textContent = card.icon || '';
+            // 图片加载成功 → 隐藏 emoji 显示图片
+            img.onload = () => { emoji.style.display = 'none'; img.style.display = ''; };
+            // 图片加载失败 → 隐藏图片显示 emoji
+            img.onerror = () => { img.style.display = 'none'; emoji.style.display = ''; };
+            iconWrap.appendChild(img);
+            iconWrap.appendChild(emoji);
+
+            // 卡片内容：左图标 + 右侧信息区（2行）
+            div.appendChild(iconWrap);
+
+            const infoWrap = document.createElement('div');
+            infoWrap.className = 'levelup-card-info';
+
+            const header = document.createElement('div');
+            header.className = 'levelup-card-header';
+            const tierBadge = document.createElement('span');
+            tierBadge.className = 'levelup-card-tier';
+            tierBadge.textContent = card.tier;
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'levelup-choice-name';
+            nameSpan.textContent = card.name;
+            header.appendChild(tierBadge);
+            header.appendChild(nameSpan);
+
+            const desc = document.createElement('div');
+            desc.className = 'levelup-choice-desc';
+            desc.textContent = card.desc || '';
+
+            infoWrap.appendChild(header);
+            infoWrap.appendChild(desc);
+            div.appendChild(infoWrap);
             div.addEventListener('click', () => {
-                PlayerSystem.applyLevelUp(opt.id);
+                LevelUpSystem.applyCard(card.id, p);
+                // 10% 生命回复
+                if (p.hp > 0) {
+                    p.hp = Math.min(p.maxHp, p.hp + Math.floor(p.maxHp * 0.1));
+                }
+                StatsSystem.clampPlayer(p);
                 document.getElementById('levelUpOverlay').classList.add('hidden');
-                ParticleSystem.levelUp(p.x, p.y);
+                if (typeof ParticleSystem !== 'undefined') ParticleSystem.levelUp(p.x, p.y);
+                if (typeof AudioSystem !== 'undefined') AudioSystem.play('levelup');
                 GameEngine.onLevelUpClosed();
             });
             container.appendChild(div);
         }
+        // 重掷按钮
+        const rerollDiv = document.createElement('div');
+        rerollDiv.className = 'levelup-reroll';
+        const rerollCost = LevelUpSystem.getRerollCost();
+        const costText = rerollCost > 0 ? _UI_STR.levelup_reroll_cost.replace('{0}', rerollCost) : _UI_STR.levelup_reroll_free;
+        rerollDiv.innerHTML = `
+            <button class="reroll-btn" id="rerollBtn">
+                ${_UI_STR.reroll_btn} ${costText}
+            </button>
+        `;
+        rerollDiv.addEventListener('click', () => {
+            const pp = PlayerSystem.player;
+            if (!pp) return;
+            const cost = LevelUpSystem.getRerollCost();
+            if (cost > 0 && (pp.materials || 0) < cost) return;
+            const newCards = LevelUpSystem.rerollCards(pp, pp.level);
+            if (newCards.length > 0) {
+                this.showLevelUp();
+            }
+        });
+        container.appendChild(rerollDiv);
     },
 
     hideLevelUp() {
@@ -1410,12 +1495,13 @@ const UISystem = {
         const xpPct = p.xpToNext > 0 ? (p.xp / p.xpToNext) * 100 : 0;
         document.getElementById('xpBar').style.width = Math.min(100, xpPct) + '%';
         document.getElementById('hudExpPct').textContent = Math.floor(xpPct) + '%';
+        document.getElementById('hudLevelDisplay').textContent = 'Lv ' + p.level;
 
         // 资源
         document.getElementById('materialCount').textContent = p.materials;
 
-        // 角色等级标识（当前等级数 badge，有可升级时高亮）
-        const levelBadge = p.level > 1 ? p.level : 0;
+        // 角色等级标识（已获得的升级次数 = 累计抽卡奖励数）
+        const levelBadge = p.level > 1 ? p.level - 1 : 0;
         const el = document.getElementById('hudStatLevelUp');
         if (levelBadge > 0) {
             el.classList.remove('hidden');
@@ -1539,9 +1625,9 @@ const UISystem = {
             const opt = rewards[i];
             const div = document.createElement('div');
             div.className = 'chest-reward-choice';
-            let icon = '📦', name = opt.name || opt.id || '奖励', desc = opt.desc || '';
+            let icon = '📦', name = opt.name || opt.id || _UI_STR.chest_reward_fallback, desc = opt.desc || '';
             if (opt.type === 'weapon') { icon = '🗡️'; name = opt.id; }
-            else if (opt.type === 'gold') { icon = '🪙'; name = `金币 ×${opt.goldAmount || 0}`; desc = ''; }
+            else if (opt.type === 'gold') { icon = '🪙'; name = `${_UI_STR.gold_label} ×${opt.goldAmount || 0}`; desc = ''; }
             div.innerHTML = `
                 <div class="chest-reward-choice-icon">${icon}</div>
                 <div class="chest-reward-choice-text">

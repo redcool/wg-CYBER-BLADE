@@ -1,6 +1,21 @@
 // ============================================================
 // cyberblade/enemy.js - 敌人系统（每种行为独立方法）
 // ============================================================
+const _ENEMY_STR = {
+    enemy_basic_name: '无人机兵',
+    enemy_fast_name: '疾行者',
+    enemy_tank_name: '重装机兵',
+    enemy_ranged_name: '狙击手',
+    enemy_exploder_name: '自爆者',
+    enemy_healer_name: '修复者',
+    enemy_mortar_name: '迫击者',
+    enemy_blinker_name: '闪现者',
+    enemy_elite_name: '精英猎手',
+    enemy_boss_name: 'BOSS·毁灭者'
+};
+if (typeof DataLoader !== 'undefined') {
+    DataLoader.load('enemy_charsData').then(d => { if (d) Object.assign(_ENEMY_STR, d); }).catch(() => {});
+}
 const EnemySystem = {
     enemies: [],
 
@@ -78,16 +93,16 @@ const EnemySystem = {
 
     // 敌人类型定义（硬编码兜底）
     types: {
-        basic: { name: '无人机兵', hp: 30, speed: 80, damage: 8, radius: 14, color: '#ff4444', glowColor: '#ff0044', xpValue: 5, materialValue: 2, attackCooldown: 1.5, behavior: 'chase' },
-        fast: { name: '疾行者', hp: 20, speed: 160, damage: 6, radius: 10, color: '#ff8800', glowColor: '#ff6600', xpValue: 6, materialValue: 2, attackCooldown: 1.2, behavior: 'chase' },
-        tank: { name: '重装机兵', hp: 120, speed: 45, damage: 15, radius: 22, color: '#8844ff', glowColor: '#6622ff', xpValue: 12, materialValue: 5, attackCooldown: 2.0, behavior: 'chase' },
-        ranged: { name: '狙击手', hp: 25, speed: 55, damage: 12, radius: 12, color: '#ff00aa', glowColor: '#ff0088', xpValue: 8, materialValue: 3, attackCooldown: 2.0, behavior: 'ranged', preferredDist: 250, bulletSpeed: 350 },
-        exploder: { name: '自爆者', hp: 40, speed: 120, damage: 12, radius: 16, color: '#ff5500', glowColor: '#ff2200', xpValue: 7, materialValue: 2, attackCooldown: 0, behavior: 'explode', explosionRadius: 80, explosionDamageMult: 1.5 },
-        healer: { name: '修复者', hp: 35, speed: 65, damage: 5, radius: 14, color: '#44ff88', glowColor: '#22ff66', xpValue: 9, materialValue: 3, attackCooldown: 2.5, behavior: 'heal', preferredDist: 250, healCooldown: 3.0, healRadius: 120, healAmount: 10 },
-        mortar: { name: '迫击者', hp: 30, speed: 40, damage: 18, radius: 14, color: '#aa44ff', glowColor: '#8822ff', xpValue: 10, materialValue: 4, attackCooldown: 3.0, behavior: 'mortar', preferredDist: 350, mortarCooldown: 3.0, mortarSpeed: 180 },
-        blinker: { name: '闪现者', hp: 25, speed: 90, damage: 14, radius: 12, color: '#ff44ff', glowColor: '#ff00ff', xpValue: 8, materialValue: 3, attackCooldown: 1.5, behavior: 'blink', blinkCooldown: 2.0, blinkDist: 100, dodgeChance: 0.3 },
-        elite: { name: '精英猎手', hp: 250, speed: 70, damage: 20, radius: 24, color: '#ffcc00', glowColor: '#ffaa00', xpValue: 30, materialValue: 15, attackCooldown: 1.0, behavior: 'chase', isElite: true },
-        boss: { name: 'BOSS·毁灭者', hp: 800, speed: 55, damage: 30, radius: 36, color: '#ff0044', glowColor: '#ff0000', xpValue: 80, materialValue: 40, attackCooldown: 0.8, behavior: 'chase', isBoss: true }
+        basic: { name: _ENEMY_STR.enemy_basic_name, hp: 30, speed: 200, damage: 8, radius: 14, color: '#ff4444', glowColor: '#ff0044', xpValue: 5, materialValue: 2, attackCooldown: 1.5, behavior: 'chase' },
+        fast: { name: _ENEMY_STR.enemy_fast_name, hp: 20, speed: 400, damage: 6, radius: 10, color: '#ff8800', glowColor: '#ff6600', xpValue: 6, materialValue: 2, attackCooldown: 1.2, behavior: 'chase' },
+        tank: { name: _ENEMY_STR.enemy_tank_name, hp: 120, speed: 110, damage: 15, radius: 22, color: '#8844ff', glowColor: '#6622ff', xpValue: 12, materialValue: 5, attackCooldown: 2.0, behavior: 'chase' },
+        ranged: { name: _ENEMY_STR.enemy_ranged_name, hp: 25, speed: 140, damage: 12, radius: 12, color: '#ff00aa', glowColor: '#ff0088', xpValue: 8, materialValue: 3, attackCooldown: 2.0, behavior: 'ranged', preferredDist: 250, bulletSpeed: 350 },
+        exploder: { name: _ENEMY_STR.enemy_exploder_name, hp: 40, speed: 300, damage: 12, radius: 16, color: '#ff5500', glowColor: '#ff2200', xpValue: 7, materialValue: 2, attackCooldown: 0, behavior: 'explode', explosionRadius: 80, explosionDamageMult: 1.5 },
+        healer: { name: _ENEMY_STR.enemy_healer_name, hp: 35, speed: 160, damage: 5, radius: 14, color: '#44ff88', glowColor: '#22ff66', xpValue: 9, materialValue: 3, attackCooldown: 2.5, behavior: 'heal', preferredDist: 250, healCooldown: 3.0, healRadius: 120, healAmount: 10 },
+        mortar: { name: _ENEMY_STR.enemy_mortar_name, hp: 30, speed: 100, damage: 18, radius: 14, color: '#aa44ff', glowColor: '#8822ff', xpValue: 10, materialValue: 4, attackCooldown: 3.0, behavior: 'mortar', preferredDist: 350, mortarCooldown: 3.0, mortarSpeed: 180 },
+        blinker: { name: _ENEMY_STR.enemy_blinker_name, hp: 25, speed: 230, damage: 14, radius: 12, color: '#ff44ff', glowColor: '#ff00ff', xpValue: 8, materialValue: 3, attackCooldown: 1.5, behavior: 'blink', blinkCooldown: 2.0, blinkDist: 100, dodgeChance: 0.3 },
+        elite: { name: _ENEMY_STR.enemy_elite_name, hp: 250, speed: 180, damage: 20, radius: 24, color: '#ffcc00', glowColor: '#ffaa00', xpValue: 30, materialValue: 15, attackCooldown: 1.0, behavior: 'chase', isElite: true },
+        boss: { name: _ENEMY_STR.enemy_boss_name, hp: 800, speed: 140, damage: 30, radius: 36, color: '#ff0044', glowColor: '#ff0000', xpValue: 80, materialValue: 40, attackCooldown: 0.8, behavior: 'chase', isBoss: true }
     },
 
     create(type, x, y, waveLevel = 1) {
@@ -394,7 +409,7 @@ const EnemySystem = {
         enemy.flashTimer = 0.1;
 
         const p = PlayerSystem.player;
-        if (p) {
+        if (p && !enemy.isElite && !enemy.isBoss) {
             const dx = enemy.x - p.x;
             const dy = enemy.y - p.y;
             const dist = Math.sqrt(dx * dx + dy * dy) || 1;
@@ -442,9 +457,11 @@ const EnemySystem = {
             if (oDist < radius + other.radius) {
                 const falloff = Math.max(0.5, 1 - oDist / (radius + other.radius) * 0.5);
                 other.hp -= Math.floor(dmg * 0.5 * falloff);
-                const oDistSafe = oDist || 1;
-                other.knockbackX += odx / oDistSafe * 300 * falloff;
-                other.knockbackY += ody / oDistSafe * 300 * falloff;
+                if (!other.isElite && !other.isBoss) {
+                    const oDistSafe = oDist || 1;
+                    other.knockbackX += odx / oDistSafe * 300 * falloff;
+                    other.knockbackY += ody / oDistSafe * 300 * falloff;
+                }
                 other.flashTimer = 0.1;
                 if (other.hp <= 0) other.alive = false;
             }

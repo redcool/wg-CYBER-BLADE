@@ -28,7 +28,7 @@ const CharacterSystem = {
     // 状态
     // -------------------------------------------------------
     allCharacters: [],
-    selectedCharacterId: 'default',
+    selectedCharacterId: null,
 
     // -------------------------------------------------------
     // 1. 数据加载
@@ -41,7 +41,6 @@ const CharacterSystem = {
      * 1. 调用 DataLoader.load('characters')
      * 2. 标准化旧标签为 7 新标签
      * 3. 写入 this.allCharacters
-     * 4. 如果没有 default 角色 → 从 swordsman 映射或创建默认
      *
      * @returns {Promise<void>}
      */
@@ -64,8 +63,6 @@ const CharacterSystem = {
             penalties: ch.penalties || {},
             passives: ch.passives || [],
         }));
-
-        // 默认角色已禁用 — 每个角色单独设计，无 defaults
     },
 
     /**
@@ -83,60 +80,6 @@ const CharacterSystem = {
             medic: 'tech', lance: 'melee',
         };
         return tags.map(t => OLD_MAP[t] || t);
-    },
-
-    /**
-     * 确保 default 角色存在
-     * 优先从 swordsman 映射，否则创建默认值
-     */
-    _ensureDefault() {
-        const swordsman = this.allCharacters.find(c => c.id === 'swordsman');
-        if (swordsman) {
-            this.allCharacters.unshift({
-                id: 'default',
-                name: '默认',
-                desc: '均衡型角色，无特殊优势或代价',
-                icon: '👤',
-                unlocked: true,
-                weaponSlots: swordsman.weaponSlots || 6,
-                maxHp: swordsman.maxHp || 100,
-                hpRegen: swordsman.hpRegen || 0.5,
-                speed: swordsman.speed || 220,
-                pickupRange: swordsman.pickupRange || 15,
-                attackSpeed: swordsman.attackSpeed || 1.0,
-                attackRange: swordsman.attackRange || 280,
-                armor: swordsman.armor || 1,
-                dodge: swordsman.dodge || 0.02,
-                critChance: swordsman.critChance || 0.05,
-                critDamage: swordsman.critDamage || 2.0,
-                lifeSteal: swordsman.lifeSteal || 0,
-                damagePercent: 0,
-                meleeDamage: 0, rangedDamage: 0,
-                elementalDamage: 0, engineering: 0,
-                harvesting: 0, luck: 0, xpGain: 0, materialGain: 0,
-                tags: ['melee', 'ranged'],
-                penalties: {},
-                passives: [],
-                unlockType: '',
-                unlockValue: 0,
-            });
-        } else {
-            // 完全创建默认角色
-            this.allCharacters.unshift({
-                id: 'default', name: '默认', desc: '均衡型角色', icon: '👤',
-                unlocked: true, weaponSlots: 6,
-                maxHp: 100, hpRegen: 0.5, speed: 220,
-                pickupRange: 15, attackSpeed: 1.0, attackRange: 280,
-                armor: 1, dodge: 0.02, critChance: 0.05, critDamage: 2.0,
-                lifeSteal: 0, damagePercent: 0,
-                meleeDamage: 0, rangedDamage: 0, elementalDamage: 0,
-                engineering: 0, harvesting: 0, luck: 0,
-                xpGain: 0, materialGain: 0,
-                tags: ['melee', 'ranged'],
-                penalties: {}, passives: [],
-                unlockType: '', unlockValue: 0,
-            });
-        }
     },
 
     // -------------------------------------------------------
@@ -321,7 +264,7 @@ const CharacterSystem = {
      */
     reset() {
         this.allCharacters = [];
-        this.selectedCharacterId = 'default';
+        this.selectedCharacterId = null;
     },
 };
 

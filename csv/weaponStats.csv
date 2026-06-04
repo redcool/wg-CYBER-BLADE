@@ -6,7 +6,6 @@ damage_lv1,伤害,damage
 damage,伤害,damage
 cooldown_lv1,冷却,cooldown
 attackSpeed,攻速,attack speed
-meleeRange,近战范围,melee range
 attackRange,射程,attack range
 range,射程,range
 bulletSpeed,弹速,bullet speed
@@ -18,10 +17,10 @@ splashRadius,溅射,splash radius
 homingStrength,追踪,homing
 chainCount,连锁,chain
 burnDps,灼烧,burn dps
-burnMaxStacks,灼烧层数,burn stacks
+burnMaxStacks,灼烧层,burn stacks
 slowAmount,减速,slow
 slowDuration,减速时长,slow duration
-healOnHit,击中回血,heal on hit
+healOnHit,吸血,heal on hit
 auraHeal,光环回复,aura heal
 auraRadius,光环范围,aura radius
 critChanceAdd,暴击,crit chance

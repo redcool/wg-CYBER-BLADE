@@ -24,23 +24,32 @@
  *   - 宝箱可排队依次显示
  */
 
+// 宝箱中文名（从 JSON 加载，运行时覆盖; fallback 硬编码）
+const _LOOT_STR = {
+    chest_normal: '普通宝箱', chest_elite: '精英宝箱', chest_legendary: '传奇宝箱',
+    gold_name: '{0} 金币', gold_desc: '获得 {0} 金币',
+};
+if (typeof DataLoader !== 'undefined') {
+    DataLoader.load('loot_charsData').then(d => { if (d) Object.assign(_LOOT_STR, d); }).catch(() => {});
+}
+
 const CHEST_TYPES = {
     normal: {
-        name: '普通宝箱',
+        name: _LOOT_STR.chest_normal,
         color: '#aaaaaa',  // 运行时从 RarityColorSystem 覆盖
         rarityWeights: { common: 70, rare: 25, epic: 5, legendary: 0 },
         itemCount: 2,
         goldRange: [10, 25],
     },
     elite: {
-        name: '精英宝箱',
+        name: _LOOT_STR.chest_elite,
         color: '#aa44ff',  // 运行时从 RarityColorSystem 覆盖
         rarityWeights: { common: 40, rare: 35, epic: 20, legendary: 5 },
         itemCount: 3,
         goldRange: [25, 50],
     },
     legendary: {
-        name: '传奇宝箱',
+        name: _LOOT_STR.chest_legendary,
         color: '#ff6600',  // 运行时从 RarityColorSystem 覆盖
         rarityWeights: { common: 10, rare: 20, epic: 30, legendary: 40 },
         itemCount: 3,
@@ -330,8 +339,8 @@ const LootSystem = {
         return {
             type: 'gold',
             id: 'gold',
-            name: `${amount} 金币`,
-            desc: `获得 ${amount} 金币`,
+            name: _LOOT_STR.gold_name.replace('{0}', amount),
+            desc: _LOOT_STR.gold_desc.replace('{0}', amount),
             icon: '💰',
             rarity: 'common',
             rarityColor: '#ffd700',
@@ -388,11 +397,8 @@ const LootSystem = {
                 };
                 player.weapons.push(newWeapon);
 
-                // 初始化词条并更新参数
+                // 更新武器参数
                 if (typeof ShopSystem !== 'undefined') {
-                    if (ShopSystem._initWeaponAffixes) {
-                        ShopSystem._initWeaponAffixes(newWeapon);
-                    }
                     if (ShopSystem._updateWeaponParams) {
                         ShopSystem._updateWeaponParams(player, reward.id);
                     }

@@ -14,9 +14,9 @@ global.DataLoader = {
     async load(name) {
         if (name === 'items') {
             return [
-                { id: 'hpUp', name: '生命核心', desc: '最大生命 +30', cost: 6, icon: '❤️', unique: false, rarity: 'common', tags: [], triggers: [], effects: null },
-                { id: 'replicator', name: '子弹复制器', desc: '20%概率射出双倍子弹', cost: 14, icon: '🖨️', unique: true, rarity: 'epic', tags: [], triggers: ['OnHit'], effects: [{ type: 'duplicateBullet', chance: 0.2 }] },
-                { id: 'nirvana', name: '涅槃', desc: '测试用 unique', cost: 50, icon: '🔥', unique: true, rarity: 'legendary', tags: [], triggers: [], effects: null },
+                { id: 'hpUp', name: '生命核心', desc: '最大生命 +30', cost: 6, icon: '❤️', unique: false, rarity: 'common', tags: [], statMods: { maxHp: 30 }, triggers: [], effects: null },
+                { id: 'replicator', name: '子弹复制器', desc: '20%概率射出双倍子弹', cost: 14, icon: '🖨️', unique: true, rarity: 'epic', tags: [], statMods: {}, triggers: ['OnHit'], effects: [{ type: 'duplicateBullet', chance: 0.2 }] },
+                { id: 'nirvana', name: '涅槃', desc: '测试用 unique', cost: 50, icon: '🔥', unique: true, rarity: 'legendary', tags: [], statMods: {}, triggers: [], effects: null },
             ];
         }
         return [];
@@ -33,7 +33,7 @@ describe('ItemSystem - 数据加载', () => {
         await ItemSystem.loadItems();
         expect(ItemSystem.allItems.length).toBeGreaterThan(0);
 
-        // hpUp 从 _itemDefs 获取 statMods
+        // hpUp 从 JSON 的 statMods 加载
         const hpUp = ItemSystem.getItemDef('hpUp');
         expect(hpUp).toBeDefined();
         expect(hpUp.statMods).toBeDefined();

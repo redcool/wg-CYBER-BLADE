@@ -67,12 +67,21 @@ const FormulaSystem = {
         level = level || 1;
         if (this.TYPE === 'B') {
             const weaponBase = this.getWeaponBaseDamage(weaponDef, level);
+            if (weaponBase > 0) {
+                const tag = weaponDef.tag || '';
+                const flatStatId = TAG_TO_FLAT_STAT[tag];
+                const flat = (flatStatId && player[flatStatId]) || 0;
+                return weaponBase + flat;
+            }
+            // 武器无 damage_lvN 数据 → TYPE B 回退: baseAtk * mult + flat（F 层折叠进 B）
+            const baseAtk = player._baseDamage || 15;
+            const mult = weaponDef.damageMult || 1.0;
             const tag = weaponDef.tag || '';
             const flatStatId = TAG_TO_FLAT_STAT[tag];
             const flat = (flatStatId && player[flatStatId]) || 0;
-            return weaponBase + flat;
+            return baseAtk * mult + flat;
         }
-        // TYPE A — 旧版兼容
+        // TYPE A — 旧版兼容（F 层单独计算，此处不含 flat）
         const baseAtk = player._baseDamage || 15;
         const mult = weaponDef.damageMult || 1.0;
         return baseAtk * mult;

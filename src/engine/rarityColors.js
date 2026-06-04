@@ -29,6 +29,12 @@
  *   Level 4 / epic:      红色 #FF3B3B
  *   Level 5 / legendary: 金色 #FFD700
  */
+// 从 rarityColors_charsData.json 加载（运行时覆盖 fallback）
+const _RC_STR = { fallback_name: '普通' };
+if (typeof DataLoader !== 'undefined') {
+    DataLoader.load('rarityColors_charsData').then(d => { if (d) Object.assign(_RC_STR, d); }).catch(() => {});
+}
+
 const RarityColorSystem = {
     /** 原始数据（从 DataLoader 加载） */
     _data: [],
@@ -105,12 +111,12 @@ const RarityColorSystem = {
     /**
      * 获取显示名称
      * @param {string} key - rarity key 或 T1~T4
-     * @returns {string} 显示名，找不到返回 '普通'
+     * @returns {string} 显示名，找不到返回 fallback
      */
     getName(key) {
         const resolved = this._resolveKey(key);
         const entry = this._map[resolved];
-        return entry ? entry.name : '普通';
+        return entry ? entry.name : (_RC_STR.fallback_name || '普通');
     },
 
     /**

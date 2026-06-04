@@ -3,59 +3,97 @@
 // 伤害公式已移至 formula.js (FormulaSystem)
 // 使用 FormulaSystem.TAG_TO_FLAT_STAT 获取武器-属性映射
 // ============================================================
+// 从 stats_charsData.json 加载中文显示字符串，运行时会被 DataLoader 数据覆盖
+const _STAT_STR = {
+    label_maxHp: '最大生命', label_hpRegen: '生命回复', label_lifeSteal: '生命偷取', label_armor: '护甲', label_dodge: '闪避',
+    label_healingModifier: '治疗加成', label_damagePercent: '伤害加成', label_meleeDamage: '近战伤害', label_rangedDamage: '远程伤害',
+    label_elementalDamage: '元素伤害', label_attackSpeed: '攻击速度', label_attackRange: '攻击范围', label_critChance: '暴击率',
+    label_critDamage: '暴击伤害', label_engineering: '工程', label_speed: '移动速度', label_knockback: '击退', label_luck: '幸运',
+    label_harvesting: '收获加成', label_xpGain: '经验加成', label_materialGain: '材料加成', label_explosionDamage: '爆炸伤害',
+    label_explosionSize: '爆炸范围', label_burningSpread: '燃烧传播', label_turretDamage: '炮塔伤害', label_turretCount: '炮塔数量',
+    label_projectilePierce: '穿透', label_weaponTypeLimit: '武器限制', label_statLock: '属性锁定',
+    label_pickupRange: '拾取范围',
+    desc_maxHp: '最大生命 {0}', desc_hpRegen: '每秒生命回复 +{0}', desc_lifeSteal: '生命偷取 +{0}%（上限 50%）',
+    desc_armor: '护甲 +{0}（减伤 {1}%）', desc_dodge: '闪避率 +{0}%（上限 60%）', desc_healingModifier: '治疗加成 +{0}%',
+    desc_damagePercent: '伤害 +{0}%', desc_meleeDamage: '近战伤害 +{0}', desc_rangedDamage: '远程伤害 +{0}',
+    desc_elementalDamage: '元素伤害 +{0}', desc_attackSpeed: '攻击速度 +{0}%', desc_attackRange: '攻击范围 +{0}%',
+    desc_critChance: '暴击率 +{0}%（上限 80%）', desc_critDamage: '暴击伤害 {0} 倍', desc_engineering: '工程 +{0}',
+    desc_speed: '移动速度 +{0}%', desc_knockback: '击退 +{0}', desc_luck: '幸运 +{0}', desc_harvesting: '材料收获 +{0}%',
+    desc_xpGain: '经验加成 +{0}%', desc_materialGain: '材料加成 +{0}%', desc_explosionDamage: '爆炸伤害 +{0}%',
+    desc_explosionSize: '爆炸范围 +{0}%', desc_burningSpread: '燃烧传播 +{0}', desc_turretDamage: '炮塔伤害 +{0}%',
+    desc_turretCount: '炮塔数量 +{0}', desc_projectilePierce: '穿透 +{0}', desc_weaponTypeLimit: '武器限制',
+    desc_statLock: '属性锁定', desc_pickupRange: '拾取范围 +{0}',
+    cap_near: '⚠️ 接近上限', cap_used: '已使用 {0}% 上限',
+    armor_note: '减伤 {0}%',
+    lvl_maxHp_name: '生命强化', lvl_maxHp_desc: '最大生命 +20%',
+    lvl_hpRegen_name: '生命恢复', lvl_hpRegen_desc: '回复 +0.5/秒',
+    lvl_damage_name: '攻击强化', lvl_damage_desc: '攻击力 +22%',
+    lvl_attackSpeed_name: '攻速提升', lvl_attackSpeed_desc: '攻速 +18%',
+    lvl_attackRange_name: '射程提升', lvl_attackRange_desc: '射程 +15%',
+    lvl_armor_name: '护甲强化', lvl_armor_desc: '护甲 +3',
+    lvl_dodge_name: '闪避强化', lvl_dodge_desc: '闪避 +3%',
+    lvl_critChance_name: '暴击强化', lvl_critChance_desc: '暴击 +4%',
+    lvl_critMultiplier_name: '暴伤提升', lvl_critMultiplier_desc: '暴伤 +0.5x',
+    lvl_speed_name: '机动强化', lvl_speed_desc: '移速 +10%',
+    lvl_bulletCount_name: '多重射击', lvl_bulletCount_desc: '子弹 +1',
+    lvl_bulletPierce_name: '穿透弹', lvl_bulletPierce_desc: '穿透 +1',
+    lvl_lifeSteal_name: '生命偷取', lvl_lifeSteal_desc: '偷取 +3%',
+    lvl_bulletSpeed_name: '弹速提升', lvl_bulletSpeed_desc: '弹速 +15%',
+    lvl_harvesting_name: '丰收', lvl_harvesting_desc: '收获 +20%',
+    lvl_pickupRange_name: '引力场', lvl_pickupRange_desc: '拾取范围 +20',
+    lvl_luck_name: '幸运提升', lvl_luck_desc: '幸运 +2',
+};
+if (typeof DataLoader !== 'undefined') {
+    DataLoader.load('stats_charsData').then(d => { if (d) Object.assign(_STAT_STR, d); }).catch(() => {});
+}
+
 const StatsSystem = {
     // -------------------------------------------------------
     // 1. 属性定义（六类 ~35 属性）
     // -------------------------------------------------------
     statDefs: {
         // --- 生存 (Survival) ---
-        maxHp:          { category: 'survival', label: '最大生命', icon: '❤️', min: 1,   max: null, fmt: 'int',     desc: (v) => `最大生命 ${v}` },
-        hpRegen:        { category: 'survival', label: '生命回复', icon: '💚', min: 0,   max: null, fmt: 'float1', desc: (v) => `每秒生命回复 +${v.toFixed(1)}` },
-        lifeSteal:      { category: 'survival', label: '生命偷取', icon: '🩸', min: 0,   max: 0.5,  fmt: 'percent', desc: (v) => `生命偷取 +${Math.round(v * 100)}%（上限 50%）` },
-        armor:          { category: 'survival', label: '护甲',     icon: '🛡️', min: 0,   max: null, fmt: 'int',     desc: (v) => `护甲 +${v}（减伤 ${Math.round(v / (v + 50) * 100)}%）` },
-        dodge:          { category: 'survival', label: '闪避',     icon: '💨', min: 0,   max: 0.6,  fmt: 'percent', desc: (v) => `闪避率 +${Math.round(v * 100)}%（上限 60%）` },
-        healingModifier:{ category: 'survival', label: '治疗加成', icon: '💚', min: 0,   max: null, fmt: 'percent', desc: (v) => `治疗加成 +${Math.round(v * 100)}%` },
+        maxHp:          { category: 'survival', label: _STAT_STR.label_maxHp, icon: '❤️', min: 1,   max: null, fmt: 'int',     desc: (v) => _STAT_STR.desc_maxHp.replace('{0}', v) },
+        hpRegen:        { category: 'survival', label: _STAT_STR.label_hpRegen, icon: '💚', min: 0,   max: null, fmt: 'float1', desc: (v) => _STAT_STR.desc_hpRegen.replace('{0}', v.toFixed(1)) },
+        lifeSteal:      { category: 'survival', label: _STAT_STR.label_lifeSteal, icon: '🩸', min: 0,   max: 0.5,  fmt: 'percent', desc: (v) => _STAT_STR.desc_lifeSteal.replace('{0}', Math.round(v * 100)) },
+        armor:          { category: 'survival', label: _STAT_STR.label_armor, icon: '🛡️', min: 0,   max: null, fmt: 'int',     desc: (v) => _STAT_STR.desc_armor.replace('{0}', v).replace('{1}', Math.round(v / (v + 50) * 100)) },
+        dodge:          { category: 'survival', label: _STAT_STR.label_dodge, icon: '💨', min: 0,   max: 0.6,  fmt: 'percent', desc: (v) => _STAT_STR.desc_dodge.replace('{0}', Math.round(v * 100)) },
+        healingModifier:{ category: 'survival', label: _STAT_STR.label_healingModifier, icon: '💚', min: 0,   max: null, fmt: 'percent', desc: (v) => _STAT_STR.desc_healingModifier.replace('{0}', Math.round(v * 100)) },
 
         // --- 输出 (Offense) ---
-        damagePercent:  { category: 'offense', label: '伤害加成',   icon: '🗡️', min: -0.99, max: null, fmt: 'percent', desc: (v) => `伤害 +${Math.round(v * 100)}%` },
-        meleeDamage:    { category: 'offense', label: '近战伤害',   icon: '⚔️', min: 0,    max: null, fmt: 'int',     desc: (v) => `近战伤害 +${v}` },
-        rangedDamage:   { category: 'offense', label: '远程伤害',   icon: '🏹', min: 0,    max: null, fmt: 'int',     desc: (v) => `远程伤害 +${v}` },
-        elementalDamage:{ category: 'offense', label: '元素伤害',   icon: '🔮', min: 0,    max: null, fmt: 'int',     desc: (v) => `元素伤害 +${v}` },
-        attackSpeed:    { category: 'offense', label: '攻击速度',   icon: '⚡', min: 0.2,  max: 5.0,  fmt: 'float2', desc: (v) => `攻击速度 +${Math.round(v * 100)}%` },
-        attackRange:    { category: 'offense', label: '攻击范围',   icon: '🎯', min: 20,   max: 800,  fmt: 'int',     desc: (v) => `攻击范围 +${Math.round(v * 100)}%` },
-        critChance:     { category: 'offense', label: '暴击率',     icon: '💥', min: 0,    max: 0.8,  fmt: 'percent', desc: (v) => `暴击率 +${Math.round(v * 100)}%（上限 80%）` },
-        critDamage:     { category: 'offense', label: '暴击伤害',   icon: '🔥', min: 1.0,  max: null, fmt: 'float1', desc: (v) => `暴击伤害 ${v.toFixed(1)} 倍` },
-        engineering:    { category: 'offense', label: '工程',       icon: '🤖', min: 0,    max: null, fmt: 'int',     desc: (v) => `工程 +${v}` },
+        damagePercent:  { category: 'offense', label: _STAT_STR.label_damagePercent, icon: '🗡️', min: -0.99, max: null, fmt: 'percent', desc: (v) => _STAT_STR.desc_damagePercent.replace('{0}', Math.round(v * 100)) },
+        meleeDamage:    { category: 'offense', label: _STAT_STR.label_meleeDamage, icon: '⚔️', min: 0,    max: null, fmt: 'int',     desc: (v) => _STAT_STR.desc_meleeDamage.replace('{0}', v) },
+        rangedDamage:   { category: 'offense', label: _STAT_STR.label_rangedDamage, icon: '🏹', min: 0,    max: null, fmt: 'int',     desc: (v) => _STAT_STR.desc_rangedDamage.replace('{0}', v) },
+        elementalDamage:{ category: 'offense', label: _STAT_STR.label_elementalDamage, icon: '🔮', min: 0,    max: null, fmt: 'int',     desc: (v) => _STAT_STR.desc_elementalDamage.replace('{0}', v) },
+        attackSpeed:    { category: 'offense', label: _STAT_STR.label_attackSpeed, icon: '⚡', min: 0.2,  max: 5.0,  fmt: 'float2', desc: (v) => _STAT_STR.desc_attackSpeed.replace('{0}', Math.round(v * 100)) },
+        attackRange:    { category: 'offense', label: _STAT_STR.label_attackRange, icon: '🎯', min: 20,   max: 800,  fmt: 'int',     desc: (v) => _STAT_STR.desc_attackRange.replace('{0}', Math.round(v * 100)) },
+        critChance:     { category: 'offense', label: _STAT_STR.label_critChance, icon: '💥', min: 0,    max: 0.8,  fmt: 'percent', desc: (v) => _STAT_STR.desc_critChance.replace('{0}', Math.round(v * 100)) },
+        critDamage:     { category: 'offense', label: _STAT_STR.label_critDamage, icon: '🔥', min: 1.0,  max: null, fmt: 'float1', desc: (v) => _STAT_STR.desc_critDamage.replace('{0}', v.toFixed(1)) },
+        engineering:    { category: 'offense', label: _STAT_STR.label_engineering, icon: '🤖', min: 0,    max: null, fmt: 'int',     desc: (v) => _STAT_STR.desc_engineering.replace('{0}', v) },
 
         // --- 机动 (Mobility) ---
-        speed:          { category: 'mobility', label: '移动速度', icon: '⚡', min: 50,  max: 400, fmt: 'int',     desc: (v) => `移动速度 +${Math.round(v * 100)}%` },
-        knockback:      { category: 'mobility', label: '击退',     icon: '💨', min: 0,   max: null, fmt: 'int',     desc: (v) => `击退 +${v}` },
+        speed:          { category: 'mobility', label: _STAT_STR.label_speed, icon: '⚡', min: 50,  max: 400, fmt: 'int',     desc: (v) => _STAT_STR.desc_speed.replace('{0}', Math.round(v * 100)) },
+        knockback:      { category: 'mobility', label: _STAT_STR.label_knockback, icon: '💨', min: 0,   max: null, fmt: 'int',     desc: (v) => _STAT_STR.desc_knockback.replace('{0}', v) },
 
         // --- 经济 (Economy) ---
-        luck:           { category: 'economy', label: '幸运',       icon: '🍀', min: 0,   max: 50,   fmt: 'int',     desc: (v) => `幸运 +${v}` },
-        harvesting:     { category: 'economy', label: '收获加成',   icon: '💰', min: 0,   max: 500,  fmt: 'percent', desc: (v) => `材料收获 +${v}%` },
-        xpGain:         { category: 'economy', label: '经验加成',   icon: '📈', min: 0,   max: null, fmt: 'percent', desc: (v) => `经验加成 +${Math.round(v * 100)}%` },
-        materialGain:   { category: 'economy', label: '材料加成',   icon: '💎', min: 0,   max: null, fmt: 'percent', desc: (v) => `材料加成 +${Math.round(v * 100)}%` },
+        luck:           { category: 'economy', label: _STAT_STR.label_luck, icon: '🍀', min: 0,   max: 50,   fmt: 'int',     desc: (v) => _STAT_STR.desc_luck.replace('{0}', v) },
+        harvesting:     { category: 'economy', label: _STAT_STR.label_harvesting, icon: '💰', min: 0,   max: 500,  fmt: 'percent', desc: (v) => _STAT_STR.desc_harvesting.replace('{0}', v) },
+        xpGain:         { category: 'economy', label: _STAT_STR.label_xpGain, icon: '📈', min: 0,   max: null, fmt: 'percent', desc: (v) => _STAT_STR.desc_xpGain.replace('{0}', Math.round(v * 100)) },
+        materialGain:   { category: 'economy', label: _STAT_STR.label_materialGain, icon: '💎', min: 0,   max: null, fmt: 'percent', desc: (v) => _STAT_STR.desc_materialGain.replace('{0}', Math.round(v * 100)) },
 
         // --- 特殊 (Special) ---
-        explosionDamage:{ category: 'special', label: '爆炸伤害',   icon: '💥', min: 0,   max: null, fmt: 'percent', desc: (v) => `爆炸伤害 +${Math.round(v * 100)}%` },
-        explosionSize:  { category: 'special', label: '爆炸范围',   icon: '💥', min: 0,   max: null, fmt: 'percent', desc: (v) => `爆炸范围 +${Math.round(v * 100)}%` },
-        burningSpread:  { category: 'special', label: '燃烧传播',   icon: '🔥', min: 0,   max: null, fmt: 'int',     desc: (v) => `燃烧传播 +${v}` },
-        turretDamage:   { category: 'special', label: '炮塔伤害',   icon: '🤖', min: 0,   max: null, fmt: 'percent', desc: (v) => `炮塔伤害 +${Math.round(v * 100)}%` },
-        turretCount:    { category: 'special', label: '炮塔数量',   icon: '🤖', min: 0,   max: null, fmt: 'int',     desc: (v) => `炮塔数量 +${v}` },
-        projectilePierce:{category: 'special', label: '穿透',       icon: '➡️', min: 0,   max: 10,   fmt: 'int',     desc: (v) => `穿透 +${v}` },
+        explosionDamage:{ category: 'special', label: _STAT_STR.label_explosionDamage, icon: '💥', min: 0,   max: null, fmt: 'percent', desc: (v) => _STAT_STR.desc_explosionDamage.replace('{0}', Math.round(v * 100)) },
+        explosionSize:  { category: 'special', label: _STAT_STR.label_explosionSize, icon: '💥', min: 0,   max: null, fmt: 'percent', desc: (v) => _STAT_STR.desc_explosionSize.replace('{0}', Math.round(v * 100)) },
+        burningSpread:  { category: 'special', label: _STAT_STR.label_burningSpread, icon: '🔥', min: 0,   max: null, fmt: 'int',     desc: (v) => _STAT_STR.desc_burningSpread.replace('{0}', v) },
+        turretDamage:   { category: 'special', label: _STAT_STR.label_turretDamage, icon: '🤖', min: 0,   max: null, fmt: 'percent', desc: (v) => _STAT_STR.desc_turretDamage.replace('{0}', Math.round(v * 100)) },
+        turretCount:    { category: 'special', label: _STAT_STR.label_turretCount, icon: '🤖', min: 0,   max: null, fmt: 'int',     desc: (v) => _STAT_STR.desc_turretCount.replace('{0}', v) },
+        projectilePierce:{category: 'special', label: _STAT_STR.label_projectilePierce, icon: '➡️', min: 0,   max: 10,   fmt: 'int',     desc: (v) => _STAT_STR.desc_projectilePierce.replace('{0}', v) },
 
         // --- 限制 (Restriction) — 角色代价专用 ---
-        weaponTypeLimit:{ category: 'restriction', label: '武器限制', icon: '🔒', min: 0, max: null, fmt: 'int', desc: (v) => `武器限制` },
-        statLock:       { category: 'restriction', label: '属性锁定', icon: '🔒', min: 0, max: null, fmt: 'int', desc: (v) => `属性锁定` },
+        weaponTypeLimit:{ category: 'restriction', label: _STAT_STR.label_weaponTypeLimit, icon: '🔒', min: 0, max: null, fmt: 'int', desc: (v) => _STAT_STR.desc_weaponTypeLimit },
+        statLock:       { category: 'restriction', label: _STAT_STR.label_statLock, icon: '🔒', min: 0, max: null, fmt: 'int', desc: (v) => _STAT_STR.desc_statLock },
 
-        // --- 旧字段兼容层（标记 _deprecated） ---
-        damage:         { category: 'offense', label: '攻击力（旧）', icon: '🗡️', min: 1, max: null, fmt: 'percent', _deprecated: true, desc: (v) => `攻击力 +${Math.round(v * 100)}%` },
-        critMultiplier: { category: 'offense', label: '暴伤（旧）',   icon: '🔥', min: 1.0, max: 6.0, fmt: 'float1', _deprecated: true, desc: (v) => `暴击伤害 ${v.toFixed(1)} 倍` },
-        bulletCount:    { category: 'offense', label: '子弹数量（旧）', icon: '🔫', min: 1, max: 20, fmt: 'int', _deprecated: true, desc: (v) => `子弹 +${v}` },
-        bulletPierce:   { category: 'special', label: '穿透（旧）',   icon: '➡️', min: 0, max: 10, fmt: 'int', _deprecated: true, desc: (v) => `穿透 +${v}` },
-        bulletSpeed:    { category: 'offense', label: '弹速（旧）',   icon: '➡️', min: 100, max: 2000, fmt: 'int', _deprecated: true, desc: (v) => `弹道速度 +${Math.round(v * 100)}%` },
-        pickupRange:    { category: 'mobility', label: '拾取范围', icon: '🧲', min: 10, max: 300, fmt: 'int', desc: (v) => `拾取范围 +${v}` },
+        pickupRange:    { category: 'mobility', label: _STAT_STR.label_pickupRange, icon: '🧲', min: 10, max: 300, fmt: 'int', desc: (v) => _STAT_STR.desc_pickupRange.replace('{0}', v) },
     },
 
     // -------------------------------------------------------
@@ -214,8 +252,8 @@ const StatsSystem = {
         if (!def) return '';
         if (def.max === null || def.max === undefined) return '';
         const pct = Math.round((value / def.max) * 100);
-        if (pct >= 90) return '⚠️ 接近上限';
-        if (pct >= 70) return `已使用 ${pct}% 上限`;
+        if (pct >= 90) return _STAT_STR.cap_near;
+        if (pct >= 70) return _STAT_STR.cap_used.replace('{0}', pct);
         return '';
     },
 
@@ -247,7 +285,7 @@ const StatsSystem = {
             let note = '';
             if (id === 'armor') {
                 const dr = this.armorDR(rawValue);
-                note = `减伤 ${Math.round(dr * 100)}%`;
+                note = _STAT_STR.armor_note.replace('{0}', Math.round(dr * 100));
             }
 
             result.push({
@@ -321,39 +359,39 @@ const StatsSystem = {
     // 5. 等级可选项（Phase 2 移到 levelUpCards.json）
     // -------------------------------------------------------
     levelUpOptions: [
-        { id: 'maxHp',         name: '生命强化',    desc: '最大生命 +20%',   icon: '❤️',
+        { id: 'maxHp',         name: _STAT_STR.lvl_maxHp_name, desc: _STAT_STR.lvl_maxHp_desc, icon: '❤️',
           apply: (p) => { p.maxHp = Math.floor(p.maxHp * 1.20); } },
-        { id: 'hpRegen',       name: '生命恢复',    desc: '回复 +0.5/秒',   icon: '💚',
+        { id: 'hpRegen',       name: _STAT_STR.lvl_hpRegen_name, desc: _STAT_STR.lvl_hpRegen_desc, icon: '💚',
           apply: (p) => { p.hpRegen += 0.5; } },
-        { id: 'damage',        name: '攻击强化',    desc: '攻击力 +22%',    icon: '🗡️',
+        { id: 'damage',        name: _STAT_STR.lvl_damage_name, desc: _STAT_STR.lvl_damage_desc, icon: '🗡️',
           apply: (p) => { p.damage = Math.floor(p.damage * 1.22); p.damagePercent = p.damage; } },
-        { id: 'attackSpeed',   name: '攻速提升',    desc: '攻速 +18%',     icon: '⚡',
+        { id: 'attackSpeed',   name: _STAT_STR.lvl_attackSpeed_name, desc: _STAT_STR.lvl_attackSpeed_desc, icon: '⚡',
           apply: (p) => { p.attackSpeed = Math.min(5.0, p.attackSpeed * 1.18); } },
-        { id: 'attackRange',   name: '射程提升',    desc: '射程 +15%',     icon: '🎯',
+        { id: 'attackRange',   name: _STAT_STR.lvl_attackRange_name, desc: _STAT_STR.lvl_attackRange_desc, icon: '🎯',
           apply: (p) => { p.attackRange = Math.min(800, p.attackRange * 1.15); } },
-        { id: 'armor',         name: '护甲强化',    desc: '护甲 +3',       icon: '🛡️',
+        { id: 'armor',         name: _STAT_STR.lvl_armor_name, desc: _STAT_STR.lvl_armor_desc, icon: '🛡️',
           apply: (p) => { p.armor = Math.min(100, p.armor + 3); } },
-        { id: 'dodge',         name: '闪避强化',    desc: '闪避 +3%',      icon: '💨',
+        { id: 'dodge',         name: _STAT_STR.lvl_dodge_name, desc: _STAT_STR.lvl_dodge_desc, icon: '💨',
           apply: (p) => { p.dodge = Math.min(0.6, p.dodge + 0.03); } },
-        { id: 'critChance',    name: '暴击强化',    desc: '暴击 +4%',      icon: '💥',
+        { id: 'critChance',    name: _STAT_STR.lvl_critChance_name, desc: _STAT_STR.lvl_critChance_desc, icon: '💥',
           apply: (p) => { p.critChance = Math.min(0.8, p.critChance + 0.04); } },
-        { id: 'critMultiplier',name: '暴伤提升',    desc: '暴伤 +0.5x',    icon: '🔥',
+        { id: 'critMultiplier',name: _STAT_STR.lvl_critMultiplier_name, desc: _STAT_STR.lvl_critMultiplier_desc, icon: '🔥',
           apply: (p) => { p.critMultiplier = Math.min(6.0, p.critMultiplier + 0.5); p.critDamage = p.critMultiplier; } },
-        { id: 'speed',         name: '机动强化',    desc: '移速 +10%',     icon: '⚡',
+        { id: 'speed',         name: _STAT_STR.lvl_speed_name, desc: _STAT_STR.lvl_speed_desc, icon: '⚡',
           apply: (p) => { p.speed = Math.min(400, p.speed * 1.10); } },
-        { id: 'bulletCount',   name: '多重射击',    desc: '子弹 +1',       icon: '🔫',
+        { id: 'bulletCount',   name: _STAT_STR.lvl_bulletCount_name, desc: _STAT_STR.lvl_bulletCount_desc, icon: '🔫',
           apply: (p) => { p.bulletCount = Math.min(20, p.bulletCount + 1); } },
-        { id: 'bulletPierce',  name: '穿透弹',      desc: '穿透 +1',       icon: '➡️',
+        { id: 'bulletPierce',  name: _STAT_STR.lvl_bulletPierce_name, desc: _STAT_STR.lvl_bulletPierce_desc, icon: '➡️',
           apply: (p) => { p.bulletPierce = Math.min(10, p.bulletPierce + 1); } },
-        { id: 'lifeSteal',     name: '生命偷取',    desc: '偷取 +3%',      icon: '🩸',
+        { id: 'lifeSteal',     name: _STAT_STR.lvl_lifeSteal_name, desc: _STAT_STR.lvl_lifeSteal_desc, icon: '🩸',
           apply: (p) => { p.lifeSteal = Math.min(0.5, p.lifeSteal + 0.03); } },
-        { id: 'bulletSpeed',   name: '弹速提升',    desc: '弹速 +15%',     icon: '➡️',
+        { id: 'bulletSpeed',   name: _STAT_STR.lvl_bulletSpeed_name, desc: _STAT_STR.lvl_bulletSpeed_desc, icon: '➡️',
           apply: (p) => { p.bulletSpeed = Math.min(2000, p.bulletSpeed * 1.15); } },
-        { id: 'harvesting',    name: '丰收',        desc: '收获 +20%',     icon: '💰',
+        { id: 'harvesting',    name: _STAT_STR.lvl_harvesting_name, desc: _STAT_STR.lvl_harvesting_desc, icon: '💰',
           apply: (p) => { p.harvesting = Math.min(500, p.harvesting + 20); } },
-        { id: 'pickupRange',   name: '引力场',      desc: '拾取范围 +20',  icon: '🧲',
+        { id: 'pickupRange',   name: _STAT_STR.lvl_pickupRange_name, desc: _STAT_STR.lvl_pickupRange_desc, icon: '🧲',
           apply: (p) => { p.pickupRange = Math.min(300, p.pickupRange + 20); } },
-        { id: 'luck',          name: '幸运提升',    desc: '幸运 +2',       icon: '🍀',
+        { id: 'luck',          name: _STAT_STR.lvl_luck_name, desc: _STAT_STR.lvl_luck_desc, icon: '🍀',
           apply: (p) => { p.luck = Math.min(50, p.luck + 2); } },
     ],
 };

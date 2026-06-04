@@ -1,0 +1,9 @@
+{
+  "melee": "近战",
+  "ranged": "远程",
+  "fire": "火焰",
+  "explosive": "爆炸",
+  "crit": "暴击",
+  "tech": "工程",
+  "economy": "经济"
+}

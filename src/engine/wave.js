@@ -267,13 +267,13 @@ const WaveSystem = {
         this.currentLevel++;
         const config = this._getConfig();
 
-        // 预算 = avgBudget × 缓变倍率（而非 × effectiveLevel，避免指数暴增）
-        // 缓变: wave1=×1.0, wave5=×2.2, wave10=×3.7, wave17+=×6(封顶)
-        const budgetScale = Math.min(6, 1 + (this.effectiveLevel - 1) * 0.3);
         if (config && config.minBudget !== undefined && config.maxBudget !== undefined) {
-            const avgBudget = (config.minBudget + config.maxBudget) / 2;
-            this._remainingBudget = Math.floor(avgBudget * budgetScale);
+            // CSV 预算已含波次缩放，直接使用
+            this._remainingBudget = Math.floor((config.minBudget + config.maxBudget) / 2);
         } else {
+            // WAVE_INTERVALS 回退路径: 缓变倍率替代 effectiveLevel 防暴增
+            // 缓变: wave1=×1.0, wave5=×2.2, wave10=×3.7, wave17+=×6(封顶)
+            const budgetScale = Math.min(6, 1 + (this.effectiveLevel - 1) * 0.3);
             const baseBudget = 10;
             const budgetMul = config ? config.budgetMul : 1.0;
             this._remainingBudget = Math.floor(baseBudget * budgetMul * budgetScale);

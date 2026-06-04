@@ -2,7 +2,7 @@
 // shop.test.js — ShopSystem 单元测试
 // ============================================================
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ShopSystem } from '../../src/engine/shop.js';
+import { ShopSystem } from '../../src/engine/engine-shop.js';
 import { TagSystem } from '../../src/engine/tags.js';
 import { ItemSystem } from '../../src/engine/item.js';
 import { EffectEngine } from '../../src/engine/effects.js';
@@ -98,11 +98,11 @@ describe('ShopSystem - 稀有度投掷', () => {
         const rarities = new Set();
         for (let i = 0; i < 200; i++) {
             const rarity = ShopSystem.rollRarity(20);
-            expect(['common', 'rare', 'epic', 'legendary']).toContain(rarity);
+            expect(['common', 'uncommon', 'rare', 'epic', 'legendary']).toContain(rarity);
             rarities.add(rarity);
         }
-        // 大样本应覆盖全部 4 种
-        expect(rarities.size).toBe(4);
+        // 大样本应覆盖全部 5 种
+        expect(rarities.size).toBe(5);
     });
 
     it('S2: rollRarity 尊重 minWave — wave=1 仅 common', () => {
@@ -299,17 +299,17 @@ describe('ShopSystem - 商品生成', () => {
         global.DataLoader._cache = { weapons: MOCK_WEAPONS };
     });
 
-    it('S19: generateItems 生成 3~5 武器 + 3~5 道具', () => {
+    it('S19: generateItems 生成 2~3 武器 + 0~1 道具', () => {
         const player = makePlayer({ weapons: [{ id: 'plasma', level: 1, quality: 'T1' }] });
 
         ShopSystem.generateItems(player, 5);
         const weapons = ShopSystem.items.filter(it => it.type === 'weapon');
         const items = ShopSystem.items.filter(it => it.type === 'item');
 
-        expect(weapons.length).toBeGreaterThanOrEqual(3);
-        expect(weapons.length).toBeLessThanOrEqual(5);
-        expect(items.length).toBeGreaterThanOrEqual(3);
-        expect(items.length).toBeLessThanOrEqual(5);
+        expect(weapons.length).toBeGreaterThanOrEqual(2);
+        expect(weapons.length).toBeLessThanOrEqual(3);
+        expect(items.length).toBeGreaterThanOrEqual(0);
+        expect(items.length).toBeLessThanOrEqual(1);
     });
 
     it('S20: 生成的武器有完整字段', () => {
@@ -325,7 +325,7 @@ describe('ShopSystem - 商品生成', () => {
         expect(weapon).toHaveProperty('cost');
         expect(weapon).toHaveProperty('type', 'weapon');
         expect(weapon).toHaveProperty('level');
-        expect(['common', 'rare', 'epic', 'legendary']).toContain(weapon.rarity);
+        expect(['common', 'uncommon', 'rare', 'epic', 'legendary']).toContain(weapon.rarity);
     });
 
     it('S21: 生成的道具有完整字段', () => {
@@ -341,7 +341,7 @@ describe('ShopSystem - 商品生成', () => {
         expect(item).toHaveProperty('type', 'item');
         expect(item).toHaveProperty('name');
         expect(item).toHaveProperty('unique');
-        expect(['common', 'rare', 'epic', 'legendary']).toContain(item.rarity);
+        expect(['common', 'uncommon', 'rare', 'epic', 'legendary']).toContain(item.rarity);
     });
 
     it('S22: 不生成重复武器 ID', () => {
@@ -497,7 +497,7 @@ describe('ShopSystem - 购买', () => {
         expect(player.materials).toBe(100 - 10);
         expect(player.weapons.length).toBe(1);
         expect(player.weapons[0].id).toBe('plasma');
-        expect(player.weapons[0].quality).toBe('T2');
+        expect(player.weapons[0].quality).toBe('T1'); // 品质已锁定为 T1
         expect(player.weapons[0].level).toBe(1);
     });
 
@@ -507,13 +507,12 @@ describe('ShopSystem - 购买', () => {
             weaponSlots: 4,
         });
 
-        const result = ShopSystem.buyItem(0, player); // plasma (quality T2)
+        const result = ShopSystem.buyItem(0, player); // plasma (quality T1)
         expect(result).not.toBeNull();
         expect(result.action).toBe('merged');
         expect(player.weapons.length).toBe(1); // 数量不变
         expect(player.weapons[0].level).toBe(2); // level+1
-        expect(player.weapons[0].quality).toBe('T2'); // 升级为更高品质
-        expect(player.weapons[0].affixes).toBeDefined(); // 有词条
+        expect(player.weapons[0].quality).toBe('T1'); // 品质固定 T1（系统已移除）
     });
 
     it('S35: 购买武器—槽满返回 null', () => {
@@ -710,12 +709,12 @@ describe('ShopSystem - 集成', () => {
 
         // 1. 生成
         ShopSystem.generateItems(player, 3);
-        expect(ShopSystem.items.length).toBeGreaterThanOrEqual(6); // 3w + 3i
-        expect(ShopSystem.items.length).toBeLessThanOrEqual(10); // 5w + 5i
+        expect(ShopSystem.items.length).toBeGreaterThanOrEqual(2); // 2~3w + 0~1i
+        expect(ShopSystem.items.length).toBeLessThanOrEqual(4);
 
         // 2. 刷新
         ShopSystem.reroll(player, 3);
-        expect(ShopSystem.items.length).toBeGreaterThanOrEqual(6);
+        expect(ShopSystem.items.length).toBeGreaterThanOrEqual(2);
 
         // 3. 购买道具
         const itemIndex = ShopSystem.items.findIndex(it => it.type === 'item');
@@ -733,7 +732,7 @@ describe('ShopSystem - 集成', () => {
     });
 
     it('S51: RARITY 定义完整', () => {
-        const expectedKeys = ['common', 'rare', 'epic', 'legendary'];
+        const expectedKeys = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
         for (const key of expectedKeys) {
             const def = ShopSystem.RARITY[key];
             expect(def).toBeDefined();
@@ -747,19 +746,7 @@ describe('ShopSystem - 集成', () => {
         }
     });
 
-    it('S52: qualityDefs 保持完整', () => {
-        const expected = ['T1', 'T2', 'T3', 'T4'];
-        for (const key of expected) {
-            const def = ShopSystem.qualityDefs[key];
-            expect(def).toBeDefined();
-            expect(def).toHaveProperty('damageMult');
-            expect(def).toHaveProperty('costMult');
-            expect(def).toHaveProperty('minWave');
-            expect(def).toHaveProperty('rollWeight');
-        }
-    });
-
-    it('S53: 保底计数器在多次生成后累计', () => {
+    it('S52: 保底计数器在多次生成后累计', () => {
         const player = makePlayer();
 
         // 多次生成，保底计数器应增加

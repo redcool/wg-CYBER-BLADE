@@ -1,0 +1,12 @@
+{
+  "enemy_basic_name": "无人机兵",
+  "enemy_fast_name": "疾行者",
+  "enemy_tank_name": "重装机兵",
+  "enemy_ranged_name": "狙击手",
+  "enemy_exploder_name": "自爆者",
+  "enemy_healer_name": "修复者",
+  "enemy_mortar_name": "迫击者",
+  "enemy_blinker_name": "闪现者",
+  "enemy_elite_name": "精英猎手",
+  "enemy_boss_name": "BOSS·毁灭者"
+}

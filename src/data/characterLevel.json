@@ -7,115 +7,115 @@
   },
   {
     "level": 2,
-    "xpRequired": 25,
+    "xpRequired": 40,
     "growth": 1.08,
     "offset": 0.04
   },
   {
     "level": 3,
-    "xpRequired": 65,
+    "xpRequired": 110,
     "growth": 1.17,
     "offset": 0.05
   },
   {
     "level": 4,
-    "xpRequired": 120,
+    "xpRequired": 220,
     "growth": 1.26,
     "offset": 0.05
   },
   {
     "level": 5,
-    "xpRequired": 190,
+    "xpRequired": 380,
     "growth": 1.36,
     "offset": 0.06
   },
   {
     "level": 6,
-    "xpRequired": 280,
+    "xpRequired": 600,
     "growth": 1.46,
     "offset": 0.06
   },
   {
     "level": 7,
-    "xpRequired": 390,
+    "xpRequired": 890,
     "growth": 1.57,
     "offset": 0.07
   },
   {
     "level": 8,
-    "xpRequired": 520,
+    "xpRequired": 1260,
     "growth": 1.68,
     "offset": 0.07
   },
   {
     "level": 9,
-    "xpRequired": 680,
+    "xpRequired": 1720,
     "growth": 1.8,
     "offset": 0.08
   },
   {
     "level": 10,
-    "xpRequired": 870,
+    "xpRequired": 2280,
     "growth": 1.92,
     "offset": 0.08
   },
   {
     "level": 11,
-    "xpRequired": 1100,
+    "xpRequired": 2950,
     "growth": 2.05,
     "offset": 0.09
   },
   {
     "level": 12,
-    "xpRequired": 1370,
+    "xpRequired": 3740,
     "growth": 2.18,
     "offset": 0.09
   },
   {
     "level": 13,
-    "xpRequired": 1690,
+    "xpRequired": 4660,
     "growth": 2.32,
     "offset": 0.1
   },
   {
     "level": 14,
-    "xpRequired": 2060,
+    "xpRequired": 5720,
     "growth": 2.46,
     "offset": 0.1
   },
   {
     "level": 15,
-    "xpRequired": 2490,
+    "xpRequired": 6930,
     "growth": 2.61,
     "offset": 0.11
   },
   {
     "level": 16,
-    "xpRequired": 2980,
+    "xpRequired": 8300,
     "growth": 2.76,
     "offset": 0.11
   },
   {
     "level": 17,
-    "xpRequired": 3540,
+    "xpRequired": 9840,
     "growth": 2.92,
     "offset": 0.12
   },
   {
     "level": 18,
-    "xpRequired": 4170,
+    "xpRequired": 11560,
     "growth": 3.08,
     "offset": 0.12
   },
   {
     "level": 19,
-    "xpRequired": 4880,
+    "xpRequired": 13470,
     "growth": 3.25,
     "offset": 0.13
   },
   {
     "level": 20,
-    "xpRequired": 5670,
+    "xpRequired": 15580,
     "growth": 3.42,
     "offset": 0.13
   }

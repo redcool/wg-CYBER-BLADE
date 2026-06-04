@@ -13,7 +13,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "maxHp": 15
+      "maxHp": 4
     }
   },
   {
@@ -30,7 +30,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "hpRegen": 1
+      "hpRegen": 0.3
     }
   },
   {
@@ -47,7 +47,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "speed": 10
+      "speed": 3
     }
   },
   {
@@ -64,7 +64,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "armor": 2
+      "armor": 1
     }
   },
   {
@@ -151,7 +151,7 @@
     "effects": null,
     "statMods": {
       "lifeSteal": 0.03,
-      "maxHp": -2
+      "maxHp": -1
     }
   },
   {
@@ -168,7 +168,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "meleeDamage": 3,
+      "meleeDamage": 1,
       "rangedDamage": -1
     }
   },
@@ -186,7 +186,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "rangedDamage": 3,
+      "rangedDamage": 1,
       "meleeDamage": -1
     }
   },
@@ -204,7 +204,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "pickupRange": 12
+      "pickupRange": 3
     }
   },
   {
@@ -221,7 +221,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "attackRange": 30,
+      "attackRange": 8,
       "attackSpeed": -0.03
     }
   },
@@ -239,8 +239,8 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "maxHp": 30,
-      "speed": -5
+      "maxHp": 8,
+      "speed": -1
     }
   },
   {
@@ -258,7 +258,7 @@
     "effects": null,
     "statMods": {
       "attackSpeed": 0.15,
-      "armor": -2
+      "armor": -1
     }
   },
   {
@@ -315,7 +315,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "elementalDamage": 3
+      "elementalDamage": 1
     }
   },
   {
@@ -332,8 +332,8 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "hpRegen": 2,
-      "maxHp": 20
+      "hpRegen": 0.5,
+      "maxHp": 5
     }
   },
   {
@@ -369,7 +369,7 @@
     "effects": null,
     "statMods": {
       "dodge": 0.05,
-      "maxHp": 20
+      "maxHp": 5
     }
   },
   {
@@ -404,9 +404,9 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "armor": 3,
-      "maxHp": 20,
-      "speed": -5
+      "armor": 1,
+      "maxHp": 5,
+      "speed": -1
     }
   },
   {
@@ -448,7 +448,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "attackRange": 45,
+      "attackRange": 11,
       "damagePercent": -0.05
     }
   },
@@ -466,7 +466,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "hpRegen": 3,
+      "hpRegen": 0.8,
       "dodge": -0.02
     }
   },
@@ -484,7 +484,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "maxHp": 50
+      "maxHp": 13
     }
   },
   {
@@ -502,7 +502,7 @@
     "effects": null,
     "statMods": {
       "damagePercent": 0.25,
-      "armor": -5
+      "armor": -1
     }
   },
   {
@@ -520,7 +520,7 @@
     "effects": null,
     "statMods": {
       "lifeSteal": 0.05,
-      "maxHp": -15
+      "maxHp": -4
     }
   },
   {
@@ -555,8 +555,8 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "armor": 8,
-      "speed": -15
+      "armor": 2,
+      "speed": -4
     }
   },
   {
@@ -574,7 +574,7 @@
     "effects": null,
     "statMods": {
       "critChance": 0.08,
-      "hpRegen": -2
+      "hpRegen": -1
     }
   },
   {
@@ -636,7 +636,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "pickupRange": 999
+      "pickupRange": 250
     }
   },
   {
@@ -718,7 +718,7 @@
       }
     ],
     "statMods": {
-      "maxHp": 30
+      "maxHp": 8
     }
   },
   {
@@ -777,7 +777,7 @@
     "statMods": {
       "lifeSteal": 0.08,
       "damagePercent": 0.1,
-      "maxHp": -20
+      "maxHp": -5
     }
   },
   {
@@ -794,8 +794,8 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "armor": 12,
-      "maxHp": 50
+      "armor": 3,
+      "maxHp": 13
     }
   },
   {
@@ -812,7 +812,7 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "speed": 30,
+      "speed": 8,
       "dodge": 0.1
     }
   },
@@ -852,8 +852,8 @@
     "triggers": [],
     "effects": null,
     "statMods": {
-      "hpRegen": 5,
-      "maxHp": 50
+      "hpRegen": 1.3,
+      "maxHp": 13
     }
   },
   {
@@ -872,7 +872,7 @@
     "statMods": {
       "dodge": 0.2,
       "attackSpeed": 0.15,
-      "maxHp": -50
+      "maxHp": -12
     }
   }
 ]

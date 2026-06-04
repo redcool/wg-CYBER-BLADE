@@ -3,6 +3,21 @@
 // 标签: melee / gun / bow / magic / medic / lance
 // ============================================================
 
+const _SHOP_STR = {
+    error_slotFull: '武器槽位已满，无法购买新武器',
+    log_csvNoData: 'CSV 加载成功但无有效武器数据',
+    log_csvLoaded: '从 CSV 加载',
+    log_csvWeapons: '种武器',
+    log_csvFail: '武器CSV加载失败:',
+    log_itemCsvNoData: '道具CSV 加载成功但无有效数据',
+    log_itemCsvItems: '种道具',
+    log_itemCsvFail: '道具CSV加载失败:',
+    log_modsParseFail: 'mods 解析失败',
+};
+if (typeof DataLoader !== 'undefined') {
+    DataLoader.load('shop_charsData').then(d => { if (d) Object.assign(_SHOP_STR, d); }).catch(() => {});
+}
+
 /** 拆分 CSV 行（支持 "" 双引号字段 + "" 转义）
  *  作为全局工具函数，供 ShopSystem 和 AudioSystem 共用 */
 function splitCSVLine(line) {
@@ -34,196 +49,9 @@ const ShopSystem = {
     lockedItems: [],
     refreshCost: 1,
     _boughtUniqueItems: [],
+    _lastBuyError: '',
 
     config: {},
-
-    affixDefs: {
-        damagePct: {
-            name: '攻击力', icon: '🗡️',
-            desc: (v) => `+${Math.round(v * 100)}% 攻击力`,
-            baseValue: [0.08, 0.15], perLevel: [0.02, 0.04],
-        },
-        attackSpeedPct: {
-            name: '攻速', icon: '⚡',
-            desc: (v) => `+${Math.round(v * 100)}% 攻速`,
-            baseValue: [0.05, 0.10], perLevel: [0.01, 0.03],
-        },
-        critChancePct: {
-            name: '暴击率', icon: '💥',
-            desc: (v) => `+${Math.round(v * 100)}% 暴击率`,
-            baseValue: [0.02, 0.04], perLevel: [0.005, 0.01],
-        },
-        critMultiplierAdd: {
-            name: '暴击伤害', icon: '🔥',
-            desc: (v) => `+${v.toFixed(1)}x 暴击伤害`,
-            baseValue: [0.15, 0.30], perLevel: [0.05, 0.10],
-        },
-        lifeStealPct: {
-            name: '生命偷取', icon: '🩸',
-            desc: (v) => `+${Math.round(v * 100)}% 生命偷取`,
-            baseValue: [0.01, 0.03], perLevel: [0.005, 0.01],
-        },
-        armor: {
-            name: '护甲', icon: '🛡️',
-            desc: (v) => `+${v} 护甲`,
-            baseValue: [1, 3], perLevel: [1, 1],
-            isInt: true,
-        },
-        hpRegenPct: {
-            name: '生命回复', icon: '💚',
-            desc: (v) => `+${v.toFixed(1)} 回复/秒`,
-            baseValue: [0.3, 0.8], perLevel: [0.1, 0.2],
-        },
-        maxHp: {
-            name: '最大生命', icon: '❤️',
-            desc: (v) => `+${v} 最大HP`,
-            baseValue: [5, 15], perLevel: [3, 5],
-            isInt: true,
-        },
-        attackRangePct: {
-            name: '射程', icon: '🎯',
-            desc: (v) => `+${Math.round(v * 100)}% 射程`,
-            baseValue: [0.05, 0.10], perLevel: [0.015, 0.03],
-        },
-        bulletSpeedPct: {
-            name: '弹速', icon: '➡️',
-            desc: (v) => `+${Math.round(v * 100)}% 弹速`,
-            baseValue: [0.05, 0.10], perLevel: [0.015, 0.03],
-        },
-        bulletPierceAdd: {
-            name: '穿透', icon: '🔱',
-            desc: (v) => `+${v} 穿透`,
-            baseValue: [1, 1], perLevel: [0, 0],
-            isInt: true,
-        },
-    },
-
-    _rollAffix(level) {
-        const ids = Object.keys(this.affixDefs);
-        const id = ids[Math.floor(Math.random() * ids.length)];
-        const def = this.affixDefs[id];
-        const base = def.baseValue[0] + Math.random() * (def.baseValue[1] - def.baseValue[0]);
-        const perLvl = def.perLevel[0] + Math.random() * (def.perLevel[1] - def.perLevel[0]);
-        let value = base + (level - 1) * perLvl;
-        if (def.isInt) value = Math.round(value);
-        else value = Math.round(value * 100) / 100;
-        return { id, value };
-    },
-
-    _rollNewAffixId(existingIds) {
-        const pool = Object.keys(this.affixDefs).filter(id => !existingIds.includes(id));
-        if (pool.length === 0) return null;
-        return pool[Math.floor(Math.random() * pool.length)];
-    },
-
-    _initWeaponAffixes(weapon) {
-        const level = weapon.level || 1;
-        weapon.affixes = [this._rollAffix(level)];
-    },
-
-    _increaseAffixesOnMerge(weapon, fromLevel) {
-        const levelIncrease = fromLevel || 1;
-        for (const aff of (weapon.affixes || [])) {
-            const def = this.affixDefs[aff.id];
-            if (!def) continue;
-            const inc = def.perLevel[0] + Math.random() * (def.perLevel[1] - def.perLevel[0]) * levelIncrease;
-            if (def.isInt) aff.value += Math.round(inc);
-            else aff.value = Math.round((aff.value + inc) * 100) / 100;
-        }
-    },
-
-    getRerollCost(weapon) {
-        const level = weapon.level || 1;
-        const quality = weapon.quality || 'T1';
-        const baseCosts = { T1: 5, T2: 8, T3: 14, T4: 22 };
-        const base = baseCosts[quality] || 5;
-        const rerollPenalty = (weapon._rerollCount || 0) * 2;
-        return base + (level - 1) * 3 + rerollPenalty;
-    },
-
-    rerollAffixes(weapon, player) {
-        const cost = this.getRerollCost(weapon);
-        if (player.materials < cost) return false;
-        player.materials -= cost;
-        weapon._rerollCount = (weapon._rerollCount || 0) + 1;
-        const level = weapon.level || 1;
-        const expectedCount = 1 + Math.floor((level - 1) / 3);
-        weapon.affixes = [];
-        const existingIds = [];
-        for (let i = 0; i < expectedCount; i++) {
-            const newId = this._rollNewAffixId(existingIds);
-            if (!newId) {
-                const ids = Object.keys(this.affixDefs);
-                const anyId = ids[Math.floor(Math.random() * ids.length)];
-                const aff = this._rollAffix(level);
-                aff.id = anyId;
-                weapon.affixes.push(aff);
-            } else {
-                const aff = this._rollAffix(level);
-                aff.id = newId;
-                weapon.affixes.push(aff);
-                existingIds.push(newId);
-            }
-        }
-        this._updateWeaponParams(player, weapon.id);
-        PlayerSystem._updateSynergies();
-        return { cost, newAffixes: weapon.affixes };
-    },
-
-    _applyMergeWithHighlights(weapon, fromLevel) {
-        const before = (weapon.affixes || []).map(a => ({ id: a.id, value: a.value }));
-        this._increaseAffixesOnMerge(weapon, fromLevel);
-        this._ensureAffixCount(weapon);
-        const highlights = {};
-        for (const a of (weapon.affixes || [])) {
-            const prev = before.find(b => b.id === a.id);
-            if (!prev) {
-                highlights[a.id] = 'new';
-            } else if (prev.value !== a.value) {
-                highlights[a.id] = 'upgraded';
-            }
-        }
-        weapon._affixHighlights = highlights;
-        if (weapon._highlightTimer) clearTimeout(weapon._highlightTimer);
-        weapon._highlightTimer = setTimeout(() => {
-            delete weapon._affixHighlights;
-            delete weapon._highlightTimer;
-        }, 3000);
-    },
-
-    _ensureAffixCount(weapon) {
-        const level = weapon.level || 1;
-        const expected = 1 + Math.floor((level - 1) / 3);
-        const existingIds = (weapon.affixes || []).map(a => a.id);
-        while ((weapon.affixes || []).length < expected) {
-            const newId = this._rollNewAffixId(existingIds);
-            if (!newId) break;
-            const newAff = this._rollAffix(level);
-            newAff.id = newId;
-            weapon.affixes.push(newAff);
-            existingIds.push(newId);
-        }
-    },
-
-    qualityDefs: {
-        T1: { name: '普通', color: '#aaaaaa', bg: 'rgba(170,170,170,0.12)', damageMult: 1.0,  costMult: 1.0,  minWave: 1,  rollWeight: 45 },
-        T2: { name: '优秀', color: '#4488ff', bg: 'rgba(68,136,255,0.12)', damageMult: 1.3,  costMult: 1.8,  minWave: 3,  rollWeight: 30 },
-        T3: { name: '稀有', color: '#aa44ff', bg: 'rgba(170,68,255,0.12)', damageMult: 1.6,  costMult: 2.8,  minWave: 6,  rollWeight: 18 },
-        T4: { name: '传说', color: '#ff6600', bg: 'rgba(255,102,0,0.15)', damageMult: 2.0,  costMult: 4.0,  minWave: 10, rollWeight: 7 },
-    },
-
-    rollQuality(currentWave) {
-        const pool = Object.entries(this.qualityDefs)
-            .filter(([_, q]) => currentWave >= q.minWave);
-        if (pool.length === 0) return 'T1';
-        const totalWeight = pool.reduce((sum, [_, q]) => sum + q.rollWeight, 0);
-        let r = Math.random() * totalWeight;
-        for (const [key, q] of pool) {
-            r -= q.rollWeight;
-            if (r <= 0) return key;
-        }
-        return pool[pool.length - 1][0];
-    },
 
     _itemApplyFunctions: {
         // statMods 来自 CSV，下方仅保留需要特殊逻辑的道具
@@ -253,13 +81,13 @@ const ShopSystem = {
             const text = await resp.text();
             const weapons = this._parseWeaponCSV(text);
             if (weapons.length === 0) {
-                console.warn('[ShopSystem] CSV 加载成功但无有效武器数据');
+                console.warn('[ShopSystem] ' + _SHOP_STR.log_csvNoData);
             } else {
-                console.log('[ShopSystem] 从 CSV 加载', weapons.length, '种武器');
+                console.log('[ShopSystem] ' + _SHOP_STR.log_csvLoaded, weapons.length, _SHOP_STR.log_csvWeapons);
                 this.allWeapons = weapons;
             }
         } catch (e) {
-            console.error('[ShopSystem] 武器CSV加载失败:', e.message);
+            console.error('[ShopSystem] ' + _SHOP_STR.log_csvFail, e.message);
         }
     },
 
@@ -271,55 +99,66 @@ const ShopSystem = {
             if (trimmed === '' || trimmed.startsWith('#')) continue;
 
             const fields = this._splitCSVLine(trimmed);
-            if (fields.length < 28) continue;
-
-            const [
-                id, name, desc, icon, slotsStr, costStr, tag,
-                modsStr, behavior,
-                bulletCountStr, bulletSpeedStr, damageMultStr, attackSpeedMultStr, spreadStr, pierceStr,
-                meleeRangeStr, attackRangeStr,
-                burnDpsStr, burnMaxStacksStr, chainCountStr, splashRadiusStr, homingStrengthStr,
-                slowAmountStr, slowDurationStr,
-                healOnHitStr, auraHealStr, auraRadiusStr, sprayConeStr
-            ] = fields;
+            if (fields.length < 43) continue;
 
             const toNum = (s) => { const v = parseFloat(s); return isNaN(v) ? 0 : v; };
 
-            let mods = {};
-            try {
-                if (modsStr && modsStr !== '{}') {
-                    mods = JSON.parse(modsStr);
-                }
-            } catch (e) {
-                console.warn('[ShopSystem] mods 解析失败 (' + id + '):', modsStr);
-            }
+            const [
+                id, name, desc, icon, slotsStr, costStr, tag,
+                minLevelStr,
+                d1, d2, d3, d4,                                 // damage_lv1~4
+                c1, c2, c3, c4,                                 // cooldown_lv1~4
+                atkRangeMultStr, speedMultStr,
+                critChAddStr, critDmgAddStr, armorAddStr, hpRegAddStr, maxHpAddStr, lifestealAddStr,
+                bulletCountStr, bulletSpeedStr, bulletMaxRangeStr,
+                attackRangeStr, spreadStr, pierceStr, meleeRangeStr,
+                burnDpsStr, burnMaxStacksStr, chainCountStr, splashRadiusStr, homingStr,
+                slowAmtStr, slowDurStr,
+                healOnHitStr, auraHealStr, auraRadiusStr, sprayConeStr,
+                behavior, classStr, knockbackStr, magSizeStr, reloadTimeStr
+            ] = fields;
 
             weapons.push({
                 id, name, desc, icon,
                 slots: toNum(slotsStr) || 1,
                 cost: toNum(costStr) || 0,
                 tag,
-                mods,
-                behavior: behavior || 'bullet',
+                minLevel: toNum(minLevelStr) || 1,
+                damage_lv1: toNum(d1), damage_lv2: toNum(d2),
+                damage_lv3: toNum(d3), damage_lv4: toNum(d4),
+                cooldown_lv1: toNum(c1), cooldown_lv2: toNum(c2),
+                cooldown_lv3: toNum(c3), cooldown_lv4: toNum(c4),
+                attackRangeMult: toNum(atkRangeMultStr) || 0,
+                speedMult: toNum(speedMultStr) || 0,
+                critChanceAdd: toNum(critChAddStr) || 0,
+                critDamageAdd: toNum(critDmgAddStr) || 0,
+                armorAdd: toNum(armorAddStr) || 0,
+                hpRegenAdd: toNum(hpRegAddStr) || 0,
+                maxHpAdd: toNum(maxHpAddStr) || 0,
+                lifeStealAdd: toNum(lifestealAddStr) || 0,
                 bulletCount: toNum(bulletCountStr) || 1,
                 bulletSpeed: toNum(bulletSpeedStr) || 500,
-                damageMult: toNum(damageMultStr) || 1.0,
-                attackSpeedMult: toNum(attackSpeedMultStr) || 1.0,
+                bulletMaxRange: toNum(bulletMaxRangeStr) || 0,
+                attackRange: toNum(attackRangeStr) || 0,
                 spread: toNum(spreadStr) || 0.1,
                 pierce: toNum(pierceStr) || 0,
                 meleeRange: toNum(meleeRangeStr) || 0,
-                attackRange: toNum(attackRangeStr) || 0,
                 burnDps: toNum(burnDpsStr) || 0,
                 burnMaxStacks: toNum(burnMaxStacksStr) || 0,
                 chainCount: toNum(chainCountStr) || 0,
                 splashRadius: toNum(splashRadiusStr) || 0,
-                homingStrength: toNum(homingStrengthStr) || 0,
-                slowAmount: toNum(slowAmountStr) || 0,
-                slowDuration: toNum(slowDurationStr) || 0,
+                homingStrength: toNum(homingStr) || 0,
+                slowAmount: toNum(slowAmtStr) || 0,
+                slowDuration: toNum(slowDurStr) || 0,
                 healOnHit: toNum(healOnHitStr) || 0,
                 auraHeal: toNum(auraHealStr) || 0,
                 auraRadius: toNum(auraRadiusStr) || 0,
                 sprayCone: toNum(sprayConeStr) || 0,
+                behavior: behavior || 'bullet',
+                class: classStr || 'Primitive',
+                knockback: toNum(knockbackStr) || 0,
+                magSize: toNum(magSizeStr) || 0,
+                reloadTime: toNum(reloadTimeStr) || 0,
             });
         }
         return weapons;
@@ -338,13 +177,13 @@ const ShopSystem = {
             const text = await resp.text();
             const items = this._parseItemCSV(text);
             if (items.length === 0) {
-                console.warn('[ShopSystem] 道具CSV 加载成功但无有效数据');
+                console.warn('[ShopSystem] ' + _SHOP_STR.log_itemCsvNoData);
             } else {
-                console.log('[ShopSystem] 从 CSV 加载', items.length, '种道具');
+                console.log('[ShopSystem] ' + _SHOP_STR.log_csvLoaded, items.length, _SHOP_STR.log_itemCsvItems);
                 this.allItems = items;
             }
         } catch (e) {
-            console.error('[ShopSystem] 道具CSV加载失败:', e.message);
+            console.error('[ShopSystem] ' + _SHOP_STR.log_itemCsvFail, e.message);
         }
     },
 
@@ -402,11 +241,9 @@ const ShopSystem = {
         const weaponCount = Math.min(2, shuffledWeapons.length);
         for (let i = 0; i < weaponCount && this.items.filter(it => it.type === 'weapon').length < 2; i++) {
             const base = shuffledWeapons[i];
-            const quality = this.rollQuality(currentWave);
-            const qDef = this.qualityDefs[quality];
             const inflationCost = Math.round(base.cost + currentWave + base.cost * 0.1 * currentWave);
-            const cost = Math.max(1, Math.round(inflationCost * qDef.costMult));
-            this.items.push({ ...base, type: 'weapon', locked: false, quality: quality, cost: cost });
+            const cost = Math.max(1, inflationCost);
+            this.items.push({ ...base, type: 'weapon', locked: false, quality: 'T1', cost: cost });
         }
 
         const existingItemIds = this.items.filter(it => it.type === 'item').map(it => it.id);
@@ -493,7 +330,6 @@ const ShopSystem = {
                 if (qOrder.indexOf(quality) > qOrder.indexOf(existingWeapon.quality || 'T1')) {
                     existingWeapon.quality = quality;
                 }
-                this._applyMergeWithHighlights(existingWeapon, 1);
                 this._updateWeaponParams(player, item.id);
                 PlayerSystem._updateSynergies();
                 UnlockSystem.recordWeaponBought(item.id);
@@ -509,13 +345,12 @@ const ShopSystem = {
             const maxSlots = player.weaponSlots || 6;
 
             if (usedSlots + item.slots > maxSlots) {
-                this._lastBuyError = '武器槽位已满，无法购买新武器';
+                this._lastBuyError = _SHOP_STR.error_slotFull;
                 return false;
             }
 
             player.materials -= actualCost;
             const newWeapon = { id: item.id, level: 1, quality: quality };
-            this._initWeaponAffixes(newWeapon);
             player.weapons.push(newWeapon);
             this._applyWeaponMods(player, item.mods);
             this._applyWeaponBehaviors(player, item);
@@ -561,10 +396,7 @@ const ShopSystem = {
         const def = this.allWeapons.find(d => d.id === weapon.id);
         if (!def) return false;
 
-        const quality = weapon.quality || 'T1';
-        const qDef = this.qualityDefs[quality];
-        const qualityCostMult = qDef ? qDef.costMult : 1.0;
-        const refund = Math.floor((def.cost * qualityCostMult) / 2) + 1;
+        const refund = Math.floor(def.cost / 2) + 1;
         player.materials += refund;
 
         if (def.mods) {
@@ -606,7 +438,6 @@ const ShopSystem = {
         if (qOrder.indexOf(from.quality || 'T1') > qOrder.indexOf(to.quality || 'T1')) {
             to.quality = from.quality;
         }
-        this._applyMergeWithHighlights(to, fromLevel);
         const actualFromIdx = player.weapons.indexOf(from);
         if (actualFromIdx !== -1) player.weapons.splice(actualFromIdx, 1);
         this._updateWeaponParams(player, to.id);
@@ -644,7 +475,6 @@ const ShopSystem = {
             auraRadius: def.auraRadius || 0,
             burnDps: def.burnDps || 0,
             burnMaxStacks: def.burnMaxStacks || 0,
-            meleeRange: def.meleeRange || 0,
             critBounce: def.critBounce || 0,
             attackRange: def.attackRange || 0,
             bulletMaxRange: def.bulletMaxRange || 0,
@@ -689,7 +519,6 @@ const ShopSystem = {
             auraRadius: weapon.auraRadius || 0,
             burnDps: weapon.burnDps || 0,
             burnMaxStacks: weapon.burnMaxStacks || 0,
-            meleeRange: weapon.meleeRange || 0,
             critBounce: weapon.critBounce || 0,
             attackRange: weapon.attackRange || 0,
             bulletMaxRange: weapon.bulletMaxRange || 0,

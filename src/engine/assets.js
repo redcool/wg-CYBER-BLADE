@@ -204,27 +204,27 @@ const AssetSystem = {
         const img = this.weaponIcons[id];
         const s = size || 48;
         if (!img) return `<div class="icon-fallback weapon-fallback" style="width:${s}px;height:${s}px">W</div>`;
-        return `<img class="asset-icon weapon-icon" src="${img.src}" alt="${id}" width="${s}" height="${s}" >`;
+        return `<img class="asset-icon weapon-icon" src="${img.src}" alt="${id}" width="${s}" height="${s}" style="object-fit:contain;" >`;
     },
 
     itemIconHTML(id, size) {
         const img = this.itemIcons[id];
         const s = size || 28;
         if (!img) return `<div class="icon-fallback item-fallback" style="width:${s}px;height:${s}px">I</div>`;
-        return `<img class="asset-icon item-icon" src="${img.src}" alt="${id}" width="${s}" height="${s}" >`;
+        return `<img class="asset-icon item-icon" src="${img.src}" alt="${id}" width="${s}" height="${s}" style="object-fit:contain;" >`;
     },
 
     charIconHTML(id, size) {
         const img = this.characterIcons[id];
         const s = size || 64;
         if (!img) return `<div class="icon-fallback char-fallback" style="width:${s}px;height:${s}px">C</div>`;
-        return `<img class="asset-icon char-icon" src="${img.src}" alt="${id}" width="${s}" height="${s}" >`;
+        return `<img class="asset-icon char-icon" src="${img.src}" alt="${id}" width="${s}" height="${s}" style="object-fit:contain;" >`;
     },
 
     enemyIconHTML(id, size) {
         const img = this.enemyIcons[id];
         const s = size || 48;
         if (!img) return `<div class="icon-fallback enemy-fallback" style="width:${s}px;height:${s}px">E</div>`;
-        return `<img class="asset-icon enemy-icon" src="${img.src}" alt="${id}" width="${s}" height="${s}" >`;
+        return `<img class="asset-icon enemy-icon" src="${img.src}" alt="${id}" width="${s}" height="${s}" style="object-fit:contain;" >`;
     },
 };

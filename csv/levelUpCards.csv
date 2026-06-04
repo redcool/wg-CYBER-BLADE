@@ -1,96 +1,93 @@
-# 升级抽卡配置表
-# statAdd / statMult 格式: 属性名:数值|属性名:数值 (管道符分隔多属性)
-# actionType: weaponLevelUp|weaponQualityUp|addWeaponSlot|addPassive
-# rarity: common|rare|epic|legendary
-# tags: 管道符分隔 (melee|ranged|fire|explosive|tech|crit|economy)
-id,level,name,desc,icon,rarity,category,tags,statAdd,statMult,actionType,actionValue
-# ===== survival =====
-maxHp,1,生命强化,最大生命 +20%,❤️,common,survival,,,maxHp:0.20,,
-maxHp,2,生命祝福,最大生命 +40%,❤️,rare,survival,,,maxHp:0.40,,
-maxHp,3,生命祝福,最大生命 +60%,❤️,epic,survival,,,maxHp:0.60,,
-maxHp,4,生命不朽,最大生命 +80%,❤️,legendary,survival,,,maxHp:0.80,,
-armor,1,合金护甲,护甲 +3,🛡️,common,survival,,armor:3,,,
-armor,2,重甲锻造,护甲 +6,🛡️,rare,survival,melee,armor:6,,,
-armor,3,钢甲壁垒,护甲 +9,🛡️,epic,survival,melee,armor:9,,,
-armor,4,不灭战甲,护甲 +12,🛡️,legendary,survival,melee,armor:12,,,
-dodge,1,幽影步法,闪避 +3%,💨,common,survival,,dodge:0.03,,,
-dodge,2,风影步,闪避 +6%,💨,rare,survival,,dodge:0.06,,,
-dodge,3,虚空漫步,闪避 +9%,💨,epic,survival,,dodge:0.09,,,
-dodge,4,幻影之舞,闪避 +12%,💨,legendary,survival,,dodge:0.12,,,
-hpRegen,1,再生之力,生命回复 +1/秒,💚,common,survival,,hpRegen:1,,,
-hpRegen,2,生命源泉,生命回复 +2/秒,💚,rare,survival,,hpRegen:2,,,
-hpRegen,3,大地之愈,生命回复 +3/秒,💚,epic,survival,,hpRegen:3,,,
-hpRegen,4,永恒之泉,生命回复 +4/秒,💚,legendary,survival,,hpRegen:4,,,
-lifeSteal,1,嗜血本能,生命偷取 +3%,🩸,rare,survival,melee,lifeSteal:0.03,,,
-lifeSteal,2,血之渴望,生命偷取 +6%,🩸,epic,survival,melee,lifeSteal:0.06,,,
-lifeSteal,3,生命契约,生命偷取 +9%,🩸,legendary,survival,melee,lifeSteal:0.09,,,
-# ===== offense =====
-damage,1,攻击强化,伤害 +10%,🗡️,common,offense,,,damagePercent:0.10,,
-damage,2,毁灭之力,伤害 +25%,🗡️,rare,offense,,,damagePercent:0.25,,
-damage,3,末日审判,伤害 +50%,🗡️,epic,offense,,,damagePercent:0.50,,
-attackSpeed,1,疾风连击,攻速 +15%,⚡,common,offense,,,attackSpeed:0.15,,
-attackSpeed,2,狂战士之怒,攻速 +30%,⚡,rare,offense,melee,,attackSpeed:0.30,,
-attackSpeed,3,时停之刃,攻速 +45%,⚡,epic,offense,melee,,attackSpeed:0.45,,
-critChance,1,精准锁定,暴击率 +5%,💥,common,offense,crit,critChance:0.05,,,
-critChance,2,致命瞄准,暴击率 +10%,💥,rare,offense,crit,critChance:0.10,,,
-critChance,3,百发百中,暴击率 +15%,💥,epic,offense,crit,critChance:0.15,,,
-critDamage,1,暴击强化,暴击伤害 +50%,🔥,rare,offense,crit,,critDamage:0.5,,
-critDamage,2,毁灭暴击,暴击伤害 +100%,🔥,epic,offense,crit,,critDamage:1.0,,
-critDamage,3,致命裁决,暴击伤害 +150%,🔥,legendary,offense,crit,,critDamage:1.5,,
-meleeDmg,1,近战专精,近战伤害 +5,⚔️,common,offense,melee,meleeDamage:5,,,
-meleeDmg,2,近战大师,近战伤害 +10,⚔️,rare,offense,melee,meleeDamage:10,,,
-meleeDmg,3,近战宗师,近战伤害 +15,⚔️,epic,offense,melee,meleeDamage:15,,,
-rangedDmg,1,远程专精,远程伤害 +5,🏹,common,offense,ranged,rangedDamage:5,,,
-rangedDmg,2,远程大师,远程伤害 +10,🏹,rare,offense,ranged,rangedDamage:10,,,
-rangedDmg,3,远程宗师,远程伤害 +15,🏹,epic,offense,ranged,rangedDamage:15,,,
-elementalDmg,1,元素之力,元素伤害 +5,🔮,common,offense,fire|explosive,elementalDamage:5,,,
-elementalDmg,2,元素风暴,元素伤害 +10,🔮,rare,offense,fire|explosive,elementalDamage:10,,,
-elementalDmg,3,元素毁灭,元素伤害 +15,🔮,epic,offense,fire|explosive,elementalDamage:15,,,
-engDmg,1,工程强化,工程 +5,🤖,common,offense,tech,engineering:5,,,
-engDmg,2,工程大师,工程 +10,🤖,rare,offense,tech,engineering:10,,,
-engDmg,3,工程宗师,工程 +15,🤖,epic,offense,tech,engineering:15,,,
-# ===== mobility =====
-speed,1,疾跑,移速 +10%,⚡,common,mobility,,,speed:0.10,,
-speed,2,神行太保,移速 +20%,⚡,rare,mobility,,,speed:0.20,,
-speed,3,瞬影,移速 +30%,⚡,epic,mobility,,,speed:0.30,,
-range,1,鹰眼,射程 +15%,🎯,common,mobility,ranged,,attackRange:0.15,,
-range,2,千里眼,射程 +30%,🎯,rare,mobility,ranged,,attackRange:0.30,,
-range,3,全知之眼,射程 +45%,🎯,epic,mobility,ranged,,attackRange:0.45,,
-# ===== economy =====
-luck,1,幸运之星,幸运 +2,🍀,common,economy,economy,luck:2,,,
-luck,2,幸运光环,幸运 +4,🍀,rare,economy,economy,luck:4,,,
-luck,3,幸运女神,幸运 +6,🍀,epic,economy,economy,luck:6,,,
-harvest,1,收获,金币量 +5%,🪙,common,economy,economy,,harvesting:0.05,,
-harvest,2,收获,金币量 +8%,🪙,common,economy,economy,,harvesting:0.10,,
-harvest,3,丰收,金币量 +12,🪙,rare,economy,economy,,harvesting:0.15,,
-harvest,4,丰收,金币量 +16%,🪙,epic,economy,economy,,harvesting:0.20,,
-harvest,5,大丰收,金币量 +20%,🪙,epic,economy,economy,,harvesting:0.30,,
-xpGain,1,经验加成,经验获取 +15%,📈,rare,economy,economy,,xpGain:0.15,,
-xpGain,2,经验祝福,经验获取 +30%,📈,epic,economy,economy,,xpGain:0.30,,
-xpGain,3,经验洪流,经验获取 +45%,📈,legendary,economy,economy,,xpGain:0.45,,
-materialGain,1,财源广进,材料获取 +20%,💰,epic,economy,economy,,materialGain:0.20,,
-materialGain,2,黄金之河,材料获取 +40%,💰,legendary,economy,economy,,materialGain:0.40,,
-# ===== special =====
-explosionSize,1,爆破扩大,爆炸范围 +20%,💥,rare,special,explosive,,explosionSize:0.2,,
-explosionSize,2,毁灭扩撒,爆炸范围 +40%,💥,epic,special,explosive,,explosionSize:0.4,,
-explosionSize,3,核爆范围,爆炸范围 +60%,💥,legendary,special,explosive,,explosionSize:0.6,,
-explosionDmg,1,爆破强化,爆炸伤害 +25%,💥,rare,special,explosive,,explosionDamage:0.25,,
-explosionDmg,2,爆破毁灭,爆炸伤害 +50%,💥,epic,special,explosive,,explosionDamage:0.50,,
-explosionDmg,3,末日爆破,爆炸伤害 +75%,💥,legendary,special,explosive,,explosionDamage:0.75,,
-pierce,1,穿透弹,穿透 +1,➡️,rare,special,ranged,,projectilePierce:1,,
-pierce,2,穿透强化,穿透 +2,➡️,epic,special,ranged,,projectilePierce:2,,
-pierce,3,无尽穿透,穿透 +3,➡️,legendary,special,ranged,,projectilePierce:3,,
-turretDmg,1,炮台强化,炮台伤害 +25%,🤖,epic,special,tech,,turretDamage:0.25,,
-turretDmg,2,炮台毁灭,炮台伤害 +50%,🤖,legendary,special,tech,,turretDamage:0.50,,
-bulletCount,1,弹幕,子弹 +1,🔫,epic,special,ranged,,bulletCount:1,,
-bulletCount,2,弹幕大师,子弹 +2,🔫,legendary,special,ranged,,bulletCount:2,,
-# ===== weapon (action cards) =====
-weaponLevelUp,1,武器精炼,随机一把武器等级 +1,⚔️,rare,weapon,,,,weaponLevelUp,
-weaponLevelUp,2,武器精炼,随机一把武器等级 +1,⚔️,epic,weapon,,,,weaponLevelUp,
-weaponLevelUp,3,武器精炼,随机一把武器等级 +1,⚔️,legendary,weapon,,,,weaponLevelUp,
-weaponQualityUp,1,品质升华,随机一把武器品质提升,✨,epic,weapon,,,,weaponQualityUp,
-weaponSlot,1,武器槽扩展,武器槽 +1,📦,legendary,weapon,,,,addWeaponSlot,
-# ===== passive (action cards) =====
-passiveKillExplode,1,杀戮快感,击杀时爆炸,💥,epic,special,explosive,,,addPassive,on_kill_explosion
-passiveBurnSpread,1,燃烧扩散,燃烧效果传播,🔥,epic,special,fire,,,addPassive,burn_spread
-passiveLifeSteal,1,生命契约,击杀回复5生命,🩸,legendary,survival,melee,,,addPassive,life_on_hit
+# ====== 升级卡牌表 (Brotato风格 升级抽卡系统) ======
+# 格式: CSV (逗号分隔), 以 # 开头的行为注释行
+# 共 17 属性 × 4 Tier + 3 特殊 = 71 张
+#
+# ====== 列说明 (11列) ======
+# id:          卡牌唯一标识 (英文)
+# name:        卡牌名 (中文, 如 "心脏")
+# desc:        卡牌描述 (显示数值)
+# icon:        卡牌图标 (emoji)
+# tier:        品质等级 I|II|III|IV (IV最高)
+# statField:   属性字段名 (maxHp, armor, speed, critChance 等, 对应角色面板key)
+# statValue:   属性值 (数值, 具体单位由字段决定)
+# tags:        流派标签限制
+#              melee|ranged|fire|explosive|tech|crit|economy
+#              空 = 所有流派可用, 用 | 分隔 = 仅限这些流派
+# unlockLevel: 角色等级解锁要求 (数字, 如 1=初始可用)
+# actionType:  特殊动作类型 (空=普通属性卡)
+#   weaponLevelUp  武器升级 (随机武器+1级)
+#   weaponQualityUp 品质提升 (预留)
+#   addWeaponSlot  增加武器槽
+# actionValue: 特殊动作参数 (与actionType搭配)
+id,name,desc,icon,tier,statField,statValue,tags,unlockLevel,actionType,actionValue
+maxHp_t1,心脏,最大生命 +3,❤️,I,maxHp,3,,1,,
+maxHp_t2,心脏,最大生命 +6,❤️,II,maxHp,6,,5,,
+maxHp_t3,心脏,最大生命 +9,❤️,III,maxHp,9,,10,,
+maxHp_t4,心脏,最大生命 +12,❤️,IV,maxHp,12,,25,,
+hpRegen_t1,肺脏,生命回复 +0.3/秒,💚,I,hpRegen,0.3,,1,,
+hpRegen_t2,肺脏,生命回复 +0.6/秒,💚,II,hpRegen,0.6,,5,,
+hpRegen_t3,肺脏,生命回复 +1.0/秒,💚,III,hpRegen,1.0,,10,,
+hpRegen_t4,肺脏,生命回复 +1.5/秒,💚,IV,hpRegen,1.5,,25,,
+lifeSteal_t1,利齿,生命偷取 +1%,🩸,I,lifeSteal,0.01,melee,1,,
+lifeSteal_t2,利齿,生命偷取 +2%,🩸,II,lifeSteal,0.02,melee,5,,
+lifeSteal_t3,利齿,生命偷取 +3%,🩸,III,lifeSteal,0.03,melee,10,,
+lifeSteal_t4,利齿,生命偷取 +4%,🩸,IV,lifeSteal,0.04,melee,25,,
+damagePercent_t1,三头肌,伤害% +4%,🗡️,I,damagePercent,0.04,,1,,
+damagePercent_t2,三头肌,伤害% +8%,🗡️,II,damagePercent,0.08,,5,,
+damagePercent_t3,三头肌,伤害% +12%,🗡️,III,damagePercent,0.12,,10,,
+damagePercent_t4,三头肌,伤害% +16%,🗡️,IV,damagePercent,0.16,,25,,
+meleeDamage_t1,前臂,近战伤害 +2,⚔️,I,meleeDamage,2,melee,1,,
+meleeDamage_t2,前臂,近战伤害 +4,⚔️,II,meleeDamage,4,melee,5,,
+meleeDamage_t3,前臂,近战伤害 +6,⚔️,III,meleeDamage,6,melee,10,,
+meleeDamage_t4,前臂,近战伤害 +8,⚔️,IV,meleeDamage,8,melee,25,,
+rangedDamage_t1,肩膀,远程伤害 +1,🏹,I,rangedDamage,1,ranged,1,,
+rangedDamage_t2,肩膀,远程伤害 +2,🏹,II,rangedDamage,2,ranged,5,,
+rangedDamage_t3,肩膀,远程伤害 +3,🏹,III,rangedDamage,3,ranged,10,,
+rangedDamage_t4,肩膀,远程伤害 +4,🏹,IV,rangedDamage,4,ranged,25,,
+elementalDamage_t1,大脑,元素伤害 +1,🔮,I,elementalDamage,1,fire|explosive,1,,
+elementalDamage_t2,大脑,元素伤害 +2,🔮,II,elementalDamage,2,fire|explosive,5,,
+elementalDamage_t3,大脑,元素伤害 +3,🔮,III,elementalDamage,3,fire|explosive,10,,
+elementalDamage_t4,大脑,元素伤害 +4,🔮,IV,elementalDamage,4,fire|explosive,25,,
+attackSpeed_t1,反射神经,攻速 +5%,⚡,I,attackSpeed,0.05,,1,,
+attackSpeed_t2,反射神经,攻速 +10%,⚡,II,attackSpeed,0.1,,5,,
+attackSpeed_t3,反射神经,攻速 +15%,⚡,III,attackSpeed,0.15,,10,,
+attackSpeed_t4,反射神经,攻速 +20%,⚡,IV,attackSpeed,0.2,,25,,
+critChance_t1,手指,暴击率 +3%,💥,I,critChance,0.03,crit,1,,
+critChance_t2,手指,暴击率 +5%,💥,II,critChance,0.05,crit,5,,
+critChance_t3,手指,暴击率 +7%,💥,III,critChance,0.07,crit,10,,
+critChance_t4,手指,暴击率 +9%,💥,IV,critChance,0.09,crit,25,,
+engineering_t1,颅骨,工程 +1,🤖,I,engineering,1,tech,1,,
+engineering_t2,颅骨,工程 +2,🤖,II,engineering,2,tech,5,,
+engineering_t3,颅骨,工程 +3,🤖,III,engineering,3,tech,10,,
+engineering_t4,颅骨,工程 +5,🤖,IV,engineering,5,tech,25,,
+attackRange_t1,眼睛,射程 +15,🎯,I,attackRange,15,ranged,1,,
+attackRange_t2,眼睛,射程 +30,🎯,II,attackRange,30,ranged,5,,
+attackRange_t3,眼睛,射程 +45,🎯,III,attackRange,45,ranged,10,,
+attackRange_t4,眼睛,射程 +60,🎯,IV,attackRange,60,ranged,25,,
+armor_t1,胸甲,护甲 +1,🛡️,I,armor,1,,1,,
+armor_t2,胸甲,护甲 +2,🛡️,II,armor,2,,5,,
+armor_t3,胸甲,护甲 +3,🛡️,III,armor,3,,10,,
+armor_t4,胸甲,护甲 +4,🛡️,IV,armor,4,,25,,
+dodge_t1,背部,闪避 +3%,💨,I,dodge,0.03,,1,,
+dodge_t2,背部,闪避 +6%,💨,II,dodge,0.06,,5,,
+dodge_t3,背部,闪避 +9%,💨,III,dodge,0.09,,10,,
+dodge_t4,背部,闪避 +12%,💨,IV,dodge,0.12,,25,,
+speed_t1,双腿,移速 +3,👟,I,speed,3,,1,,
+speed_t2,双腿,移速 +6,👟,II,speed,6,,5,,
+speed_t3,双腿,移速 +9,👟,III,speed,9,,10,,
+speed_t4,双腿,移速 +12,👟,IV,speed,12,,25,,
+luck_t1,嗅觉,幸运 +5,🍀,I,luck,5,economy,1,,
+luck_t2,嗅觉,幸运 +10,🍀,II,luck,10,economy,5,,
+luck_t3,嗅觉,幸运 +15,🍀,III,luck,15,economy,10,,
+luck_t4,嗅觉,幸运 +20,🍀,IV,luck,20,economy,25,,
+materialGain_t1,双手,材料获取% +3%,💰,I,materialGain,0.03,economy,1,,
+materialGain_t2,双手,材料获取% +6%,💰,II,materialGain,0.06,economy,5,,
+materialGain_t3,双手,材料获取% +9%,💰,III,materialGain,0.09,economy,10,,
+materialGain_t4,双手,材料获取% +12%,💰,IV,materialGain,0.12,economy,25,,
+harvesting_t1,胃,采集 +4%,🍽️,I,harvesting,0.04,economy,1,,
+harvesting_t2,胃,采集 +8%,🍽️,II,harvesting,0.08,economy,5,,
+harvesting_t3,胃,采集 +12%,🍽️,III,harvesting,0.12,economy,10,,
+harvesting_t4,胃,采集 +18%,🍽️,IV,harvesting,0.18,economy,25,,
+weaponLvUp,武器升级,随机武器+1级,⚔️,II,,,,3,weaponLevelUp,
+weaponQuality,品质提升,随机武器品质+1,✨,III,,,,6,weaponQualityUp,
+weaponSlotUp,武器槽,武器槽+1,📦,IV,,,,25,addWeaponSlot,

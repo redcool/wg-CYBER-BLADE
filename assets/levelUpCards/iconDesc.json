@@ -1,0 +1,62 @@
+{
+  "maxHp": {
+    "color": "#ff3355"
+  },
+  "hpRegen": {
+    "color": "#44ff88"
+  },
+  "lifeSteal": {
+    "color": "#ff2266"
+  },
+  "damagePercent": {
+    "color": "#ffcc00"
+  },
+  "meleeDamage": {
+    "color": "#00ddff"
+  },
+  "rangedDamage": {
+    "color": "#ff8833"
+  },
+  "elementalDamage": {
+    "color": "#aa66ff"
+  },
+  "attackSpeed": {
+    "color": "#ffff44"
+  },
+  "critChance": {
+    "color": "#ff4444"
+  },
+  "engineering": {
+    "color": "#44aaff"
+  },
+  "attackRange": {
+    "color": "#44ddff"
+  },
+  "armor": {
+    "color": "#44ccff"
+  },
+  "dodge": {
+    "color": "#66ffcc"
+  },
+  "speed": {
+    "color": "#ff6644"
+  },
+  "luck": {
+    "color": "#44ff44"
+  },
+  "materialGain": {
+    "color": "#ffcc44"
+  },
+  "harvesting": {
+    "color": "#ffaa44"
+  },
+  "weaponLevelUp": {
+    "color": "#ffffff"
+  },
+  "weaponQualityUp": {
+    "color": "#ffcc00"
+  },
+  "addWeaponSlot": {
+    "color": "#44ddff"
+  }
+}

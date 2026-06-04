@@ -1,5 +1,23 @@
-# 难度配置表
-# id,中文名,英文名,enemyMult,spawnRate,eliteInterval,bossWaves,newEnemyTypes,desc
+# ====== 难度配置表 ======
+# 格式: CSV (逗号分隔)
+# 定义了从"标准"到"极限★9"共10个难度等级
+#
+# ====== 列说明 (9列) ======
+# id:             难度编号 (0=标准, 1-9=挑战★1~★9)
+# 中文名:         难度中文名称
+# 英文名:         难度英文名称
+# enemyMult:      怪物属性倍率 (1.0=标准, 3.5=3.5倍HP/DMG/SPD)
+# spawnRate:      生成速度倍率 (1.0=标准, 2.0=双倍出怪)
+# eliteInterval:  精英出现间隔 (关卡数)
+#                 0=不出精英, 正整数=每N关出精英
+# bossWaves:      Boss出现波次JSON数组
+#                 "[15]" = 第15关出Boss
+#                 "[10,20]" = 第10/20关出Boss
+#                 空数组或空=不出Boss
+# newEnemyTypes:  新增敌人类型 (用 | 分隔)
+#                 tank|ranged|exploder|healer|mortar|blinker|elite
+#                 空=使用基础敌人池
+# desc:           难度描述 (中文)
 id,中文名,英文名,enemyMult,spawnRate,eliteInterval,bossWaves,newEnemyTypes,desc
 0,标准,Standard,1.0,1.0,0,,,默认难度，怪物属性为标准值
 1,挑战★1,Challenge 1,1.2,1.0,0,,,怪物属性提升至1.2倍

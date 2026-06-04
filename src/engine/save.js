@@ -3,6 +3,16 @@
 // ============================================================
 const SAVE_SAVE_KEY = 'cyberblade_save';
 
+// 从 save_charsData.json 加载（运行时覆盖 fallback）
+const _SAVE_STR = {
+    no_file: '未选择文件', need_json: '请选择 .json 存档文件',
+    invalid_file: '无效的存档文件', parse_error: '文件解析失败: {0}',
+    read_error: '文件读取失败', imported: '存档已导入 ({0} 项数据)',
+};
+if (typeof DataLoader !== 'undefined') {
+    DataLoader.load('save_charsData').then(d => { if (d) Object.assign(_SAVE_STR, d); }).catch(() => {});
+}
+
 const SaveSystem = {
     /** 存档数据版本 */
     VERSION: 1,
@@ -80,6 +90,12 @@ const SaveSystem = {
         }
     },
 
+    /** 从 save_charsData.json 加载中文提示（运行时覆盖 fallback） */
+    _loadStrings() {
+        if (typeof DataLoader === 'undefined') return;
+        DataLoader.load('save_charsData').then(d => { if (d) Object.assign(_SAVE_STR, d); }).catch(() => {});
+    },
+
     /** 导出存档为文件（下载 .json） */
     exportToFile() {
         const data = this._collectSaveData();
@@ -100,11 +116,11 @@ const SaveSystem = {
     importFromFile(file) {
         return new Promise((resolve) => {
             if (!file) {
-                resolve({ success: false, message: '未选择文件' });
+                resolve({ success: false, message: _SAVE_STR.no_file });
                 return;
             }
             if (!file.name.endsWith('.json')) {
-                resolve({ success: false, message: '请选择 .json 存档文件' });
+                resolve({ success: false, message: _SAVE_STR.need_json });
                 return;
             }
             const reader = new FileReader();
@@ -112,18 +128,18 @@ const SaveSystem = {
                 try {
                     const data = JSON.parse(e.target.result);
                     if (!data || !data.version) {
-                        resolve({ success: false, message: '无效的存档文件' });
+                        resolve({ success: false, message: _SAVE_STR.invalid_file });
                         return;
                     }
                     this._applySaveData(data);
                     this.save(); // 同步到 localStorage
-                    resolve({ success: true, message: `存档已导入 (${Object.keys(data.stats || {}).length} 项数据)` });
+                    resolve({ success: true, message: _SAVE_STR.imported.replace('{0}', Object.keys(data.stats || {}).length) });
                 } catch (err) {
-                    resolve({ success: false, message: '文件解析失败: ' + err.message });
+                    resolve({ success: false, message: _SAVE_STR.parse_error.replace('{0}', err.message) });
                 }
             };
             reader.onerror = () => {
-                resolve({ success: false, message: '文件读取失败' });
+                resolve({ success: false, message: _SAVE_STR.read_error });
             };
             reader.readAsText(file);
         });

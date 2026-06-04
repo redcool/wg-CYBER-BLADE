@@ -1,5 +1,16 @@
-# 调试信息配置表
-# 如果 expr 列包含逗号，必须用双引号括起来
+# ====== 调试信息配置表 ======
+# 格式: CSV (逗号分隔)
+# 用于游戏内 HUD 调试面板的显示项配置
+#
+# ====== 列说明 (6列) ======
+# key:    调试项唯一标识 (英文, 程序内部用)
+# label:  中文标签 (显示在调试面板上)
+# desc:   英文描述
+# group:  分组名称 (波次|敌人|玩家|Boss 等, 用于面板分组折叠)
+# expr:   JavaScript 表达式 (运行时求值, 结果显示在面板上)
+#         注意: 如果包含逗号必须用双引号括起来!
+#         支持全局限量: WaveSystem, EnemySystem, PlayerSystem, BossSystem
+# enabled: 是否默认启用 (true=显示, false=隐藏, 可在面板中切换)
 key,label,desc,group,expr,enabled
 currentWave,波次,Current wave,波次,WaveSystem.currentLevel,true
 effectiveLevel,有效等级,Effective level (wave+difficulty),波次,WaveSystem.effectiveLevel,true

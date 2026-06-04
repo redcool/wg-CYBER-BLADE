@@ -266,8 +266,16 @@ const Renderer = {
         // 获取敌人图标
         const iconImg = typeof AssetSystem !== 'undefined' ? AssetSystem.enemyIcons[enemy.typeId] : null;
         if (iconImg && iconImg.complete && iconImg.naturalWidth > 0) {
-            const size = enemy.radius * 2.5;
-            ctx.drawImage(iconImg, enemy.x - size / 2, enemy.y - size / 2, size, size);
+            let w = iconImg.naturalWidth;
+            let h = iconImg.naturalHeight;
+            // 最长边限制 64px
+            const MAX_SIZE = 64;
+            if (w > MAX_SIZE || h > MAX_SIZE) {
+                const scale = MAX_SIZE / Math.max(w, h);
+                w = Math.round(w * scale);
+                h = Math.round(h * scale);
+            }
+            ctx.drawImage(iconImg, enemy.x - w / 2, enemy.y - h / 2, w, h);
         } else {
             // 回退：圆形绘制
             let color = enemy.color;
@@ -329,8 +337,16 @@ const Renderer = {
         const charImg = player.characterId && typeof AssetSystem !== 'undefined'
             ? AssetSystem.characterIcons[player.characterId] : null;
         if (charImg && charImg.complete && charImg.naturalWidth > 0) {
-            const size = player.radius * 2.5;
-            ctx.drawImage(charImg, -size / 2, -size / 2, size, size);
+            let w = charImg.naturalWidth;
+            let h = charImg.naturalHeight;
+            // 最长边限制 64px
+            const MAX_SIZE = 64;
+            if (w > MAX_SIZE || h > MAX_SIZE) {
+                const scale = MAX_SIZE / Math.max(w, h);
+                w = Math.round(w * scale);
+                h = Math.round(h * scale);
+            }
+            ctx.drawImage(charImg, -w / 2, -h / 2, w, h);
         } else {
             ctx.fillStyle = '#00ffff';
             ctx.shadowColor = '#00ffff';
@@ -363,7 +379,7 @@ const Renderer = {
                 const wp = player.weaponParams[w.id];
                 if (!wp) continue;
 
-                const dist = player.radius + 8 + (wp.slots || 1) * 5;
+                const dist = player.radius + 16 + (wp.slots || 1) * 5;
                 let angle, drawDist = dist, drawRotation;
 
                 if (wp._attackAnimTimer && wp._attackAnimTimer > 0 && wp._attackAnimDuration > 0) {
@@ -371,7 +387,7 @@ const Renderer = {
                     const aa = wp._attackAngle;
 
                     if (wp._attackBehavior === 'melee_thrust') {
-                        const maxDist = dist + (wp.meleeRange || 60) * 0.7;
+                        const maxDist = dist + (wp.attackRange || 60) * 0.7;
                         drawDist = dist + (maxDist - dist) * Math.sin(progress * Math.PI);
                         angle = aa;
                         drawRotation = aa;
@@ -392,11 +408,19 @@ const Renderer = {
 
                 const wpnImg = typeof AssetSystem !== 'undefined' ? AssetSystem.weaponIcons[w.id] : null;
                 if (wpnImg && wpnImg.complete && wpnImg.naturalWidth > 0) {
-                    let iconSize = (10 + (wp.slots || 1) * 4) * 1.3;
+                    let ww = wpnImg.naturalWidth;
+                    let wh = wpnImg.naturalHeight;
+                    // 最长边限制 64px，保持原始宽高比
+                    const MAX_SIZE = 64;
+                    if (ww > MAX_SIZE || wh > MAX_SIZE) {
+                        const scale = MAX_SIZE / Math.max(ww, wh);
+                        ww = Math.round(ww * scale);
+                        wh = Math.round(wh * scale);
+                    }
                     ctx.save();
                     ctx.translate(wx, wy);
-                    ctx.rotate(drawRotation + Math.PI / 2); // "向上"对准攻击/径向方向
-                    ctx.drawImage(wpnImg, -iconSize / 2, -iconSize / 2, iconSize, iconSize);
+                    ctx.rotate(drawRotation + Math.PI / 2);
+                    ctx.drawImage(wpnImg, -ww / 2, -wh / 2, ww, wh);
                     ctx.restore();
                 } else {
                     ctx.fillStyle = wp.tag === 'melee' || wp.tag === 'lance' ? '#ff8844' : '#44aaff';

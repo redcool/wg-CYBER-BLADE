@@ -1,0 +1,18 @@
+# ====== 武器类别（Class）定义 ======
+# 格式: CSV (逗号分隔)
+# 描述武器的品类特征，纯装饰性，无游戏性影响
+#
+# ====== 列说明 (4列) ======
+# id:     类别唯一标识 (英文, Blade|Blunt|Precise|Elemental|Heavy|Medical|Support|Primitive)
+# 中文名: 中文名称 (显示在武器详情/商店卡片上)
+# 英文名: 英文名称
+# 描述:   类别描述
+id,中文名,英文名,描述
+Blade,利刃,Blade,锋利而迅捷的近战斩击武器
+Blunt,钝器,Blunt,势大力沉的钝击系武器
+Precise,精准,Precise,追求一击致命的精密武器
+Elemental,元素,Elemental,蕴含元素之力的能量武器
+Heavy,重武,Heavy,威力绝伦的巨型武器
+Medical,医疗,Medical,以治疗守护为核心的武器
+Support,支援,Support,提供各类辅助效果的武器
+Primitive,基础,Primitive,原始原始的粗粝武器

@@ -100,35 +100,37 @@ describe('EnemySystem - 创建', () => {
 
     it('E5: create 应用波次缩放 wave=1', () => {
         const e = EnemySystem.create('chaser_basic', 100, 100, 1);
-        // hp = 30 * (1 + 1*0.12) = 33.6 → 33
-        expect(e.hp).toBe(33);
-        expect(e.maxHp).toBe(33);
-        // damage = 8 * (1 + 1*0.10) = 8.8 → 8
-        expect(e.damage).toBe(8);
+        // hpMult = 1 + 1*0.15 = 1.15; hp = 30 * 1.15 = 34.5 → 34
+        expect(e.hp).toBe(34);
+        expect(e.maxHp).toBe(34);
+        // dmgMult = 1 + 1*0.15 = 1.15; damage = 8 * 1.15 = 9.2 → 9
+        expect(e.damage).toBe(9);
     });
 
     it('E6: create 应用波次缩放 wave=5', () => {
         const e = EnemySystem.create('chaser_basic', 100, 100, 5);
-        // hp = 30 * (1 + 5*0.12) = 30 * 1.6 = 48
-        expect(e.hp).toBe(48);
-        // damage = 8 * (1 + 5*0.10) = 8 * 1.5 = 12
-        expect(e.damage).toBe(12);
+        // hpMult = 1 + 5*0.15 = 1.75; hp = 30 * 1.75 = 52.5 → 52
+        expect(e.hp).toBe(52);
+        // dmgMult = 1 + 5*0.15 = 1.75; damage = 8 * 1.75 = 14 → 14
+        expect(e.damage).toBe(14);
     });
 
     it('E7: create 精英额外缩放 wave=10', () => {
         const e = EnemySystem.create('elite', 100, 100, 10);
-        // hp = 250 * (1 + 10*0.12 + (10-10)*0.10) = 250 * 2.2 = 550
-        expect(e.hp).toBe(550);
-        // damage = 20 * (1 + 10*0.10 + (10-10)*0.10) = 20 * 2.0 = 40
-        expect(e.damage).toBe(40);
+        // hpMult = 1 + 10*0.15 = 2.5; extraHp = (10-8)*0.15 = 0.3 (精英从第8波开始)
+        // hp = 250 * (2.5 + 0.3) = 250 * 2.8 = 700
+        expect(e.hp).toBe(700);
+        // damage = 20 * (2.5 + 0.3) = 20 * 2.8 = 56
+        expect(e.damage).toBe(56);
     });
 
     it('E8: create 精英 wave=12 额外缩放', () => {
         const e = EnemySystem.create('elite', 100, 100, 12);
-        // hp = 250 * (1 + 12*0.12 + (12-10)*0.10) = 250 * (1 + 1.44 + 0.20) = 250 * 2.64 = 660
-        expect(e.hp).toBe(660);
-        // damage = 20 * (1 + 12*0.10 + (12-10)*0.10) = 20 * (1 + 1.2 + 0.2) = 20 * 2.4 = 48
-        expect(e.damage).toBe(48);
+        // hpMult = 1 + 12*0.15 = 2.8; extraHp = (12-8)*0.15 = 0.6
+        // hp = 250 * (2.8 + 0.6) = 250 * 3.4 = 850
+        expect(e.hp).toBe(850);
+        // damage = 20 * (2.8 + 0.6) = 20 * 3.4 = 68
+        expect(e.damage).toBe(68);
     });
 
     it('E9: createBatch 批量创建', () => {
@@ -383,37 +385,44 @@ describe('EnemySystem - 受击与销毁', () => {
 describe('EnemySystem - scaleByWave', () => {
     it('E33: wave=1 基础缩放', () => {
         const result = EnemySystem.scaleByWave({ hp: 30, damage: 8, speed: 80 }, 1);
-        expect(result.hp).toBe(33); // 30 * 1.12 = 33.6 → 33
-        expect(result.damage).toBe(8); // 8 * 1.10 = 8.8 → 8
-        expect(result.speed).toBe(83); // 80 * 1.04 = 83.2 → 83
+        // hpMult = 1 + 1*0.15 = 1.15; hp = 30 * 1.15 = 34.5 → 34
+        expect(result.hp).toBe(34);
+        // dmgMult = 1 + 1*0.15 = 1.15; damage = 8 * 1.15 = 9.2 → 9
+        expect(result.damage).toBe(9);
+        // spdMult = 1 + 1*0.05 = 1.05; speed = 80 * 1.05 = 84
+        expect(result.speed).toBe(84);
     });
 
     it('E34: wave=10 精英额外缩放', () => {
         const result = EnemySystem.scaleByWave({ hp: 250, damage: 20, speed: 70, isElite: true }, 10);
-        // hp = 250 * (1 + 10*0.12 + 0) = 250 * 2.2 = 550
-        expect(result.hp).toBe(550);
-        // damage = 20 * (1 + 10*0.10 + 0) = 20 * 2.0 = 40
-        expect(result.damage).toBe(40);
+        // hpMult = 1 + 10*0.15 = 2.5; extraHp = (10-8)*0.15 = 0.3
+        // hp = 250 * (2.5 + 0.3) = 250 * 2.8 = 700
+        expect(result.hp).toBe(700);
+        // damage = 20 * (2.5 + 0.3) = 20 * 2.8 = 56
+        expect(result.damage).toBe(56);
     });
 
     it('E35: wave=12 精英额外缩放', () => {
         const result = EnemySystem.scaleByWave({ hp: 250, damage: 20, speed: 70, isElite: true }, 12);
-        // hp = 250 * (1 + 12*0.12 + (12-10)*0.10) = 250 * (1 + 1.44 + 0.20) = 250 * 2.64 = 660
-        expect(result.hp).toBe(660);
-        // damage = 20 * (1 + 12*0.10 + (12-10)*0.10) = 20 * 2.4 = 48
-        expect(result.damage).toBe(48);
+        // hpMult = 1 + 12*0.15 = 2.8; extraHp = (12-8)*0.15 = 0.6
+        // hp = 250 * (2.8 + 0.6) = 250 * 3.4 = 850
+        expect(result.hp).toBe(850);
+        // damage = 20 * (2.8 + 0.6) = 20 * 3.4 = 68
+        expect(result.damage).toBe(68);
     });
 
     it('E36: wave=15 boss 额外缩放', () => {
         const result = EnemySystem.scaleByWave({ hp: 800, damage: 30, speed: 55, isBoss: true }, 15);
-        // hp = 800 * (1 + 15*0.12 + (15-15)*0.15) = 800 * 2.8 = 2240
-        expect(result.hp).toBe(2240);
+        // hpMult = 1 + 15*0.15 = 3.25; extraHp = (15-12)*0.20 = 0.6
+        // hp = 800 * (3.25 + 0.6) = 800 * 3.85 = 3080
+        expect(result.hp).toBe(3080);
     });
 
     it('E37: wave=20 boss 额外缩放', () => {
         const result = EnemySystem.scaleByWave({ hp: 800, damage: 30, speed: 55, isBoss: true }, 20);
-        // hp = 800 * (1 + 20*0.12 + (20-15)*0.15) = 800 * (1 + 2.4 + 0.75) = 800 * 4.15 = 3320
-        expect(result.hp).toBe(3320);
+        // hpMult = 1 + 20*0.15 = 4.0; extraHp = (20-12)*0.20 = 1.6
+        // hp = 800 * (4.0 + 1.6) = 800 * 5.6 = 4480
+        expect(result.hp).toBe(4480);
     });
 });
 
@@ -518,6 +527,7 @@ describe('EnemySystem - 边界情况', () => {
         const player = { x: 100, y: 100, hp: 100, maxHp: 100, radius: 10 }; // 同一位置
         e.attackTimer = 0;
         EnemySystem.update(1.0, player);
-        expect(PlayerSystem.takeDamage).toHaveBeenCalledWith(8);
+        // wave=1: damage = 8 * (1 + 1*0.15) = 9.2 → 9
+        expect(PlayerSystem.takeDamage).toHaveBeenCalledWith(9);
     });
 });
