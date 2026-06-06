@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,8 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>CYBER BLADE - 赛博土豆</title>
-    <link rel="stylesheet" href="style.css?v=5.1">
+    <!-- 缓存破坏: 修改任意 JS/CSS 后, 必须把 ?v= 后面的版本号递增 (yyyyMMddHHmm) 强制浏览器重新拉取 -->
+    <link rel="stylesheet" href="style.css?v=2026060622">
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
@@ -161,6 +162,44 @@
         </div>
     </div>
 
+    <!-- 中止界面 (按 ESC 触发) -->
+    <div id="pauseOverlay" class="overlay hidden">
+        <div class="pause-content">
+            <h1 class="pause-title">⏸ 中止</h1>
+            <p class="pause-info">战斗已暂停</p>
+            <div class="pause-actions">
+                <button id="pauseResumeBtn" class="cyber-btn">▶ 继续游戏</button>
+                <button id="pauseNewGameBtn" class="cyber-btn">🔄 新开游戏</button>
+                <button id="pauseExitBtn" class="cyber-btn">🚪 退出游戏</button>
+            </div>
+            <p class="pause-hint">按 ESC 继续</p>
+        </div>
+    </div>
+
+    <!-- 武器详情 Modal (点击装备区 ▾ 三角触发) -->
+    <div id="weaponDetailModal" class="overlay hidden">
+        <div class="weapon-detail-content">
+            <div class="wd-header">
+                <div id="wdIcon" class="wd-icon"></div>
+                <div class="wd-header-text">
+                    <div id="wdName" class="wd-name"></div>
+                    <div class="wd-meta">
+                        <span id="wdQuality" class="wd-quality"></span>
+                        <span id="wdLevel" class="wd-level"></span>
+                    </div>
+                </div>
+                <button id="wdClose" class="wd-close" title="关闭">×</button>
+            </div>
+            <div id="wdStats" class="wd-stats"></div>
+            <div id="wdSpecial" class="wd-special"></div>
+            <div class="wd-actions">
+                <button id="wdBtnSell" class="wd-btn wd-btn-sell">💰 卖出</button>
+                <button id="wdBtnMerge" class="wd-btn wd-btn-merge">🔗 合并</button>
+                <button id="wdBtnCancel" class="wd-btn wd-btn-cancel">取消</button>
+            </div>
+        </div>
+    </div>
+
     <!-- HUD -->
     <!-- 战斗日志 -->
     <div id="combatLog" class="combat-log hidden">
@@ -227,57 +266,63 @@
             <span id="bossHpText" class="boss-hp-text"></span>
         </div>
         <div id="hudSynergies" class="hud-synergies"></div>
-        <!-- 调试窗口（可折叠） -->
-        <div id="hudDebug" class="hud-debug">
-            <div class="debug-header">
-                <span class="debug-title">🐞 Debug</span>
-                <span class="debug-toggle">−</span>
-            </div>
-            <div class="debug-body"></div>
+    </div>
+    <!-- 调试窗口（独立于 #hud，战斗中始终可见） -->
+    <div id="hudDebug" class="hud-debug">
+        <div class="debug-header">
+            <span class="debug-title">🐞 Debug</span>
+            <span class="debug-toggle">−</span>
         </div>
+        <div class="debug-body"></div>
     </div>
 
     <!-- ===== 引擎层 - 基础层 ===== -->
-    <script src="src/engine/save.js?v=7.0"></script>
-    <script src="src/engine/time.js?v=7.0"></script>
-    <script src="src/engine/input.js?v=7.0"></script>
-    <script src="src/data/data-bundle.js?v=7.0"></script>
-    <script src="src/engine/data.js?v=7.0"></script>
-    <script src="src/engine/formula.js?v=7.1"></script>
-    <script src="src/engine/stats.js?v=7.1"></script>
+    <script src="src/engine/save.js?v=2026060622"></script>
+    <script src="src/engine/time.js?v=2026060622"></script>
+    <script src="src/engine/input.js?v=2026060622"></script>
+    <script src="src/data/data-bundle.js?v=2026060622"></script>
+    <script src="src/engine/math/vec2.js?v=2026060622"></script>
+    <script src="src/engine/math/angle.js?v=2026060622"></script>
+    <script src="src/engine/math/collision.js?v=2026060622"></script>
+    <script src="src/engine/math/spatialGrid.js?v=2026060622"></script>
+    <script src="src/engine/systemConfig.js?v=2026060622"></script>
+    <script src="src/engine/data.js?v=2026060622"></script>
+    <script src="src/engine/formula.js?v=2026060622"></script>
+    <script src="src/engine/stats.js?v=2026060622"></script>
 
     <!-- ===== 引擎层 - 系统层（按依赖顺序） ===== -->
-    <script src="src/engine/tags.js?v=7.0"></script>
-    <script src="src/engine/effects.js?v=7.0"></script>
-    <script src="src/engine/passives.js?v=7.0"></script>
-    <script src="src/engine/character.js?v=7.0"></script>
-    <script src="src/engine/item.js?v=7.0"></script>
-    <script src="src/engine/engine-shop.js?v=7.1"></script>
-    <script src="src/engine/rarityColors.js?v=7.0"></script>
-    <script src="src/engine/levelup.js?v=7.0"></script>
-    <script src="src/engine/loot.js?v=7.0"></script>
-    <script src="src/engine/enemy.js?v=7.0"></script>
-    <script src="src/engine/wave.js?v=7.0"></script>
-    <script src="src/engine/boss.js?v=7.0"></script>
+    <script src="src/engine/tags.js?v=2026060622"></script>
+    <script src="src/engine/effects.js?v=2026060622"></script>
+    <script src="src/engine/passives.js?v=2026060622"></script>
+    <script src="src/engine/animator.js?v=2026060622"></script>
+    <script src="src/engine/character.js?v=2026060622"></script>
+    <script src="src/engine/item.js?v=2026060622"></script>
+    <script src="src/engine/engine-shop.js?v=2026060622"></script>
+    <script src="src/engine/rarityColors.js?v=2026060622"></script>
+    <script src="src/engine/levelup.js?v=2026060622"></script>
+    <script src="src/engine/loot.js?v=2026060622"></script>
+    <script src="src/engine/enemy.js?v=2026060622"></script>
+    <script src="src/engine/wave.js?v=2026060622"></script>
+    <script src="src/engine/boss.js?v=2026060622"></script>
 
     <!-- ===== 引擎层 - 渲染层 ===== -->
-    <script src="src/engine/assets.js?v=7.0"></script>
-    <script src="src/engine/audio.js?v=7.0"></script>
-    <script src="src/engine/particle.js?v=7.0"></script>
-    <script src="src/engine/bullet.js?v=7.0"></script>
-    <script src="src/engine/combatlog.js?v=7.0"></script>
-    <script src="src/engine/renderer.js?v=7.0"></script>
-    <script src="src/engine/engine.js?v=7.0"></script>
+    <script src="src/engine/assets.js?v=2026060622"></script>
+    <script src="src/engine/audio.js?v=2026060622"></script>
+    <script src="src/engine/particle.js?v=2026060622"></script>
+    <script src="src/engine/bullet.js?v=2026060622"></script>
+    <script src="src/engine/combatlog.js?v=2026060622"></script>
+    <script src="src/engine/renderer.js?v=2026060622"></script>
+    <script src="src/engine/engine.js?v=2026060622"></script>
 
     <!-- ===== 游戏层（Cyberblade - 赛博土豆专用代码） ===== -->
-    <script src="src/cyberblade/unlock.js?v=7.0"></script>
+    <script src="src/cyberblade/unlock.js?v=2026060622"></script>
     <!-- [DEPRECATED Phase 4] 旧模块，已替换为 engine/ 下同名模块 -->
-    <!-- <script src="src/cyberblade/character.js?v=7.0"></script> -->
-    <script src="src/cyberblade/player.js?v=7.0"></script>
-    <!-- <script src="src/cyberblade/enemy.js?v=7.0"></script> -->
-    <!-- <script src="src/cyberblade/wave.js?v=7.0"></script> -->
-    <!-- <script src="src/cyberblade/shop.js?v=7.0"></script> -->
-    <script src="src/cyberblade/ui.js?v=7.0"></script>
-    <script src="src/cyberblade/main.js?v=7.0"></script>
+    <!-- <script src="src/cyberblade/character.js"></script> -->
+    <script src="src/cyberblade/player.js?v=2026060622"></script>
+    <!-- <script src="src/cyberblade/enemy.js"></script> -->
+    <!-- <script src="src/cyberblade/wave.js"></script> -->
+    <!-- <script src="src/cyberblade/shop.js"></script> -->
+    <script src="src/cyberblade/ui.js?v=2026060622"></script>
+    <script src="src/cyberblade/main.js?v=2026060622"></script>
 </body>
 </html>

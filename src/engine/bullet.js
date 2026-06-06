@@ -22,10 +22,24 @@ const BulletSystem = {
         b.maxRange = extra.range || 0;
         b.isPlayer = isPlayer;
         b.hits = [];
-        b.radius = isPlayer ? 2 : 3;
+        b.radius = isPlayer ? 3 : 4;
         b.weaponId = weaponId || 'pistol';
+        // 武器分类(用于子弹颜色 + 元素判定):从 ShopSystem 查 def
+        // 注意:仅查一次,在 _fireXxx 调用时缓存,避免每帧多武器同时开火时的重复查询
+        if (isPlayer && weaponId && !b._cachedWeaponId) {
+            // 不缓存 — 池复用时 weaponId 改变,需重新查
+        }
+        if (isPlayer && weaponId && typeof ShopSystem !== 'undefined' && ShopSystem.getWeaponDef) {
+            const def = ShopSystem.getWeaponDef(weaponId);
+            b.weaponTag = def ? def.tag : null;
+            b.knockback = def ? (def.knockback || 0) : 0;
+        } else {
+            b.weaponTag = null;
+            b.knockback = 0;
+        }
         // 清除池复用污染（强制重置所有特殊属性，防止上一轮残留）
         b.isMortar = false;
+        b.splashOnHitOnly = false; // true = 命中敌人才触发溅射(冰爆/冰霜), false = 飞行超时爆炸(火箭筒)
         // 特殊属性
         b.chainCount = extra.chainCount || 0;
         b.chainRange = extra.chainRange || 150;
@@ -54,6 +68,9 @@ const BulletSystem = {
                 this._updateHoming(b, dt);
             }
 
+            // 记录本帧起点(供碰撞扫掠, 防高速穿模)
+            b._prevX = b.x;
+            b._prevY = b.y;
             b.x += b.vx * dt;
             b.y += b.vy * dt;
             b.life -= dt;
@@ -100,13 +117,56 @@ const BulletSystem = {
                 continue;
             }
 
-            // 范围爆炸（火箭筒）
-            if (b.splashRadius > 0 && b.life <= 2.9) {
+            // 范围爆炸（火箭筒）— 仅对飞行超时爆炸类(默认)生效;命中才炸的弹(splashOnHitOnly=true)跳过
+            if (b.splashRadius > 0 && b.life <= 2.9 && !b.splashOnHitOnly) {
                 // 只有飞出去后才检查爆炸
                 this._checkSplash(b);
                 this.pool.push(b);
                 this.bullets.splice(i, 1);
                 continue;
+            }
+
+            // ====== 玩家子弹命中检测 (修复: 之前普通子弹飞到死不扣血) ======
+            if (b.isPlayer) {
+                const hit = this._checkHit(b);
+                if (hit) {
+                    const killed = EnemySystem.takeDamage(hit, b.damage);
+                    // 击退 (用武器 def 的 knockback, 远程模式)
+                    if (b.knockback > 0) {
+                        const dx = hit.x - b.x, dy = hit.y - b.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        EnemySystem.applyKnockback(hit, dx, dy, dist, b.knockback, { ranged: true });
+                    }
+                    // 燃烧
+                    if (b.burnDps > 0 && hit.alive && typeof PlayerSystem !== 'undefined' && PlayerSystem._applyBurn) {
+                        PlayerSystem._applyBurn(hit, b.burnDps, 3.0, b.burnMaxStacks || 3);
+                    }
+                    // combat log
+                    if (typeof CombatLogSystem !== 'undefined') {
+                        const p = typeof PlayerSystem !== 'undefined' ? PlayerSystem.player : null;
+                        if (p && p._lastCrit) CombatLogSystem.addCritDamage(hit.x, hit.y, b.damage);
+                        else CombatLogSystem.addDamage(hit.x, hit.y, b.damage);
+                    }
+                    // 命中才炸 (splashOnHitOnly, 如冰爆/冰霜)
+                    if (b.splashOnHitOnly && b.splashRadius > 0) {
+                        this._checkSplash(b);
+                    }
+                    // 击杀奖励
+                    if (killed === -1 && typeof GameEngine !== 'undefined' && GameEngine._handleEnemyKill) {
+                        GameEngine._handleEnemyKill(hit, b.damage);
+                    }
+                    // pierce 处理
+                    if (b.pierce > 0) {
+                        b.pierce--;
+                        if (!b.hits) b.hits = [];
+                        b.hits.push(hit);
+                    } else {
+                        // 子弹消失
+                        this.pool.push(b);
+                        this.bullets.splice(i, 1);
+                        continue;
+                    }
+                }
             }
 
             // 越界清除
@@ -170,11 +230,31 @@ const BulletSystem = {
         }
     },
 
+    /** 玩家子弹命中检测 (返回第一个未命中过的怪, 否则 null) */
+    _checkHit(b) {
+        if (typeof EnemySystem === 'undefined' || !EnemySystem.enemies) return null;
+        const enemies = EnemySystem.enemies;
+        const br = b.radius || 3;
+        for (let i = 0; i < enemies.length; i++) {
+            const e = enemies[i];
+            if (!e.alive) continue;
+            if (b.hits && b.hits.indexOf(e) !== -1) continue;
+            const er = e.radius || 14;
+            const dx = e.x - b.x, dy = e.y - b.y;
+            const r = br + er;
+            if (dx * dx + dy * dy < r * r) return e;
+        }
+        return null;
+    },
+
     /** 爆炸范围伤害 */
     _checkSplash(b) {
         if (typeof EnemySystem === 'undefined' || !EnemySystem.enemies) return;
         const enemies = EnemySystem.enemies;
         const radius = b.splashRadius;
+        // 击退用武器 def.knockback (修复: 之前硬编码 200, 远程 0.2 倍 → 40 像素过强)
+        // 兜底: 没武器定义时用 60 (合理爆炸击退)
+        const kb = b.knockback || 60;
         let hitCount = 0;
         for (const e of enemies) {
             if (!e.alive) continue;
@@ -184,9 +264,8 @@ const BulletSystem = {
                 const atEdge = dist > radius * 0.3; // 边缘伤害衰减
                 const dmg = atEdge ? Math.floor(b.damage * 0.5) : b.damage;
                 EnemySystem.takeDamage(e, dmg);
-                // 爆炸击退
-                e.knockbackX += dx / (dist || 1) * 400;
-                e.knockbackY += dy / (dist || 1) * 400;
+                // 爆炸击退（远程类,弱化,大体型抗性）
+                EnemySystem.applyKnockback(e, dx, dy, dist, kb, { ranged: true });
                 hitCount++;
             }
         }

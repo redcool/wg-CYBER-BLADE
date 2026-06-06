@@ -17,9 +17,11 @@ describe('TagSystem - 标签元数据', () => {
         expect(def).toEqual({ id: 'melee', name: '近战', icon: '⚔️' });
     });
 
-    it('T2: getTagDef("gun") 旧标签映射为 ranged', () => {
+    it('T2: getTagDef 未知标签返回 null (新系统: 不再映射)', () => {
+        // 20260606 重构: 删 OLD_TAG_MAP 后, gun/bow/magic/medic/lance 不再映射到 7 大类.
+        // 角色/武器 csv 现在写精确 tag, TAG_DEFS 只含 7 大类.
         const def = TagSystem.getTagDef('gun');
-        expect(def).toEqual({ id: 'ranged', name: '远程', icon: '🏹' });
+        expect(def).toBeNull(); // gun 不在 7 标签里, 也不映射
     });
 
     it('T3: getTagDef("nonexistent") 返回 null', () => {
@@ -31,8 +33,10 @@ describe('TagSystem - 标签元数据', () => {
         expect(ids).toEqual(['melee', 'ranged', 'fire', 'explosive', 'crit', 'tech', 'economy']);
     });
 
-    it('T5: normalizeTag("gun") → "ranged"', () => {
-        expect(TagSystem.normalizeTag('gun')).toBe('ranged');
+    it('T5: normalizeTag identity (新系统)', () => {
+        // 20260606 重构: 旧→新映射已删, normalizeTag 现在是 identity.
+        expect(TagSystem.normalizeTag('gun')).toBe('gun');
+        expect(TagSystem.normalizeTag('melee')).toBe('melee');
     });
 
     it('T6: normalizeTag("melee") → "melee"（已在 7 标签内不变）', () => {
@@ -57,16 +61,18 @@ describe('TagSystem - 标签计数', () => {
         expect(result.fire).toBe(0);
     });
 
-    it('T9: countWeaponTags 旧标签 gun → ranged', () => {
+    it('T9: countWeaponTags 旧标签 (新系统: 计入旧标签不归一化)', () => {
+        // 20260606 重构: legacyGunWeapon.tag = 'gun', 新系统下 'gun' 不在 7 大类,
+        // countWeaponTags 只数 7 大类 (melee/ranged/fire/explosive/crit/tech/economy), 'gun' 不会被数.
+        // 这是预期行为, 旧标签应逐步迁移到 7 大类.
         const result = TagSystem.countWeaponTags([legacyGunWeapon]);
-        expect(result.ranged).toBe(1);
+        expect(result.ranged).toBe(0);
         expect(result.melee).toBe(0);
     });
 
-    it('T10: countWeaponTags 旧标签 medic → tech', () => {
-        // 模拟 medic 标签武器
+    it('T10: countWeaponTags 旧标签 medic 同上 (新系统)', () => {
         const result = TagSystem.countWeaponTags([{ tag: 'medic' }]);
-        expect(result.tech).toBe(1);
+        expect(result.tech).toBe(0);
     });
 
     it('T11: countItemTags([]) 返回全零', () => {
@@ -219,8 +225,10 @@ describe('TagSystem - 过滤查询', () => {
         expect(TagSystem.hasTag(fireItem, 'fire')).toBe(true);
     });
 
-    it('T32: hasTag 旧标签 gun → ranged 映射', () => {
-        expect(TagSystem.hasTag(legacyGunWeapon, 'ranged')).toBe(true);
+    it('T32: hasTag 旧标签 (新系统: 不映射)', () => {
+        // 20260606 重构: 旧标签不再自动映射. hasTag 现在用精确 tag.
+        expect(TagSystem.hasTag(legacyGunWeapon, 'gun')).toBe(true);
+        expect(TagSystem.hasTag(legacyGunWeapon, 'ranged')).toBe(false);
     });
 
     it('T33: getTags 武器返回 [tag]', () => {

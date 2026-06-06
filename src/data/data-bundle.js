@@ -19,7 +19,7 @@ __DATA_BUNDLE__['characters'] = [
     "speed": 120,
     "damagePercent": 0,
     "attackSpeed": 1.2,
-    "attackRange": 200,
+    "attackRange": 50,
     "armor": 1,
     "dodge": 0.03,
     "critChance": 0.05,
@@ -53,7 +53,7 @@ __DATA_BUNDLE__['characters'] = [
     "speed": 110,
     "damagePercent": 0,
     "attackSpeed": 1.3,
-    "attackRange": 350,
+    "attackRange": 120,
     "armor": 0,
     "dodge": 0.02,
     "critChance": 0.08,
@@ -86,7 +86,7 @@ __DATA_BUNDLE__['characters'] = [
     "speed": 100,
     "damagePercent": 0,
     "attackSpeed": 0.9,
-    "attackRange": 320,
+    "attackRange": 100,
     "armor": 0,
     "dodge": 0.02,
     "critChance": 0.05,
@@ -119,7 +119,7 @@ __DATA_BUNDLE__['characters'] = [
     "speed": 115,
     "damagePercent": 0,
     "attackSpeed": 1.1,
-    "attackRange": 360,
+    "attackRange": 150,
     "armor": 0,
     "dodge": 0.03,
     "critChance": 0.1,
@@ -152,7 +152,7 @@ __DATA_BUNDLE__['characters'] = [
     "speed": 70,
     "damagePercent": 0,
     "attackSpeed": 0.8,
-    "attackRange": 280,
+    "attackRange": -30,
     "armor": 2,
     "dodge": 0,
     "critChance": 0.03,
@@ -187,7 +187,7 @@ __DATA_BUNDLE__['characters'] = [
     "speed": 140,
     "damagePercent": 0,
     "attackSpeed": 1.5,
-    "attackRange": 220,
+    "attackRange": -20,
     "armor": 0,
     "dodge": 0.12,
     "critChance": 0.12,
@@ -222,7 +222,7 @@ __DATA_BUNDLE__['characters'] = [
     "speed": 100,
     "damagePercent": 0,
     "attackSpeed": 1,
-    "attackRange": 280,
+    "attackRange": 0,
     "armor": 1,
     "dodge": 0.04,
     "critChance": 0.05,
@@ -255,7 +255,7 @@ __DATA_BUNDLE__['characters'] = [
     "speed": 90,
     "damagePercent": 0,
     "attackSpeed": 0.9,
-    "attackRange": 220,
+    "attackRange": 30,
     "armor": 1,
     "dodge": 0.02,
     "critChance": 0.05,
@@ -290,7 +290,7 @@ __DATA_BUNDLE__['characters'] = [
     "speed": 105,
     "damagePercent": 0,
     "attackSpeed": 1.1,
-    "attackRange": 320,
+    "attackRange": 60,
     "armor": 1,
     "dodge": 0.03,
     "critChance": 0.12,
@@ -324,7 +324,7 @@ __DATA_BUNDLE__['characters'] = [
     "speed": 130,
     "damagePercent": 0,
     "attackSpeed": 1.6,
-    "attackRange": 180,
+    "attackRange": -50,
     "armor": 0,
     "dodge": 0.05,
     "critChance": 0.08,
@@ -362,7 +362,7 @@ __DATA_BUNDLE__['characters'] = [
     "speed": 120,
     "damagePercent": 0,
     "attackSpeed": 1,
-    "attackRange": 280,
+    "attackRange": 80,
     "armor": 1,
     "dodge": 0.02,
     "critChance": 0.06,
@@ -537,7 +537,7 @@ __DATA_BUNDLE__['weapons'] = [
     "bulletCount": 1,
     "bulletSpeed": 0,
     "bulletMaxRange": 0,
-    "attackRange": 300,
+    "attackRange": 80,
     "spread": 0,
     "pierce": 0,
     "burnDps": 0,
@@ -553,9 +553,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_sweep",
     "class": "Blade",
-    "knockback": 300,
+    "knockback": 120,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "axe",
@@ -601,9 +603,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_sweep",
     "class": "Blunt",
-    "knockback": 500,
+    "knockback": 80,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "dagger",
@@ -649,9 +653,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_sweep",
     "class": "Blade",
-    "knockback": 200,
+    "knockback": 80,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "chainsaw",
@@ -697,9 +703,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_sweep",
     "class": "Heavy",
-    "knockback": 400,
+    "knockback": 180,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "sword",
@@ -745,9 +753,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_thrust",
     "class": "Blade",
-    "knockback": 250,
+    "knockback": 100,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "katana",
@@ -793,9 +803,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_thrust",
     "class": "Precise",
-    "knockback": 250,
+    "knockback": 100,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "hammer",
@@ -841,9 +853,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_sweep",
     "class": "Heavy",
-    "knockback": 600,
+    "knockback": 200,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "spear",
@@ -889,9 +903,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_thrust",
     "class": "Blunt",
-    "knockback": 300,
+    "knockback": 100,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "claws",
@@ -937,9 +953,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_sweep",
     "class": "Blade",
-    "knockback": 150,
+    "knockback": 80,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "whip",
@@ -985,9 +1003,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_sweep",
     "class": "Blunt",
-    "knockback": 200,
+    "knockback": 80,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "pistol",
@@ -1035,7 +1055,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Primitive",
     "knockback": 40,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "smg",
@@ -1083,7 +1105,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Primitive",
     "knockback": 40,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "shotgun",
@@ -1131,7 +1155,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Heavy",
     "knockback": 40,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "sniper",
@@ -1179,7 +1205,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Precise",
     "knockback": 40,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "gatling",
@@ -1227,7 +1255,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Heavy",
     "knockback": 40,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "revolver",
@@ -1275,7 +1305,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Precise",
     "knockback": 40,
     "magSize": 6,
-    "reloadTime": 2
+    "reloadTime": 2,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "rifle",
@@ -1323,7 +1355,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Primitive",
     "knockback": 40,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "rifle2",
@@ -1371,7 +1405,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Precise",
     "knockback": 40,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "shotgun_double",
@@ -1419,7 +1455,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Heavy",
     "knockback": 25,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "magnum",
@@ -1467,7 +1505,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Heavy",
     "knockback": 25,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "minigun",
@@ -1513,9 +1553,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "spread",
     "class": "Heavy",
-    "knockback": 60,
+    "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "bow",
@@ -1561,9 +1603,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "bullet",
     "class": "Primitive",
-    "knockback": 100,
+    "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "crossbow",
@@ -1609,9 +1653,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "bullet",
     "class": "Precise",
-    "knockback": 90,
+    "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "longbow",
@@ -1657,9 +1703,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "bullet",
     "class": "Precise",
-    "knockback": 200,
+    "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "recurve",
@@ -1705,9 +1753,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "bullet",
     "class": "Primitive",
-    "knockback": 80,
+    "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "explosive_arrow",
@@ -1753,9 +1803,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "explode",
     "class": "Support",
-    "knockback": 200,
+    "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "frost_arrow",
@@ -1801,9 +1853,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "frost",
     "class": "Support",
-    "knockback": 100,
+    "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "poison_arrow",
@@ -1849,9 +1903,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "bullet",
     "class": "Support",
-    "knockback": 80,
+    "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "triple_shot",
@@ -1897,9 +1953,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "spread",
     "class": "Primitive",
-    "knockback": 80,
+    "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "piercing_shot",
@@ -1945,9 +2003,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "bullet",
     "class": "Precise",
-    "knockback": 90,
+    "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "homing_bow",
@@ -1993,9 +2053,11 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "homing",
     "class": "Support",
-    "knockback": 80,
+    "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "fire_staff",
@@ -2043,7 +2105,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Elemental",
     "knockback": 80,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "frost_staff",
@@ -2091,7 +2155,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Elemental",
     "knockback": 60,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "thunder_staff",
@@ -2139,7 +2205,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Elemental",
     "knockback": 100,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "energy_staff",
@@ -2187,7 +2255,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Elemental",
     "knockback": 100,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "magic_orb",
@@ -2235,7 +2305,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Elemental",
     "knockback": 60,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "poison_staff",
@@ -2283,7 +2355,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Elemental",
     "knockback": 60,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "void_staff",
@@ -2331,7 +2405,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Elemental",
     "knockback": 80,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "lightning_staff",
@@ -2379,7 +2455,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Elemental",
     "knockback": 100,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "fire_wand",
@@ -2427,7 +2505,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Elemental",
     "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "arcane_orb",
@@ -2475,7 +2555,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Elemental",
     "knockback": 80,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "flame_spray",
@@ -2504,10 +2586,10 @@ __DATA_BUNDLE__['weapons'] = [
     "lifeStealAdd": 0,
     "bulletCount": 1,
     "bulletSpeed": 300,
-    "bulletMaxRange": 0,
+    "bulletMaxRange": 320,
     "attackRange": 320,
-    "spread": 0.5,
-    "pierce": 0,
+    "spread": 0,
+    "pierce": 3,
     "burnDps": 6,
     "burnMaxStacks": 3,
     "chainCount": 0,
@@ -2518,12 +2600,14 @@ __DATA_BUNDLE__['weapons'] = [
     "healOnHit": 0,
     "auraHeal": 0,
     "auraRadius": 0,
-    "sprayCone": 0,
+    "sprayCone": 0.5,
     "behavior": "spray",
     "class": "Elemental",
     "knockback": 80,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "poison_spray",
@@ -2552,10 +2636,10 @@ __DATA_BUNDLE__['weapons'] = [
     "lifeStealAdd": 0,
     "bulletCount": 1,
     "bulletSpeed": 280,
-    "bulletMaxRange": 0,
+    "bulletMaxRange": 320,
     "attackRange": 320,
-    "spread": 0.6,
-    "pierce": 0,
+    "spread": 0,
+    "pierce": 3,
     "burnDps": 10,
     "burnMaxStacks": 3,
     "chainCount": 0,
@@ -2566,12 +2650,14 @@ __DATA_BUNDLE__['weapons'] = [
     "healOnHit": 0,
     "auraHeal": 0,
     "auraRadius": 0,
-    "sprayCone": 0,
+    "sprayCone": 0.6,
     "behavior": "spray",
     "class": "Elemental",
     "knockback": 60,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "cold_spray",
@@ -2600,10 +2686,10 @@ __DATA_BUNDLE__['weapons'] = [
     "lifeStealAdd": 0,
     "bulletCount": 1,
     "bulletSpeed": 320,
-    "bulletMaxRange": 0,
+    "bulletMaxRange": 320,
     "attackRange": 320,
-    "spread": 0.55,
-    "pierce": 0,
+    "spread": 0,
+    "pierce": 3,
     "burnDps": 0,
     "burnMaxStacks": 0,
     "chainCount": 0,
@@ -2614,12 +2700,14 @@ __DATA_BUNDLE__['weapons'] = [
     "healOnHit": 0,
     "auraHeal": 0,
     "auraRadius": 0,
-    "sprayCone": 0,
+    "sprayCone": 0.55,
     "behavior": "spray",
     "class": "Elemental",
     "knockback": 60,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "heal_gun",
@@ -2659,15 +2747,17 @@ __DATA_BUNDLE__['weapons'] = [
     "homingStrength": 0,
     "slowAmount": 0,
     "slowDuration": 0,
-    "healOnHit": 0,
-    "auraHeal": 3,
+    "healOnHit": 3,
+    "auraHeal": 0,
     "auraRadius": 0,
     "sprayCone": 0,
     "behavior": "heal_bullet",
     "class": "Medical",
     "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "shield",
@@ -2708,19 +2798,21 @@ __DATA_BUNDLE__['weapons'] = [
     "slowAmount": 0,
     "slowDuration": 0,
     "healOnHit": 0,
-    "auraHeal": 0,
-    "auraRadius": 5,
-    "sprayCone": 100,
+    "auraHeal": 5,
+    "auraRadius": 100,
+    "sprayCone": 0,
     "behavior": "shield_aura",
     "class": "Medical",
     "knockback": 100,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "holy_staff",
     "name": "圣光杖",
-    "desc": "20%回血+5 -10%伤害 +1回复",
+    "desc": "20%回血 +5/s治疗光环 r100 -10%移速 +1回复/s",
     "icon": "✨",
     "slots": 1,
     "cost": 14,
@@ -2735,13 +2827,13 @@ __DATA_BUNDLE__['weapons'] = [
     "cooldown_lv3": 0.78,
     "cooldown_lv4": 0.72,
     "attackRangeMult": 0,
-    "speedMult": 0,
+    "speedMult": -0.1,
     "critChanceAdd": 0,
     "critDamageAdd": 0,
     "armorAdd": 0,
     "hpRegenAdd": 1,
     "maxHpAdd": 0,
-    "lifeStealAdd": 0,
+    "lifeStealAdd": 0.2,
     "bulletCount": 1,
     "bulletSpeed": 500,
     "bulletMaxRange": 0,
@@ -2757,13 +2849,15 @@ __DATA_BUNDLE__['weapons'] = [
     "slowDuration": 0,
     "healOnHit": 0,
     "auraHeal": 5,
-    "auraRadius": 0,
+    "auraRadius": 100,
     "sprayCone": 0,
     "behavior": "bullet",
     "class": "Medical",
     "knockback": 60,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "life_wand",
@@ -2811,12 +2905,14 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Medical",
     "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 8
   },
   {
     "id": "blessing",
     "name": "祝福盾",
-    "desc": "减伤光环 -30%伤害 +2护甲",
+    "desc": "减伤光环30% -30%伤害 +2护甲",
     "icon": "🛡️",
     "slots": 1,
     "cost": 15,
@@ -2853,13 +2949,15 @@ __DATA_BUNDLE__['weapons'] = [
     "slowDuration": 0,
     "healOnHit": 0,
     "auraHeal": 0,
-    "auraRadius": 3,
-    "sprayCone": 80,
+    "auraRadius": 0,
+    "sprayCone": 0,
     "behavior": "shield_aura",
     "class": "Medical",
     "knockback": 80,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0.3,
+    "killHeal": 0
   },
   {
     "id": "pike",
@@ -2907,7 +3005,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Blunt",
     "knockback": 40,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "cavalry_lance",
@@ -2955,7 +3055,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Heavy",
     "knockback": 50,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   },
   {
     "id": "trident",
@@ -3003,7 +3105,9 @@ __DATA_BUNDLE__['weapons'] = [
     "class": "Blunt",
     "knockback": 35,
     "magSize": 0,
-    "reloadTime": 0
+    "reloadTime": 0,
+    "damageReductionAura": 0,
+    "killHeal": 0
   }
 ];
 
@@ -3663,7 +3767,9 @@ __DATA_BUNDLE__['items'] = [
       "shopDiscount"
     ],
     "effects": null,
-    "statMods": {}
+    "statMods": {
+      "shopDiscount": 0.8
+    }
   },
   {
     "id": "explosive_rounds",
@@ -6735,5 +6841,120 @@ __DATA_BUNDLE__['audio'] = [
     "file": "se_axeSlash.m4a",
     "name": "斧头挥砍",
     "categoryTag": "combat"
+  }
+];
+
+__DATA_BUNDLE__['classes'] = [
+  {
+    "id": "Blade",
+    "中文名": "利刃",
+    "英文名": "Blade",
+    "描述": "锋利而迅捷的近战斩击武器"
+  },
+  {
+    "id": "Blunt",
+    "中文名": "钝器",
+    "英文名": "Blunt",
+    "描述": "势大力沉的钝击系武器"
+  },
+  {
+    "id": "Precise",
+    "中文名": "精准",
+    "英文名": "Precise",
+    "描述": "追求一击致命的精密武器"
+  },
+  {
+    "id": "Elemental",
+    "中文名": "元素",
+    "英文名": "Elemental",
+    "描述": "蕴含元素之力的能量武器"
+  },
+  {
+    "id": "Heavy",
+    "中文名": "重武",
+    "英文名": "Heavy",
+    "描述": "威力绝伦的巨型武器"
+  },
+  {
+    "id": "Medical",
+    "中文名": "医疗",
+    "英文名": "Medical",
+    "描述": "以治疗守护为核心的武器"
+  },
+  {
+    "id": "Support",
+    "中文名": "支援",
+    "英文名": "Support",
+    "描述": "提供各类辅助效果的武器"
+  },
+  {
+    "id": "Primitive",
+    "中文名": "基础",
+    "英文名": "Primitive",
+    "描述": "原始原始的粗粝武器"
+  }
+];
+
+__DATA_BUNDLE__['level_duration'] = [
+  {
+    "level": "default",
+    "duration": 30
+  },
+  {
+    "level": "1",
+    "duration": 30
+  },
+  {
+    "level": "2",
+    "duration": 30
+  },
+  {
+    "level": "3",
+    "duration": 30
+  },
+  {
+    "level": "4",
+    "duration": 30
+  },
+  {
+    "level": "5",
+    "duration": 45
+  },
+  {
+    "level": "6",
+    "duration": 30
+  },
+  {
+    "level": "7",
+    "duration": 30
+  },
+  {
+    "level": "8",
+    "duration": 30
+  },
+  {
+    "level": "9",
+    "duration": 30
+  },
+  {
+    "level": "10",
+    "duration": 60
+  }
+];
+
+__DATA_BUNDLE__['system'] = [
+  {
+    "key": "weaponOrbitDistance",
+    "value": "56",
+    "valueType": "number",
+    "desc": "武器图标中心到角色中心的像素距离 (第 1 把贴身位)",
+    "group": "orbit"
+  },
+  {
+    "key": "weaponOrbitExtraPerSlot",
+    "value": "22",
+    "valueType": "number",
+    "desc": "每多 1 个 slot 武器额外外推的像素 (近→外扩, 1=56, 2=78, 3=100, 4=122)",
+    "group": "orbit"
   }
 ];

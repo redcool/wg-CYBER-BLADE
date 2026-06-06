@@ -95,9 +95,10 @@ describe('CharacterSystem - 数据加载', () => {
         };
     });
 
-    it('C3: _normalizeTags 标准化旧标签', () => {
-        const normalized = CharacterSystem._normalizeTags(['gun', 'bow', 'magic', 'medic', 'lance']);
-        expect(normalized).toEqual(['ranged', 'ranged', 'fire', 'tech', 'melee']);
+    it('C3: _normalizeTags 标签精确 (新系统)', () => {
+        // 20260606 重构: 删 OLD_TAG_MAP 后, 角色/武器 tags 直接精确, 不再归一化.
+        const normalized = CharacterSystem._normalizeTags(['gun', 'bow', 'magic', 'medic', 'lance', 'melee']);
+        expect(normalized).toEqual(['gun', 'bow', 'magic', 'medic', 'lance', 'melee']);
     });
 });
 
@@ -200,8 +201,8 @@ describe('CharacterSystem - 查询', () => {
         expect(CharacterSystem.hasTag('ranged')).toBe(true);
         expect(CharacterSystem.hasTag('crit')).toBe(true);
 
-        // 旧标签也应匹配（通过 normalize）
-        expect(CharacterSystem.hasTag('gun')).toBe(true); // → ranged
+        // 20260606 重构: 旧标签不再自动映射. hasTag 现在用精确 tag.
+        expect(CharacterSystem.hasTag('ranged')).toBe(true);
     });
 
     it('C16: getUnlocked 不含未解锁', () => {
@@ -240,7 +241,7 @@ describe('CharacterSystem - 旧标签兼容', () => {
         CharacterSystem.reset();
     });
 
-    it('C21: old tag gun → ranged 在加载时标准化', async () => {
+    it('C21: 新系统 tags 精确, 不再映射 gun→ranged', async () => {
         global.DataLoader.load = async (name) => {
             if (name === 'characters') {
                 return [{ id: 'gunslinger', name: '枪手', tags: ['gun'], unlocked: true, weaponSlots: 6,
@@ -255,11 +256,10 @@ describe('CharacterSystem - 旧标签兼容', () => {
             return [];
         };
         await CharacterSystem.loadCharacters();
-        // gunslinger 的旧标签 gun 被标准化为 ranged
+        // 20260606 重构: 删 OLD_TAG_MAP 后, gun 保持 gun, 不再映射为 ranged.
         const gs = CharacterSystem.getCharacterDef('gunslinger');
         expect(gs).toBeDefined();
-        expect(gs.tags).toEqual(['ranged']);
-        // default 应从 gunslinger 映射（没有 swordsman）
+        expect(gs.tags).toEqual(['gun']);
         const def = CharacterSystem.getCharacterDef('default');
         expect(def).toBeDefined();
     });

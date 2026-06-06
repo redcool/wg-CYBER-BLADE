@@ -11,6 +11,8 @@ const TAG_TO_FLAT_STAT = {
     magic:     'elementalDamage',
     medic:     null,
     lance:     'meleeDamage',
+    support:   null,
+    Primitive: null,
 };
 
 const FormulaSystem = {
@@ -100,6 +102,42 @@ const FormulaSystem = {
     },
 
     // -------------------------------------------------------
+    // Tag 匹配惩罚: 角色 tags 不匹配 weaponDef.tag 时大幅惩罚
+    //   匹配条件: player.tags 包含 weaponDef.tag 或 weaponDef.tag === 'melee' 且 player.tags 包含任何 melee 相关 tag
+    //   惩罚系数: UNMATCHED_MULT = 0.10 (非擅长武器只有 10% 效果)
+    // -------------------------------------------------------
+    /** 未匹配惩罚系数 */
+    UNMATCHED_MULT: 0.10,
+
+    /**
+     * 判断武器 tag 是否在角色擅长标签中
+     * @param {Object} player - 玩家对象 (含 player.tags)
+     * @param {string} weaponTag - 武器 tag (melee|gun|bow|magic|medic|lance|support)
+     * @returns {boolean}
+     */
+    _isTagMatched(player, weaponTag) {
+        if (!player.tags || !Array.isArray(player.tags)) return true; // 无 tags 视为全匹配
+        // === 20260606 修复: 双方都走 OLD→NEW 归一化 (TagSystem.normalizeTag) ===
+        // 背景: 角色 tags 在 character.js:_normalizeTags 已被转换 (gun→ranged),
+        //       但 weaponDef.tag 直接从 csv 读, 未归一化. 双方对不上导致 0.10 兜底.
+        // 修法: 双方都过同一道归一化, 保证语义一致.
+        const norm = (typeof TagSystem !== 'undefined' && TagSystem.normalizeTag)
+            ? (t) => TagSystem.normalizeTag(t)
+            : (t) => t;
+        const wTag = norm(weaponTag);
+        const pTags = player.tags.map(norm);
+        if (pTags.includes(wTag)) return true;
+        // melee 特殊处理: 所有 melee 子类型 (melee_sweep/melee_thrust) 都归入 melee tag
+        if (wTag === 'melee') {
+            // 检查是否有任何近战相关的 tag
+            const meleeRelated = ['melee', 'lance'];
+            return meleeRelated.some(t => pTags.includes(t));
+        }
+        // support/Primitive 类: 不支持 melee 标签匹配, 始终按原始 tag 判定
+        return false;
+    },
+
+    // -------------------------------------------------------
     // P 层: 百分比倍率
     //   P = 1 + player.damagePercent
     // -------------------------------------------------------
@@ -171,13 +209,20 @@ const FormulaSystem = {
         const rawDef = (weaponParams && weaponParams._weaponDef) ? weaponParams._weaponDef : weaponDef;
         const level = (weaponParams && weaponParams._weaponLevel) ? weaponParams._weaponLevel : 1;
 
+        // --- Tag 匹配检查 ---
+        const tag = rawDef ? (rawDef.tag || '') : '';
+        const matched = this._isTagMatched(player, tag);
+        const tagMult = matched ? 1.0 : this.UNMATCHED_MULT;
+
         const B = this._calcBaseDamage(rawDef, player, level);
         const F = (this.TYPE === 'A') ? this._calcFlatDamage(rawDef, player) : 0;
         const P = this._calcPercentMultiplier(player);
         const C = this._calcCritMultiplier(player, weaponParams);
         const S = this._getSpecialModifier(player, target);
 
-        const result = Math.round((B + F) * P * C * S);
+        // 应用 tag 匹配惩罚: 伤害 = (B + F) × P × C × S × tagMult
+        // 兜底: 任何武器进攻击范围都至少造成 1 dmg (避免非擅长武器"完全无反应")
+        const result = Math.max(1, Math.round((B + F) * P * C * S * tagMult));
         return result;
     },
 
@@ -187,6 +232,10 @@ const FormulaSystem = {
     calcDPS(weaponDef, player, weaponParams) {
         const rawDef = (weaponParams && weaponParams._weaponDef) ? weaponParams._weaponDef : weaponDef;
         const level = (weaponParams && weaponParams._weaponLevel) ? weaponParams._weaponLevel : 1;
+
+        // --- Tag 匹配检查 (DPS 显示) ---
+        const tag = rawDef ? (rawDef.tag || '') : '';
+        const tagMult = this._isTagMatched(player, tag) ? 1.0 : this.UNMATCHED_MULT;
 
         const B = this._calcBaseDamage(rawDef, player, level);
         const F = (this.TYPE === 'A') ? this._calcFlatDamage(rawDef, player) : 0;
@@ -203,7 +252,7 @@ const FormulaSystem = {
         const critChance = Math.min(0.8, (player.critChance || 0) + weaponCrit);
         const C_exp = 1 + critChance * (cd - 1);
 
-        const avgDamage = (B + F) * P * C_exp;
+        const avgDamage = (B + F) * P * C_exp * tagMult;
 
         const cooldown = this.calcWeaponCooldown(rawDef, player, level);
         const atkSpeed = cooldown > 0 ? 1.0 / cooldown : 1.0;
@@ -215,8 +264,10 @@ const FormulaSystem = {
     // 武器升级后属性预览（用于 Shop 面板）
     // -------------------------------------------------------
     calcWeaponPreview(weaponDef, player, currentLevel, targetLevel) {
-        const currentDmg = this._calcBaseDamage(weaponDef, player, currentLevel);
-        const newDmg = this._calcBaseDamage(weaponDef, player, targetLevel);
+        const tag = weaponDef ? (weaponDef.tag || '') : '';
+        const tagMult = this._isTagMatched(player, tag) ? 1.0 : this.UNMATCHED_MULT;
+        const currentDmg = this._calcBaseDamage(weaponDef, player, currentLevel) * tagMult;
+        const newDmg = this._calcBaseDamage(weaponDef, player, targetLevel) * tagMult;
         const currentCD = this.calcWeaponCooldown(weaponDef, player, currentLevel);
         const newCD = this.calcWeaponCooldown(weaponDef, player, targetLevel);
 
@@ -233,6 +284,10 @@ const FormulaSystem = {
         const rawDef = (weaponParams && weaponParams._weaponDef) ? weaponParams._weaponDef : weaponDef;
         const level = (weaponParams && weaponParams._weaponLevel) ? weaponParams._weaponLevel : 1;
 
+        // --- Tag 匹配检查 ---
+        const tag = rawDef ? (rawDef.tag || '') : '';
+        const tagMult = this._isTagMatched(player, tag) ? 1.0 : this.UNMATCHED_MULT;
+
         const B = this._calcBaseDamage(rawDef, player, level);
         const F = (this.TYPE === 'A') ? this._calcFlatDamage(rawDef, player) : 0;
         const P = this._calcPercentMultiplier(player);
@@ -247,7 +302,7 @@ const FormulaSystem = {
             cd += weaponParams.critDamageAdd;
         }
 
-        const base = (B + F) * P * S;
+        const base = (B + F) * P * S * tagMult;
         const critDmg = Math.round(base * (cd || 1.0));
 
         return {

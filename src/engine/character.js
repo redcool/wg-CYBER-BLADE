@@ -66,7 +66,8 @@ const CharacterSystem = {
     },
 
     /**
-     * 标准化标签数组（旧标签名 → 新标签名）
+     * 标准化标签数组（当前是 identity, 保留函数以备未来扩展）
+     * 旧版: 旧→新 7 标签映射 (gun→ranged 等). 现已删除, csv 直接写精确 tag.
      * @param {string[]} tags
      * @returns {string[]}
      */
@@ -74,12 +75,7 @@ const CharacterSystem = {
         if (typeof TagSystem !== 'undefined' && TagSystem.normalizeTag) {
             return tags.map(t => TagSystem.normalizeTag(t));
         }
-        // 无 TagSystem 时的最低兼容
-        const OLD_MAP = {
-            gun: 'ranged', bow: 'ranged', magic: 'fire',
-            medic: 'tech', lance: 'melee',
-        };
-        return tags.map(t => OLD_MAP[t] || t);
+        return [...tags];
     },
 
     // -------------------------------------------------------
@@ -113,6 +109,8 @@ const CharacterSystem = {
             'pickupRange',
             'damagePercent', 'meleeDamage', 'rangedDamage', 'elementalDamage',
             'engineering', 'harvesting', 'luck', 'xpGain', 'materialGain',
+            // 核心战斗属性
+            'bulletCount', 'bulletPierce', 'bulletSpeed',
         ];
         for (const field of statFields) {
             if (ch[field] !== undefined) {
@@ -157,7 +155,8 @@ const CharacterSystem = {
 
         // 8. 兼容字段
         player._baseDamage = 15;
-        player.damage = player.damagePercent || 0;
+        // damagePercent 是百分比加成（如 0.15 = +15%），不是 base damage
+        player.damage = 15 + (player.meleeDamage || 0) + (player.rangedDamage || 0) + (player.elementalDamage || 0);
         // critDamage 为 0 表示"使用默认 2.0"（角色 CSV 中未填暴伤加成）
         if (player.critDamage === undefined || player.critDamage === null || player.critDamage === 0) {
             player.critDamage = 2.0;

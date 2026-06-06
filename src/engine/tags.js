@@ -36,16 +36,6 @@ const TAG_DEFS = {
     economy:   { id: 'economy',   name: _TAG_STR.economy,   icon: '💰' },
 };
 
-/** 旧→新标签名映射表 */
-const OLD_TAG_MAP = {
-    melee:  'melee',
-    gun:    'ranged',
-    bow:    'ranged',
-    magic:  'fire',
-    medic:  'tech',
-    lance:  'melee',
-};
-
 const TagSystem = {
     // -------------------------------------------------------
     // 3.1 标签元数据
@@ -53,8 +43,7 @@ const TagSystem = {
 
     /** 获取标签定义 */
     getTagDef(tagId) {
-        const mapped = OLD_TAG_MAP[tagId] || tagId;
-        return TAG_DEFS[mapped] || null;
+        return TAG_DEFS[tagId] || null;
     },
 
     /** 获取所有标签ID列表 */
@@ -68,12 +57,13 @@ const TagSystem = {
     },
 
     /**
-     * 标准化标签：旧标签名 → 新标签名
+     * 标准化标签: 当前是 identity (csv 已写精确 tag: gun/bow/magic/melee/lance/medic 等)
+     * 保留此函数便于未来扩展标签集时插入映射, 不影响调用方
      * @param {string} tagId
      * @returns {string}
      */
     normalizeTag(tagId) {
-        return OLD_TAG_MAP[tagId] || tagId;
+        return tagId;
     },
 
     // -------------------------------------------------------
@@ -452,5 +442,5 @@ const TagSystem = {
 
 // CJS 导出（浏览器中 module 为 undefined，不生效；Node 中生效）
 if (typeof module !== 'undefined') {
-    module.exports = { TagSystem, TAG_DEFS, OLD_TAG_MAP };
+    module.exports = { TagSystem, TAG_DEFS };
 }
