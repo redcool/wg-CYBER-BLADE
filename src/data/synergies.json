@@ -1,0 +1,176 @@
+[
+  {
+    "tag": "melee",
+    "threshold": 2,
+    "bonuses": {
+      "damagePercent": 0.1,
+      "lifeSteal": 0.03
+    }
+  },
+  {
+    "tag": "melee",
+    "threshold": 4,
+    "bonuses": {
+      "damagePercent": 0.25,
+      "lifeSteal": 0.06,
+      "armor": 2
+    }
+  },
+  {
+    "tag": "melee",
+    "threshold": 6,
+    "bonuses": {
+      "damagePercent": 0.4,
+      "lifeSteal": 0.1,
+      "armor": 5,
+      "knockback": 150
+    }
+  },
+  {
+    "tag": "ranged",
+    "threshold": 2,
+    "bonuses": {
+      "attackRange": 0.15
+    }
+  },
+  {
+    "tag": "ranged",
+    "threshold": 4,
+    "bonuses": {
+      "attackRange": 0.3,
+      "bulletSpeed": 0.2
+    }
+  },
+  {
+    "tag": "ranged",
+    "threshold": 6,
+    "bonuses": {
+      "attackRange": 0.5,
+      "bulletSpeed": 0.35,
+      "bulletCount": 1
+    }
+  },
+  {
+    "tag": "fire",
+    "threshold": 2,
+    "bonuses": {
+      "elementalDamage": 0.15
+    }
+  },
+  {
+    "tag": "fire",
+    "threshold": 4,
+    "bonuses": {
+      "elementalDamage": 0.3,
+      "burnDps": 3
+    }
+  },
+  {
+    "tag": "fire",
+    "threshold": 6,
+    "bonuses": {
+      "elementalDamage": 0.5,
+      "burnDps": 6,
+      "burningSpread": true
+    }
+  },
+  {
+    "tag": "explosive",
+    "threshold": 2,
+    "bonuses": {
+      "explosionSize": 0.2
+    }
+  },
+  {
+    "tag": "explosive",
+    "threshold": 4,
+    "bonuses": {
+      "explosionSize": 0.4,
+      "explosionDamage": 0.3
+    }
+  },
+  {
+    "tag": "explosive",
+    "threshold": 6,
+    "bonuses": {
+      "explosionSize": 0.6,
+      "explosionDamage": 0.5,
+      "chainExplosion": true
+    }
+  },
+  {
+    "tag": "crit",
+    "threshold": 2,
+    "bonuses": {
+      "critChance": 0.05
+    }
+  },
+  {
+    "tag": "crit",
+    "threshold": 4,
+    "bonuses": {
+      "critChance": 0.1,
+      "critDamage": 0.5
+    }
+  },
+  {
+    "tag": "crit",
+    "threshold": 6,
+    "bonuses": {
+      "critChance": 0.15,
+      "critDamage": 1,
+      "onCritLightning": true
+    }
+  },
+  {
+    "tag": "tech",
+    "threshold": 2,
+    "bonuses": {
+      "engineering": 5
+    }
+  },
+  {
+    "tag": "tech",
+    "threshold": 4,
+    "bonuses": {
+      "engineering": 10,
+      "turretCount": 1
+    }
+  },
+  {
+    "tag": "tech",
+    "threshold": 6,
+    "bonuses": {
+      "engineering": 20,
+      "turretCount": 2,
+      "turretDamage": 0.3
+    }
+  },
+  {
+    "tag": "economy",
+    "threshold": 2,
+    "bonuses": {
+      "luck": 3,
+      "xpGain": 0.15
+    }
+  },
+  {
+    "tag": "economy",
+    "threshold": 4,
+    "bonuses": {
+      "luck": 6,
+      "xpGain": 0.3,
+      "materialGain": 0.25
+    }
+  },
+  {
+    "tag": "economy",
+    "threshold": 6,
+    "bonuses": {
+      "luck": 10,
+      "xpGain": 0.5,
+      "materialGain": 0.5,
+      "goldToDamage": true
+    }
+  }
+]

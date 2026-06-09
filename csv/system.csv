@@ -1,4 +1,4 @@
-# ====== 系统级参数配置 ======
+﻿# ====== 系统级参数配置 ======
 # 格式: CSV (逗号分隔) + header 行
 # 用于: 渲染参数 / 战斗公式微调 / 调试开关
 # 修改后: node scripts/csv2json.cjs 重新生成 src/data/system.json
@@ -16,6 +16,7 @@
 # weaponOrbitExtraPerSlot: 每多 1 个 slot 额外外推的像素(默认 6)
 weaponOrbitDistance,64,number,武器图标中心到角色中心的像素距离,orbit
 weaponOrbitExtraPerSlot,6,number,每多 1 个 slot 武器额外外推的像素,orbit
+weaponRotationOffset,1.57079632679,number,武器渲染旋转偏移(弧度 默认PI/2),orbit
 
 # ====== 商店参数 ======
 shop.refreshCost,2,number,商店初始刷新费用,shop
@@ -29,3 +30,187 @@ shop.biasStrength,0.2,number,标签偏向强度,shop
 shop.charTagInject,2.0,number,角色标签注入权重,shop
 shop.classPerfectBonus,2.0,number,完美适配(class+class_2命中)权重加值,shop
 shop.classPartialBonus,1.0,number,部分适配(class或class_2命中)权重加值,shop
+
+# ====== 难度缩放 (difficulty scaling) ======
+# enemy.js scaleByWave: 敌人属性每波缩放
+hpScale,0.15,number,敌人HP每波缩放系数,difficulty
+dmgScale,0.15,number,敌人伤害每波缩放系数,difficulty
+spdScale,0.05,number,敌人速度每波缩放系数,difficulty
+spdMult,2,number,敌人速度缩放翻倍系数,difficulty
+# elite/boss 额外缩放
+eliteStartWave,8,number,精英从第几波开始额外缩放,difficulty
+eliteExtraScale,0.15,number,精英每波额外缩放系数,difficulty
+bossStartWave,12,number,Boss从第几波开始额外缩放,difficulty
+bossExtraScale,0.20,number,Boss每波额外缩放系数,difficulty
+bossHpScale,0.15,number,Boss HP每波缩放系数,difficulty
+bossDmgScale,0.12,number,Boss伤害每波缩放系数,difficulty
+bossSpdScale,0.05,number,Boss速度每波缩放系数,difficulty
+# wave.js 波次预算/生成
+baseBudget,10,number,基础波次预算,difficulty
+budgetScale,0.3,number,每级预算缩放系数,difficulty
+budgetMaxScale,6,number,预算最大倍率,difficulty
+maxEnemies,40,number,最大同屏敌人数,difficulty
+baseEnemies,8,number,基础同屏敌人数,difficulty
+enemiesPerLevel,1.5,number,每波额外敌人数系数,difficulty
+bossInterval,5,number,Boss波间隔(difficulty.bossWaves为空时回退),difficulty
+maxLevel,20,number,普通模式最高关卡,difficulty
+bossBudget,10,number,Boss波预留预算,difficulty
+endlessBudgetBase,4,number,无尽模式16+预算基数,difficulty
+endlessBudgetPerLevel,0.5,number,无尽模式每级额外预算,difficulty
+spawnRateMult,0.7,number,每批生成数量受难度影响系数,difficulty
+spawnIntervalBase,1.5,number,基础生成间隔(秒),difficulty
+spawnIntervalDecay,0.03,number,每波生成间隔衰减,difficulty
+minSpawnInterval,0.3,number,最小生成间隔,difficulty
+bossSpawnDelay,4,number,Boss波延迟生成时间(秒),difficulty
+announceDuration,1.5,number,波次公告显示时间,difficulty
+
+# ====== 属性上限 (stat caps) ======
+lifeStealCap,0.5,number,生命偷取最大上限,statCap
+dodgeCap,0.6,number,闪避率最大上限,statCap
+attackSpeedMin,0.2,number,攻击速度最小值,statCap
+attackSpeedMax,5.0,number,攻击速度最大值,statCap
+attackRangeMax,500,number,攻击范围最大值,statCap
+critChanceCap,0.8,number,暴击率最大上限,statCap
+speedMin,50,number,移动速度最小值,statCap
+speedMax,800,number,移动速度最大值,statCap
+luckMax,50,number,幸运最大值,statCap
+harvestingMax,500,number,收获加成最大值,statCap
+pierceMax,10,number,穿透最大值,statCap
+pickupRangeMin,10,number,拾取范围最小值,statCap
+pickupRangeMax,300,number,拾取范围最大值,statCap
+armorFormulaDiv,50,number,护甲减伤公式除数,statCap
+critMultCap,6.0,number,暴击伤害最大值,statCap
+bulletCountCap,20,number,子弹数量最大值,statCap
+bulletSpeedCap,2000,number,子弹速度最大值,statCap
+armorCap,100,number,护甲最大值,statCap
+
+# ====== 战斗公式 (combat formulas) ======
+unmatchedMult,0.10,number,武器标签不匹配惩罚倍率,combat
+classFit0,0.30,number,class完全不匹配(0/2)倍率,combat
+classFit1,0.60,number,class部分匹配(1/2)倍率,combat
+classFit2,1.00,number,class完美匹配(2/2)倍率,combat
+critFullCap,0.8,number,暴击率硬上限(所有来源),combat
+defaultCritDmg,2.0,number,默认暴击伤害倍率,combat
+berserkerHpPct,0.3,number,狂战士触发血量百分比(低于此值激活),combat
+berserkerMult,1.30,number,狂战士伤害倍率,combat
+minAtkSpeed,0.2,number,攻速乘区最小值(TYPE A),combat
+classFit_CritDmgDefault,2.0,number,classFit暴伤默认值,combat
+
+# ====== 玩家/系统参数 (player params) ======
+invincibleDuration,0.5,number,受伤无敌时间(秒),player
+damageFlashDuration,0.15,number,受伤闪烁时间(秒),player
+sweepAnimDuration,0.35,number,横扫攻击动画时间(秒),player
+thrustAnimDuration,0.25,number,突刺攻击动画时间(秒),player
+rangedAnimDuration,0.3,number,远程攻击动画时间(秒),player
+knockbackPixelsPerUnit,2.5,number,击退单位转像素系数,player
+maxKbPixels,150,number,击退像素绝对值上限,player
+kbImmuneTime,0.3,number,击退免疫时间(秒),player
+stunRanged,0.15,number,远程击退眩晕时间(秒),player
+stunMelee,0.25,number,近战击退眩晕时间(秒),player
+kbSpeed,600,number,击退动画速度(像素/秒),player
+
+# ====== 敌人特殊机制 (enemy mechanics) ======
+splitCount,2,number,分裂数量基数,enemyMechanics
+splitRandomExtra,1,number,分裂额外随机上限(+0~1),enemyMechanics
+splitHpPct,0.5,number,分裂体继承HP比例,enemyMechanics
+splitSpeedMult,0.8,number,分裂体速度倍率,enemyMechanics
+splitDmgMult,0.7,number,分裂体伤害倍率,enemyMechanics
+splitRadiusMult,0.7,number,分裂体半径倍率,enemyMechanics
+splitInvulnTime,1.0,number,分裂体无敌时间(秒),enemyMechanics
+splitAtkCdMult,0.8,number,分裂体攻击间隔倍率,enemyMechanics
+splitSpawnOffset,20,number,分裂体生成偏移(像素),enemyMechanics
+shieldHpPct,0.5,number,护盾值占最大HP比例,enemyMechanics
+leechPct,0.3,number,吸血百分比,enemyMechanics
+reflectPct,0.2,number,反伤百分比,enemyMechanics
+freezeSlowDuration,1.5,number,冰冻减速持续时间(秒),enemyMechanics
+freezeSlowFactor,0.5,number,冰冻减速幅度,enemyMechanics
+bomberExplosionRadius,80,number,自爆者爆炸半径(像素),enemyMechanics
+bomberExplosionDmgMult,1.5,number,自爆者爆炸伤害倍率,enemyMechanics
+bomberKbForce,400,number,自爆者爆炸击退力,enemyMechanics
+bomberEnemyDmgPct,0.5,number,自爆者对友军伤害比例,enemyMechanics
+bomberFuseTime,0.8,number,自爆者引信时间(秒),enemyMechanics
+bomberProximityDist,40,number,自爆者触发距离(像素),enemyMechanics
+bomberChargeBoostDist,250,number,自爆者冲刺加速距离(像素),enemyMechanics
+swarmPackRadius,100,number,群聚检测半径(像素),enemyMechanics
+swarmPackCount,3,number,群聚加速所需数量,enemyMechanics
+swarmPackSpeedMult,1.3,number,群聚加速倍率,enemyMechanics
+summonerMaxSummons,5,number,召唤者最大召唤数,enemyMechanics
+summonerSpawnCount,3,number,召唤者单次生成数,enemyMechanics
+summonerSpawnOffset,60,number,召唤者生成偏移(像素),enemyMechanics
+summonerCooldown,4.0,number,召唤者召唤间隔(秒),enemyMechanics
+summonerMatMult,0.5,number,召唤物材料倍率,enemyMechanics
+
+# ====== 掉落/战利品 (loot/drop) ======
+dropItemProb,0.40,number,宝箱出道具概率,loot
+dropWeaponProb,0.40,number,宝箱出武器概率,loot
+dropGoldProb,0.20,number,宝箱出金币概率,loot
+lootBiasStrength,0.3,number,宝箱流派偏向强度,loot
+chestNormalItemCount,2,number,普通宝箱选项数,loot
+chestEliteItemCount,3,number,精英宝箱选项数,loot
+chestLegendaryItemCount,3,number,传奇宝箱选项数,loot
+chestAdvancedItemCount,4,number,高级宝箱选项数,loot
+chestNormalGoldMin,10,number,普通宝箱金币下限,loot
+chestNormalGoldMax,25,number,普通宝箱金币上限,loot
+chestEliteGoldMin,25,number,精英宝箱金币下限,loot
+chestEliteGoldMax,50,number,精英宝箱金币上限,loot
+chestLegendaryGoldMin,50,number,传奇宝箱金币下限,loot
+chestLegendaryGoldMax,100,number,传奇宝箱金币上限,loot
+chestAdvancedGoldMin,100,number,高级宝箱金币下限,loot
+chestAdvancedGoldMax,250,number,高级宝箱金币上限,loot
+
+# ====== 效果默认值 (effects defaults) ======
+burnDefaultDuration,3.0,number,燃烧默认持续时间(秒),effects
+burnDefaultMaxStacks,3,number,燃烧默认最大层数,effects
+slowDefaultAmount,0.5,number,减速默认幅度,effects
+slowDefaultDuration,2.0,number,减速默认持续时间(秒),effects
+explosionDefaultRadius,100,number,爆炸默认半径,effects
+explosionDefaultDmgPct,1.0,number,爆炸默认伤害百分比,effects
+reflectDefaultPct,0.3,number,默认反弹伤害百分比,effects
+burnSpreadDefaultRange,100,number,燃烧传播默认范围,effects
+burnSpreadDefaultLayers,1,number,燃烧传播默认层数,effects
+
+# ====== 升级系统 (levelUp / tier / reroll) ======
+levelUpTierIUnlock,1,number,Tier I解锁等级,levelUp
+levelUpTierIIUnlock,5,number,Tier II解锁等级,levelUp
+levelUpTierIIIUnlock,10,number,Tier III解锁等级,levelUp
+levelUpTierIVUnlock,25,number,Tier IV解锁等级,levelUp
+levelUpTierIWeight,60,number,Tier I基础权重,levelUp
+levelUpTierIIWeight,25,number,Tier II基础权重,levelUp
+levelUpTierIIIWeight,10,number,Tier III基础权重,levelUp
+levelUpTierIVWeight,5,number,Tier IV基础权重,levelUp
+levelUpTierIIIscaleStart,10,number,Tier III加权起始等级,levelUp
+levelUpTierIIIscaleMult,0.2,number,Tier III每级权重增加系数,levelUp
+levelUpTierIIIscaleMax,3,number,Tier III权重上限倍率,levelUp
+levelUpTierIVscaleStart,25,number,Tier IV加权起始等级,levelUp
+levelUpTierIVscaleMult,0.3,number,Tier IV每级权重增加系数,levelUp
+levelUpTierIVscaleMax,4,number,Tier IV权重上限倍率,levelUp
+levelUpRerollWaveMult,0.75,number,重掷基础费用 = wave × 系数,levelUp
+levelUpRerollIncMult,0.40,number,重掷递增费用 = wave × 系数,levelUp
+levelUpRerollMaxCost,200,number,重掷费用上限,levelUp
+levelUpGuaranteedThreshold,5,number,保底Tier判定间隔等级(5=每5级),levelUp
+levelUpDefaultCardCount,4,number,默认升级卡牌数量,levelUp
+levelUpDefaultWeaponSlots,4,number,默认武器槽数(升级前),levelUp
+
+# ====== 角色/玩家默认值 (player defaults) ======
+playerBaseMaxHp,100,number,玩家基础最大生命,playerDefaults
+playerBaseSpeed,100,number,玩家基础速度(像素/秒,applyToPlayer会覆盖),playerDefaults
+playerBaseDamage,15,number,玩家基础伤害,playerDefaults
+playerBaseAttackSpeed,1.0,number,玩家基础攻击速度,playerDefaults
+playerBaseCritChance,0.05,number,玩家基础暴击率,playerDefaults
+playerBaseCritDamage,2.0,number,玩家基础暴击伤害,playerDefaults
+playerBasePickupRange,15,number,玩家基础拾取范围,playerDefaults
+playerBaseHpRegen,0.5,number,玩家基础生命回复,playerDefaults
+playerBaseBulletSpeed,500,number,玩家基础子弹速度,playerDefaults
+playerBaseRadius,18,number,玩家碰撞半径,playerDefaults
+playerBaseBulletCount,1,number,玩家基础子弹数量,playerDefaults
+playerBaseWeaponSlots,6,number,玩家默认武器槽数,playerDefaults
+playerBaseInvincibleDuration,0.5,number,受伤无敌时间(秒),playerDefaults
+playerBaseArmor,0,number,玩家基础护甲,playerDefaults
+playerBaseDodge,0,number,玩家基础闪避,playerDefaults
+playerBaseLuck,0,number,玩家基础幸运,playerDefaults
+playerBaseHarvesting,0,number,玩家基础采集,playerDefaults
+
+# ====== Boss 默认值 (boss defaults) ======
+bossBaseHp,1500,number,Boss基础生命,playerDefaults
+bossBaseDamage,25,number,Boss基础伤害,playerDefaults
+bossBaseSpeed,40,number,Boss基础速度,playerDefaults

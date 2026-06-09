@@ -197,7 +197,7 @@ const LootSystem = {
             const weaponCounts = TagSystem.countWeaponTags(player.weapons || []);
             const itemCounts = TagSystem.countItemTags(player.items || []);
             const tagCounts = TagSystem.mergeTagCounts(weaponCounts, itemCounts);
-            biasWeights = TagSystem.getBiasWeights(tagCounts, 0.3);
+            biasWeights = TagSystem.getBiasWeights(tagCounts, SystemConfig.get('lootBiasStrength'));
         }
 
         const rewards = [];
@@ -228,9 +228,11 @@ const LootSystem = {
 
         // 决定奖励类型
         let rewardType;
-        if (roll < 0.40) {
+        const itemProb = SystemConfig.get('dropItemProb');
+        const weaponProb = SystemConfig.get('dropWeaponProb');
+        if (roll < itemProb) {
             rewardType = 'item';
-        } else if (roll < 0.80) {
+        } else if (roll < itemProb + weaponProb) {
             rewardType = 'weapon';
         } else {
             rewardType = 'gold';
@@ -348,8 +350,8 @@ const LootSystem = {
      * @returns {Object}
      */
     _generateGoldOption(goldRange) {
-        const min = goldRange[0] || 10;
-        const max = goldRange[1] || 25;
+        const min = goldRange[0] || SystemConfig.get('chestNormalGoldMin');
+        const max = goldRange[1] || SystemConfig.get('chestNormalGoldMax');
         const amount = min + Math.floor(Math.random() * (max - min + 1));
 
         return {

@@ -233,7 +233,10 @@ const WaveSystem = {
 
     /** 生成间隔（随波次递减，受难度 spawnRate 影响） */
     get spawnInterval() {
-        const base = Math.max(0.3, 1.5 - (this.currentLevel - 1) * 0.03);
+        const base = Math.max(
+            SystemConfig.get('minSpawnInterval'),
+            SystemConfig.get('spawnIntervalBase') - (this.currentLevel - 1) * SystemConfig.get('spawnIntervalDecay')
+        );
         const rate = this.difficultyConfig ? this.difficultyConfig.spawnRate : 1;
         return base / rate;
     },
@@ -248,12 +251,15 @@ const WaveSystem = {
         else if (lv <= 15) base = 5;
         else base = 6;
         const rate = this.difficultyConfig ? this.difficultyConfig.spawnRate : 1;
-        return Math.round(base * Math.max(1, rate * 0.7));
+        return Math.round(base * Math.max(1, rate * SystemConfig.get('spawnRateMult')));
     },
 
     /** 同屏上限 */
     get maxSimultaneous() {
-        return Math.min(40, 8 + Math.floor(this.currentLevel * 1.5));
+        const maxEn = SystemConfig.get('maxEnemies');
+        const baseEn = SystemConfig.get('baseEnemies');
+        const perLv = SystemConfig.get('enemiesPerLevel');
+        return Math.min(maxEn, baseEn + Math.floor(this.currentLevel * perLv));
     },
 
     // -------------------------------------------------------
@@ -272,19 +278,21 @@ const WaveSystem = {
             this._remainingBudget = Math.floor((config.minBudget + config.maxBudget) / 2);
         } else {
             // WAVE_INTERVALS 回退路径: 缓变倍率替代 effectiveLevel 防暴增
-            // 缓变: wave1=×1.0, wave5=×2.2, wave10=×3.7, wave17+=×6(封顶)
-            const budgetScale = Math.min(6, 1 + (this.effectiveLevel - 1) * 0.3);
-            const baseBudget = 10;
+            const maxScale = SystemConfig.get('budgetMaxScale');
+            const scale = SystemConfig.get('budgetScale');
+            const baseBud = SystemConfig.get('baseBudget');
+            const budgetScale = Math.min(maxScale, 1 + (this.effectiveLevel - 1) * scale);
             const budgetMul = config ? config.budgetMul : 1.0;
-            this._remainingBudget = Math.floor(baseBudget * budgetMul * budgetScale);
+            this._remainingBudget = Math.floor(baseBud * budgetMul * budgetScale);
         }
 
-        // Boss 波: 预留 10 budget
+        // Boss 波: 预留 budget
         this._bossSpawned = false;
         this._bossWaveBudget = 0;
         if (this.isBossWave()) {
-            this._bossWaveBudget = 10;
-            this._remainingBudget -= 10;
+            const bossBud = SystemConfig.get('bossBudget');
+            this._bossWaveBudget = bossBud;
+            this._remainingBudget -= bossBud;
         }
 
         this.waveActive = true;
@@ -328,8 +336,9 @@ const WaveSystem = {
         this.waveTimer += dt;
         this.spawnTimer += dt;
 
-        // Boss 波: 4s 后生成 Boss
-        if (this.isBossWave() && this.waveTimer > 4 && !this._bossSpawned) {
+        // Boss 波: 延迟后生成 Boss
+        const bossDelay = SystemConfig.get('bossSpawnDelay');
+        if (this.isBossWave() && this.waveTimer > bossDelay && !this._bossSpawned) {
             this.spawnBoss(player);
             this._bossSpawned = true;
         }
@@ -463,8 +472,10 @@ const WaveSystem = {
         const interval = WAVE_INTERVALS[this.currentLevel];
         if (interval) return interval;
         // 16+ 公式
+        const endlessBase = SystemConfig.get('endlessBudgetBase');
+        const endlessPerLv = SystemConfig.get('endlessBudgetPerLevel');
         return {
-            budgetMul: 4 + (this.currentLevel - 15) * 0.5,
+            budgetMul: endlessBase + (this.currentLevel - 15) * endlessPerLv,
             availableTiers: [1, 2, 3],
             pattern: 'random',
         };
@@ -480,9 +491,10 @@ const WaveSystem = {
         return EnemySystem.enemies.filter(e => e.alive).length;
     },
 
-    /** 波次剩余时间（60s 上限） */
+    /** 波次剩余时间（从 levelDuration 读取） */
     getRemainingTime() {
-        return Math.max(0, 60 - this.waveTimer);
+        const duration = this.levelDuration;
+        return Math.max(0, duration - this.waveTimer);
     },
 
     /** 是否 Boss 波（优先使用难度配置中的 bossWaves） */
@@ -492,7 +504,8 @@ const WaveSystem = {
         if (cfg && cfg.bossWaves && cfg.bossWaves.length > 0) {
             return cfg.bossWaves.includes(this.currentLevel);
         }
-        return this.currentLevel % 5 === 0;
+        const interval = SystemConfig.get('bossInterval');
+        return this.currentLevel % interval === 0;
     },
 
     /**

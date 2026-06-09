@@ -389,8 +389,8 @@ describe('EnemySystem - scaleByWave', () => {
         expect(result.hp).toBe(34);
         // dmgMult = 1 + 1*0.15 = 1.15; damage = 8 * 1.15 = 9.2 → 9
         expect(result.damage).toBe(9);
-        // spdMult = (1 + 1*0.05) * 2 = 2.1; speed = 80 * 2.1 = 168 (用户要求速度翻倍)
-        expect(result.speed).toBe(168);
+        // spdMult = 1 + 1*0.05*2 = 1.1; speed = 80 * 1.1 = 88 (spdMultFactor 放大每波增量, 不翻底数)
+        expect(result.speed).toBe(88);
     });
 
     it('E34: wave=10 精英额外缩放', () => {

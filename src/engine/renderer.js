@@ -421,39 +421,49 @@ const Renderer = {
                 const wp = player.weaponParams[w.id];
                 if (!wp) continue;
 
-                const dist = (typeof SystemConfig !== 'undefined' ? SystemConfig.get('weaponOrbitDistance', 128) : 128)
+                const dist = SystemConfig.get('weaponOrbitDistance')
                           + Math.max(0, (wp.slots || 1) - 1)
-                          * (typeof SystemConfig !== 'undefined' ? SystemConfig.get('weaponOrbitExtraPerSlot', 6) : 6);
-                let angle, drawDist = dist, drawRotation;
+                          * SystemConfig.get('weaponOrbitExtraPerSlot');
+                const orbitAngle = (i / count) * Math.PI * 2 - Math.PI / 2;
+                let angle = orbitAngle, drawDist = dist, drawRotation = orbitAngle;
 
                 if (wp._attackAnimTimer && wp._attackAnimTimer > 0 && wp._attackAnimDuration > 0) {
                     const progress = 1 - (wp._attackAnimTimer / wp._attackAnimDuration);
                     const aa = wp._attackAngle;
-                    // 攻击时距离: 数据驱动 attackRange (不再用 dist + range*0.7)
-                    // Brotato 加法: 武器 + 角色 (无乘数)
                     const weaponRange = (wp.attackRange || 60) + (player.attackRange || 0);
+                    const AIM_END = 0.25; // 瞄准阶段占动画 25%
 
                     if (wp._attackBehavior === 'melee_thrust') {
-                        // 刺击: sprite 从 player 沿 aa 刺出到 attackRange 距离
-                        drawDist = weaponRange * Math.sin(progress * Math.PI);
-                        angle = aa;
+                        // 瞄准阶段: 位置在轨道不动, 旋转朝向目标
+                        // 刺出阶段: 从轨道沿攻击方向刺出到 weaponRange 再收回
+                        if (progress < AIM_END) {
+                            angle = orbitAngle;
+                            drawDist = dist;
+                        } else {
+                            const strikeP = (progress - AIM_END) / (1 - AIM_END);
+                            const maxDist = dist + (weaponRange - dist) * 0.7;
+                            drawDist = dist + (maxDist - dist) * Math.sin(strikeP * Math.PI);
+                            angle = aa;
+                        }
                         drawRotation = aa;
                     } else if (wp._attackBehavior === 'melee_sweep') {
-                        // 挥动: sprite 在 attackRange 距离上做 180° 弧线扫掠
-                        drawDist = weaponRange;
-                        angle = aa - Math.PI / 2 + progress * Math.PI;
+                        // 瞄准阶段: 位置在轨道不动, 旋转朝向目标
+                        // 横扫阶段: 在轨道上做弧线扫掠
+                        if (progress < AIM_END) {
+                            angle = orbitAngle;
+                            drawDist = dist;
+                        } else {
+                            const sweepP = (progress - AIM_END) / (1 - AIM_END);
+                            drawDist = weaponRange;
+                            angle = aa - Math.PI / 2 + sweepP * Math.PI;
+                        }
                         drawRotation = aa;
                     } else {
-                        // 远程 (ranged): sprite 在原 orbit 距离上, 只旋转到目标方向
-                        // - 距离保持 dist (不冲到 attackRange, 区别于近战)
-                        // - 角度 = 朝目标 (武器像杆子指过去)
+                        // 远程（含射击/魔法等）: 轨道位置不动，只旋转朝向目标
+                        angle = orbitAngle;
                         drawDist = dist;
-                        angle = aa;
                         drawRotation = aa;
                     }
-                } else {
-                    angle = (i / count) * Math.PI * 2 - Math.PI / 2;
-                    drawRotation = angle; // 待机时武器图标朝外（径向）
                 }
 
                 const wx = Math.cos(angle) * drawDist;
@@ -472,7 +482,7 @@ const Renderer = {
                     }
                     ctx.save();
                     ctx.translate(wx, wy);
-                    ctx.rotate(drawRotation + Math.PI / 2);
+                    ctx.rotate(drawRotation + SystemConfig.get('weaponRotationOffset'));
                     ctx.drawImage(wpnImg, -ww / 2, -wh / 2, ww, wh);
                     ctx.restore();
                 } else {

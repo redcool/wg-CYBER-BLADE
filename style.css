@@ -168,6 +168,15 @@ body {
     padding: 2px 8px;
     border-radius: 6px;
 }
+.char-detail-affinities {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(120, 200, 255, 0.15);
+}
+.char-affinity-item {
+    font-size: 0.75em;
+    line-height: 1.5;
+}
 .char-detail-passives {
     margin-top: 8px;
     padding-top: 6px;
@@ -426,6 +435,21 @@ body {
     font-weight: 700;
     color: #00ffff;
     margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.wpn-detail-btn {
+    cursor: pointer;
+    font-size: 0.7em;
+    opacity: 0.5;
+    transition: opacity 0.15s, transform 0.15s;
+    line-height: 1;
+    user-select: none;
+}
+.wpn-detail-btn:hover {
+    opacity: 1;
+    transform: scale(1.2);
 }
 .weapon-detail-tag {
     font-size: 0.62em;

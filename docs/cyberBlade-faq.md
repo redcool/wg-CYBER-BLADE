@@ -3,7 +3,7 @@
 > 记录项目开发中反复遇到的问题、根因、修复方式。
 > 适用读者: 维护 / 重构 / 加新功能时的自己或协作者。
 >
-> 最后更新: 2026-06-06
+> 最后更新: 2026-06-09
 
 ---
 
@@ -51,7 +51,7 @@
   ```powershell
   $p = "index.html"
   $c = Get-Content -LiteralPath $p -Raw -Encoding utf8
-  $c = $c -replace '<script src="([^"?]+)\.js"></script>', '<script src="$1.js?v=20260606"></script>'
+$c = $c -replace '<script src="([^"?]+)\.js"></script>', '<script src="$1.js?v=2026060913"></script>'
   Set-Content -LiteralPath $p -Value $c -Encoding utf8 -NoNewline
   ```
 - HTML 注释中包裹的 script (如 `<!-- <script ...> -->`) **不**需要加 `?v=`, 但替换脚本会一并加上, 改完后手动还原即可
@@ -143,17 +143,16 @@ if (_Animator && e.animator) {
 
 ---
 
-## 4. 测试基线 416 passed / 15 failed
+## 4. 测试基线 465 passed / 0 failed
 
 ### 基线数据
 ```
-Test Files  1 failed (character.test.js) | 13 passed (14)
-Tests       15 failed | 416 passed (431)
+Test Files  16 passed (16)
+Tests       465 passed (465)
 ```
 
 ### 关键约束
-- **任何**改动都不能让 416 → 415 或 16 failed → 17 failed
-- 失败的 15 个**全部**是 `character.test.js` (预先存在的问题, 与本次开发无关)
+- **任何**改动不能让 465 passed 减少
 - 跑测试: `npm test`
 - 跑单个: `npm test -- test/unit/enemy.test.js -t E3`
 
@@ -334,7 +333,7 @@ if (p.attackRange) cd *= 1 + Math.max(0, p.attackRange) / 200;
 - [ ] 测试运行前**无**需在 html 加载, ESM 模式自动 import
 
 ### 测试基线
-- [ ] `npm test` → 必须是 **416 passed / 15 failed**, 不能多不能少
+- [ ] `npm test` → 必须是 **465 passed / 0 failed**, 不能少
 - [ ] 跑单个验: `npm test -- test/unit/foo.test.js`
 - [ ] 新增测试时**不**计入"15 failed 基线", 是新加的通过测试
 
@@ -346,6 +345,112 @@ if (p.attackRange) cd *= 1 + Math.max(0, p.attackRange) / 200;
 ### 文档
 - [ ] 如果是新功能 / 修了重要 bug → 在 `docs/cyberBlade项目解决.md` 追加一条
 - [ ] 复杂的模式 / 协议 → 写进本 FAQ
+
+---
+
+## 10. 源码文件中文注释乱码
+
+### 问题
+在编辑器中打开 `enemy.js` / `wave.js` 等文件，看到中文变成 `�` (U+FFFD) 或乱码如 `绯荤粺`（即 mojibake，UTF-8 双编码错误）。
+
+### 根因
+两种不同的编码损坏：
+
+| 症状 | 原因 | 示例 |
+|------|------|------|
+| `�` (U+FFFD) | 文件被非 UTF-8 编码保存，多字节字符无法映射，被替换为 U+FFFD | `敌人 AI 系统` → `敌人 AI 系统�` |
+| mojibake | UTF-8 字节被错误地按 Latin-1/Windows-1252 解码，再重新保存为 UTF-8（双编码） | `波次系统` → `æ³¢æ¬¡ç³»ç»Ÿ` |
+
+### 如何判断
+```bash
+# 查找 U+FFFD（替换字符）— 用二进制扫描
+# PowerShell
+$bytes = [System.IO.File]::ReadAllBytes("src/engine/enemy.js")
+$count = 0
+for ($i = 0; $i -lt $bytes.Count - 2; $i++) {
+    if ($bytes[$i] -eq 0xEF -and $bytes[$i+1] -eq 0xBF -and $bytes[$i+2] -eq 0xBD) { $count++ }
+}
+"U+FFFD count: $count"
+```
+
+### 修复方法
+
+#### U+FFFD 修复（enemy.js 示例）
+只能**手动逐行恢复**：
+1. 读取文件，定位 `�` 位置
+2. 根据上下文推测原文（注释多为中文描述）
+3. 用 `edit` 工具逐行替换为正确中文
+4. 验证: `node --check src/engine/enemy.js`
+
+#### Mojibake 修复（wave.js 示例）
+最安全方案: **`git checkout -- src/engine/wave.js`** 从 git 恢复原始版本。
+
+若文件不在版本控制中，可用以下 PowerShell 尝试解码还原：
+```powershell
+$bytes = [System.IO.File]::ReadAllBytes("x.js")
+$wrong = [System.Text.Encoding]::UTF8.GetString($bytes)
+$fixed = [System.Text.Encoding]::UTF8.GetString(
+    [System.Text.Encoding]::GetEncoding(1252).GetBytes($wrong)
+)
+Set-Content -Path "x.js" -Value $fixed -Encoding UTF8
+```
+⚠ **注意**: 此方案可能损坏 ASCII 之外的字符（如 `—`、`±` 等符号），建议仅在纯中文 + ASCII 文件上使用。
+
+### 预防
+- 编辑器始终设定为 **UTF-8 无 BOM** 保存
+- git 配置 `git config --global core.autocrlf true` 配合 `.gitattributes` 中 `*.js text=auto`
+- 团队约定: 禁止 GBK/GB2312 编码提交
+- 每次 `git diff` 留意非 ASCII 文件是否出现意外变更
+
+---
+
+## 11. 敌人速度异常快（spdMult 系数 BUG）
+
+### 问题
+Wave 1 的基础敌人（basic）速度 80，但游戏中感觉比角色快很多。
+数值上：Wave 1 basic 敌 = 168 px/s，枪手 = 110 px/s，**怪快 53%**。
+
+### 根因
+`enemy.js:484` 的速度缩放公式：
+```js
+// BUG: spdMultFactor=2 导致整个式子翻倍
+const spdMult = (1 + level * spdScale) * spdMultFactor;
+//       Wave 1: (1 + 1*0.05) * 2 = 2.10 → basic 速度 80*2.1 = 168
+```
+
+对比 HP 和伤害的公式（无此问题）：
+```js
+const hpMult  = 1 + level * 0.15;   // Wave 1: 1.15  ✓
+const dmgMult = 1 + level * 0.15;   // Wave 1: 1.15  ✓
+// 速度却额外乘了 spdMultFactor=2 → Wave 1: 2.10  ✗
+```
+
+CSV 定义 (`csv/system.csv:38`)：
+```
+spdMult,2,number,敌人速度缩放翻倍系数,difficulty
+```
+
+### 修复
+`enemy.js:484` 改为：
+```js
+// FIX: spdMultFactor 仅放大每波增量，不翻倍底数
+const spdMult = 1 + level * spdScale * spdMultFactor;
+//       Wave 1: 1 + 1*0.05*2 = 1.10 → basic 速度 80*1.1 = 88
+//       Wave 5: 1 + 5*0.05*2 = 1.50 → basic 速度 80*1.5 = 120（刚超枪手 110）
+//       Wave 20: 1 + 20*0.05*2 = 3.00 → basic 速度 240（后期碾压）
+```
+
+### 修复后效果对比
+| 波次 | 旧 basic 速度 | 新 basic 速度 | 枪手(110) | 感觉 |
+|------|---------------|---------------|-----------|------|
+| W1 | 168 (53% > 枪手) | 88 (20% < 枪手) | 有余裕风筝 | ✅ |
+| W5 | 200 (82% > 枪手) | 120 (9% > 枪手) | 略慢但能打 | ⚠️ |
+| W10 | 240 (118% > 枪手) | 160 (45% > 枪手) | 必须靠技能 | ✅ |
+| W20 | 320 (190% > 枪手) | 240 (118% > 枪手) | 跑不过 | ✅ 后期应有压迫感 |
+
+### 相关文件
+- `csv/system.csv:37-38`: `spdScale=0.05` + `spdMult=2`（值不变，公式修复）
+- `src/engine/enemy.js:484`: 公式修改处
 
 ---
 

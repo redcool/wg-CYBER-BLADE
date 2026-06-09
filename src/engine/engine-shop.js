@@ -60,10 +60,7 @@ const ShopSystem = {
     /** 刷新成本（可变，每次刷新+1；初始值由 system.csv shop.refreshCost 控制） */
     refreshCost: 2,
     _getBaseRefreshCost() {
-        if (typeof SystemConfig !== 'undefined' && typeof SystemConfig.get === 'function') {
-            return SystemConfig.get('shop.refreshCost', 2);
-        }
-        return 2;
+        return SystemConfig.get('shop.refreshCost');
     },
 
     /** 上次购买错误信息 */
@@ -143,9 +140,9 @@ const ShopSystem = {
         let finalRarity = rolledRarity;
 
         // 从高到低检查保底（阈值由 system.csv 控制）
-        const pityLeg = typeof SystemConfig !== 'undefined' ? SystemConfig.get('shop.pityLegendary', 20) : 20;
-        const pityEpic = typeof SystemConfig !== 'undefined' ? SystemConfig.get('shop.pityEpic', 10) : 10;
-        const pityRare = typeof SystemConfig !== 'undefined' ? SystemConfig.get('shop.pityRare', 3) : 3;
+        const pityLeg = SystemConfig.get('shop.pityLegendary');
+        const pityEpic = SystemConfig.get('shop.pityEpic');
+        const pityRare = SystemConfig.get('shop.pityRare');
         if (pityTracker.sinceLastLegendary >= pityLeg) {
             finalRarity = 'legendary';
         } else if (pityTracker.sinceLastEpic >= pityEpic) {
@@ -222,8 +219,8 @@ const ShopSystem = {
                 const pref2 = characterDef.preferredClasses_2 || [];
                 const inPref1 = item.class && pref1.includes(item.class);
                 const inPref2 = item.class_2 && pref2.includes(item.class_2);
-                const perfectBonus = typeof SystemConfig !== 'undefined' ? SystemConfig.get('shop.classPerfectBonus', 2.0) : 2.0;
-                const partialBonus = typeof SystemConfig !== 'undefined' ? SystemConfig.get('shop.classPartialBonus', 1.0) : 1.0;
+                const perfectBonus = SystemConfig.get('shop.classPerfectBonus');
+                const partialBonus = SystemConfig.get('shop.classPartialBonus');
                 if (inPref1 && inPref2) {
                     weight += perfectBonus;  // 完美适配 → ×(1+perfectBonus)
                 } else if (inPref1 || inPref2) {
@@ -327,9 +324,9 @@ const ShopSystem = {
      */
     pickSlotType(currentWave) {
         const wave = currentWave || 1;
-        const base = typeof SystemConfig !== 'undefined' ? SystemConfig.get('shop.weaponProbBase', 0.85) : 0.85;
-        const decay = typeof SystemConfig !== 'undefined' ? SystemConfig.get('shop.weaponProbDecay', 0.04) : 0.04;
-        const minP = typeof SystemConfig !== 'undefined' ? SystemConfig.get('shop.weaponProbMin', 0.35) : 0.35;
+        const base = SystemConfig.get('shop.weaponProbBase');
+        const decay = SystemConfig.get('shop.weaponProbDecay');
+        const minP = SystemConfig.get('shop.weaponProbMin');
         const pWeapon = Math.max(minP, base - wave * decay);
         return Math.random() < pWeapon ? 'weapon' : 'item';
     },
@@ -371,7 +368,7 @@ const ShopSystem = {
         if (typeof CharacterSystem !== 'undefined' && CharacterSystem.selectedCharacterId) {
             _charDef = CharacterSystem.getCharacterDef(CharacterSystem.selectedCharacterId);
             if (_charDef && _charDef.tags) {
-                const injectW = typeof SystemConfig !== 'undefined' ? SystemConfig.get('shop.charTagInject', 2.0) : 2.0;
+                const injectW = SystemConfig.get('shop.charTagInject');
                 for (const tag of _charDef.tags) {
                     if (tagCounts[tag] !== undefined) {
                         tagCounts[tag] += injectW;
@@ -381,7 +378,7 @@ const ShopSystem = {
                 }
             }
         }
-        const biasStrength = typeof SystemConfig !== 'undefined' ? SystemConfig.get('shop.biasStrength', 0.2) : 0.2;
+        const biasStrength = SystemConfig.get('shop.biasStrength');
         const biasWeights = typeof TagSystem !== 'undefined'
             ? TagSystem.getBiasWeights(tagCounts, biasStrength)
             : {};

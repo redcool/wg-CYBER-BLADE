@@ -248,7 +248,8 @@ describe('WaveSystem - 波次控制', () => {
 
     it('W21: getRemainingTime 正确', () => {
         WaveSystem.waveTimer = 10;
-        expect(WaveSystem.getRemainingTime()).toBe(50);
+        // getRemainingTime 用 levelDuration(默认30), 不再硬编码 60
+        expect(WaveSystem.getRemainingTime()).toBe(20);
     });
 });
 

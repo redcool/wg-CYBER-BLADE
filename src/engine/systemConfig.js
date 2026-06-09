@@ -49,15 +49,14 @@ const SystemConfig = {
     },
 
     /**
-     * 取参数(带默认值兜底,加载失败/未配时使用)
+     * 取参数（key 必须存在，否则报错）
      * @param {string} key
-     * @param {*} fallback
      */
-    get(key, fallback) {
+    get(key) {
         if (this._cache[key] !== undefined && this._cache[key] !== null) {
             return this._cache[key];
         }
-        return fallback;
+        throw new Error(`[SystemConfig] 缺少配置项: "${key}" — 请在 csv/system.csv 中定义`);
     },
 
     /** 是否已加载完成 */

@@ -224,6 +224,29 @@ const TagSystem = {
         },
     },
 
+    /** 运行时从 synergies.json 加载的数据（覆盖 synergyThresholds） */
+    _synergyData: null,
+
+    /**
+     * 从 JSON 加载 synergy 加成数据
+     * 将 [{ tag, threshold, bonuses }] 转为 nested structure
+     * @returns {Promise<void>}
+     */
+    async loadSynergies() {
+        try {
+            const rows = await DataLoader.load('synergies');
+            if (!rows || rows.length === 0) return;
+            const data = {};
+            for (const row of rows) {
+                if (!data[row.tag]) data[row.tag] = {};
+                data[row.tag][row.threshold] = row.bonuses || {};
+            }
+            this._synergyData = data;
+        } catch (e) {
+            console.warn('[TagSystem] 加载 synergies 失败:', e.message);
+        }
+    },
+
     /**
      * 计算当前激活的所有 synergy
      * @param {Object[]} weapons
@@ -237,11 +260,12 @@ const TagSystem = {
     getActiveSynergies(weapons) {
         const counts = this.countWeaponTags(weapons);
         const active = [];
+        const thresholds = this._synergyData || this.synergyThresholds;
 
         for (const [tagId, count] of Object.entries(counts)) {
             if (count === 0) continue;
 
-            const defs = this.synergyThresholds[tagId];
+            const defs = thresholds[tagId];
             if (!defs) continue;
 
             let threshold = 0;

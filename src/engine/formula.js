@@ -105,9 +105,12 @@ const FormulaSystem = {
     // Tag 匹配惩罚: 角色 tags 不匹配 weaponDef.tag 时大幅惩罚
     //   匹配条件: player.tags 包含 weaponDef.tag 或 weaponDef.tag === 'melee' 且 player.tags 包含任何 melee 相关 tag
     //   惩罚系数: UNMATCHED_MULT = 0.10 (非擅长武器只有 10% 效果)
+    //   来源: system.csv unmatchedMult
     // -------------------------------------------------------
     /** 未匹配惩罚系数 */
-    UNMATCHED_MULT: 0.10,
+    get UNMATCHED_MULT() {
+        return SystemConfig.get('unmatchedMult');
+    },
 
     /**
      * 判断武器 tag 是否在角色擅长标签中
@@ -153,9 +156,12 @@ const FormulaSystem = {
         const inPref1 = weaponDef.class && pref1.includes(weaponDef.class);
         const inPref2 = weaponDef.class_2 && pref2.includes(weaponDef.class_2);
         const hits = (inPref1 ? 1 : 0) + (inPref2 ? 1 : 0);
-        if (hits === 0) return 0.30;  // 不匹配
-        if (hits === 1) return 0.60;  // 部分匹配
-        return 1.0;                    // 完美匹配
+        const cf0 = SystemConfig.get('classFit0');
+        const cf1 = SystemConfig.get('classFit1');
+        const cf2 = SystemConfig.get('classFit2');
+        if (hits === 0) return cf0;  // 不匹配
+        if (hits === 1) return cf1;  // 部分匹配
+        return cf2;                    // 完美匹配
     },
 
     // -------------------------------------------------------
@@ -174,16 +180,18 @@ const FormulaSystem = {
     // -------------------------------------------------------
     _calcCritMultiplier(player, weaponParams) {
         const weaponCrit = weaponParams ? (weaponParams.critChanceAdd || 0) : 0;
-        const critChance = Math.min(0.8, (player.critChance || 0) + weaponCrit);
+        const critCap = SystemConfig.get('critFullCap');
+        const critChance = Math.min(critCap, (player.critChance || 0) + weaponCrit);
         const isCrit = Math.random() < critChance;
         player._lastCrit = isCrit;
 
         if (!isCrit) return 1.0;
 
-        // critDamage=0 视为未设置, 走默认 2.0
+        // critDamage=0 视为未设置, 走默认值
+        const defaultCritDmg = SystemConfig.get('defaultCritDmg');
         let cd = player.critDamage;
         if (cd === undefined || cd === null || cd === 0) {
-            cd = player.critMultiplier || 2.0;
+            cd = player.critMultiplier || defaultCritDmg;
         }
         // 武器独立暴击伤害加成
         if (weaponParams && weaponParams.critDamageAdd) {
@@ -198,7 +206,9 @@ const FormulaSystem = {
     _getSpecialModifier(player, target) {
         let S = 1.0;
         if (player.berserkerBlood && player.hp !== undefined && player.maxHp !== undefined) {
-            if (player.hp < player.maxHp * 0.3) S *= 1.30;
+            const hpPct = SystemConfig.get('berserkerHpPct');
+            const mult = SystemConfig.get('berserkerMult');
+            if (player.hp < player.maxHp * hpPct) S *= mult;
         }
         return S;
     },
@@ -217,7 +227,8 @@ const FormulaSystem = {
         }
         // TYPE A
         const mult = weaponDef.attackSpeedMult || 1.0;
-        return (1.0 / atkSpd) * Math.max(0.2, mult);
+        const minMult = SystemConfig.get('minAtkSpeed');
+        return (1.0 / atkSpd) * Math.max(minMult, mult);
     },
 
     // -------------------------------------------------------
@@ -265,14 +276,16 @@ const FormulaSystem = {
         const P = this._calcPercentMultiplier(player);
 
         const weaponCrit = weaponParams ? (weaponParams.critChanceAdd || 0) : 0;
+        const critCap = SystemConfig.get('critFullCap');
+        const defaultCritDmg = SystemConfig.get('defaultCritDmg');
         let cd = player.critDamage;
         if (cd === undefined || cd === null || cd === 0) {
-            cd = player.critMultiplier || 2.0;
+            cd = player.critMultiplier || defaultCritDmg;
         }
         if (weaponParams && weaponParams.critDamageAdd) {
             cd += weaponParams.critDamageAdd;
         }
-        const critChance = Math.min(0.8, (player.critChance || 0) + weaponCrit);
+        const critChance = Math.min(critCap, (player.critChance || 0) + weaponCrit);
         const C_exp = 1 + critChance * (cd - 1);
 
         const classMult = this._calcClassFitMult(player, rawDef);
@@ -319,9 +332,11 @@ const FormulaSystem = {
         const S = this._getSpecialModifier(player, target);
 
         const weaponCrit = weaponParams ? (weaponParams.critChanceAdd || 0) : 0;
+        const critCap = SystemConfig.get('critFullCap');
+        const defaultCritDmg = SystemConfig.get('defaultCritDmg');
         let cd = player.critDamage;
         if (cd === undefined || cd === null || cd === 0) {
-            cd = player.critMultiplier || 2.0;
+            cd = player.critMultiplier || defaultCritDmg;
         }
         if (weaponParams && weaponParams.critDamageAdd) {
             cd += weaponParams.critDamageAdd;
@@ -335,7 +350,7 @@ const FormulaSystem = {
             min: Math.round(base),
             normal: Math.round(base),
             crit: critDmg,
-            critChance: Math.min(0.8, (player.critChance || 0) + weaponCrit),
+            critChance: Math.min(critCap, (player.critChance || 0) + weaponCrit),
         };
     },
     // -------------------------------------------------------

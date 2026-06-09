@@ -1,0 +1,49 @@
+﻿# ====== 天赋协同（Synergy）加成定义 ======
+# 格式: CSV + header 行
+# 每行 = 一个 (标签, 阈值, 加成JSON)
+# bonuses 为 JSON 对象: { 属性字段名: 数值 }
+# 支持引号省略（csv2json 自动修复）但不能省略字段内逗号外的CSV引号
+#
+# 修改后: node scripts/csv2json.cjs 重新生成 src/data/synergies.json
+#         确认 index.html data.js _dataVersion 已同步
+#
+# ====== 列说明 ======
+# tag:      标签ID (melee/ranged/fire/explosive/crit/tech/economy)
+# threshold: 激活阈值 (2/4/6)
+# bonuses:  JSON 对象，属性名→加成值
+#
+# ====== 近战 ======
+tag,threshold,bonuses
+melee,2,"{damagePercent:0.10,lifeSteal:0.03}"
+melee,4,"{damagePercent:0.25,lifeSteal:0.06,armor:2}"
+melee,6,"{damagePercent:0.40,lifeSteal:0.10,armor:5,knockback:150}"
+
+# ====== 远程 ======
+ranged,2,"{attackRange:0.15}"
+ranged,4,"{attackRange:0.30,bulletSpeed:0.20}"
+ranged,6,"{attackRange:0.50,bulletSpeed:0.35,bulletCount:1}"
+
+# ====== 火焰 ======
+fire,2,"{elementalDamage:0.15}"
+fire,4,"{elementalDamage:0.30,burnDps:3}"
+fire,6,"{elementalDamage:0.50,burnDps:6,burningSpread:true}"
+
+# ====== 爆炸 ======
+explosive,2,"{explosionSize:0.20}"
+explosive,4,"{explosionSize:0.40,explosionDamage:0.30}"
+explosive,6,"{explosionSize:0.60,explosionDamage:0.50,chainExplosion:true}"
+
+# ====== 暴击 ======
+crit,2,"{critChance:0.05}"
+crit,4,"{critChance:0.10,critDamage:0.50}"
+crit,6,"{critChance:0.15,critDamage:1.00,onCritLightning:true}"
+
+# ====== 工程 ======
+tech,2,"{engineering:5}"
+tech,4,"{engineering:10,turretCount:1}"
+tech,6,"{engineering:20,turretCount:2,turretDamage:0.30}"
+
+# ====== 经济 ======
+economy,2,"{luck:3,xpGain:0.15}"
+economy,4,"{luck:6,xpGain:0.30,materialGain:0.25}"
+economy,6,"{luck:10,xpGain:0.50,materialGain:0.50,goldToDamage:true}"

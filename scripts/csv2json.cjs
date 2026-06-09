@@ -212,6 +212,7 @@ const CSV2JSON = {
             { name: 'classes',csv: 'csv/classes.csv',json: 'src/data/classes.json',schema: classSchema },
             { name: 'level_duration',csv: 'csv/level_duration.csv',json: 'src/data/level_duration.json',schema: levelDurationSchema },
             { name: 'system',csv: 'csv/system.csv',json: 'src/data/system.json',schema: systemSchema },
+            { name: 'synergies',csv: 'csv/synergies.csv',json: 'src/data/synergies.json',schema: synergySchema },
             { name: 'passives',csv: 'csv/passives.csv',json: 'src/data/passives.json',schema: passivesSchema },
         ];
 
@@ -570,7 +571,19 @@ const classSchema = {
 };
 
 /**
- * level_duration.csv Schema
+ *  synergies.csv Schema
+ * 列: tag,threshold,bonuses
+ *  协同天赋加成数据，每行 = 某标签在某阈值下激活的属性加成列表
+ *  bonuses 为 JSON 对象：{ 属性字段名: 数值 }
+ */
+const synergySchema = {
+    tag: 'string',
+    threshold: 'number',
+    bonuses: 'json',
+};
+
+/**
+ *  level_duration.csv Schema
  * 列: level,duration
  *  - level: 关卡(整数) 或 "default"
  *  - duration: 该关卡波次持续时间(秒)
@@ -625,7 +638,7 @@ if (require.main === module) {
     process.exit(ok ? 0 : 1);
 }
 
-module.exports = { CSV2JSON, characterSchema, characterLevelSchema, weaponSchema, itemSchema, enemySchema, bossSchema, waveSchema, weaponStatSchema, charStatSchema, difficultySchema, debugSchema, levelUpCardsSchema, rarityColorsSchema, audioSchema, classSchema, levelDurationSchema, passivesSchema };
+module.exports = { CSV2JSON, characterSchema, characterLevelSchema, weaponSchema, itemSchema, enemySchema, bossSchema, waveSchema, weaponStatSchema, charStatSchema, difficultySchema, debugSchema, levelUpCardsSchema, rarityColorsSchema, audioSchema, classSchema, levelDurationSchema, passivesSchema, synergySchema };
 
 /**
  * level_duration.csv Schema

@@ -1,4 +1,4 @@
-# 关卡持续时间(秒)
+﻿# 关卡持续时间(秒)
 # level: 关卡号, "default" 表示默认
 # duration: 该关卡波次持续时间(秒)
 level,duration

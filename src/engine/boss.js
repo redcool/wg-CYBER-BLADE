@@ -244,9 +244,15 @@ const BossSystem = {
         if (!type) return null;
 
         const level = Math.max(1, waveLevel || 1);
-        const scaledHp = Math.floor((type.baseHp || 1500) * (1 + level * 0.15));
-        const scaledDmg = Math.floor((type.baseDamage || 25) * (1 + level * 0.12));
-        const scaledSpd = Math.floor((type.baseSpeed || 40) * (1 + level * 0.05));
+        const bHpScale = SystemConfig.get('bossHpScale');
+        const bDmgScale = SystemConfig.get('bossDmgScale');
+        const bSpdScale = SystemConfig.get('bossSpdScale');
+        const bBaseHp = SystemConfig.get('bossBaseHp');
+        const bBaseDmg = SystemConfig.get('bossBaseDamage');
+        const bBaseSpd = SystemConfig.get('bossBaseSpeed');
+        const scaledHp = Math.floor((type.baseHp || bBaseHp) * (1 + level * bHpScale));
+        const scaledDmg = Math.floor((type.baseDamage || bBaseDmg) * (1 + level * bDmgScale));
+        const scaledSpd = Math.floor((type.baseSpeed || bBaseSpd) * (1 + level * bSpdScale));
 
         // 取初始阶段配置
         const initialPhase = type.phases && type.phases.length > 0 ? type.phases[0] : null;

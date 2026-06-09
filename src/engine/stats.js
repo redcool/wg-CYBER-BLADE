@@ -97,6 +97,39 @@ const StatsSystem = {
     },
 
     // -------------------------------------------------------
+    // 1b. 从 SystemConfig 加载属性上限
+    // -------------------------------------------------------
+
+    /**
+     * 从 SystemConfig 加载 stat caps 覆盖 statDefs 中的默认值
+     * 在 data.js preloadAll 中自动调用（SystemConfig.load() 之后）
+     */
+    loadCaps() {
+        if (typeof SystemConfig === 'undefined' || !SystemConfig.isLoaded()) return;
+        const CAP_MAP = [
+            ['lifeSteal', 'max', 'lifeStealCap'],
+            ['dodge', 'max', 'dodgeCap'],
+            ['attackSpeed', 'max', 'attackSpeedMax'],
+            ['attackSpeed', 'min', 'attackSpeedMin'],
+            ['attackRange', 'max', 'attackRangeMax'],
+            ['critChance', 'max', 'critChanceCap'],
+            ['speed', 'max', 'speedMax'],
+            ['speed', 'min', 'speedMin'],
+            ['luck', 'max', 'luckMax'],
+            ['harvesting', 'max', 'harvestingMax'],
+            ['projectilePierce', 'max', 'pierceMax'],
+            ['pickupRange', 'max', 'pickupRangeMax'],
+            ['pickupRange', 'min', 'pickupRangeMin'],
+        ];
+        for (const [statId, field, configKey] of CAP_MAP) {
+            const def = this.statDefs[statId];
+            if (!def) continue;
+            const val = SystemConfig.get(configKey);
+            def[field] = val;
+        }
+    },
+
+    // -------------------------------------------------------
     // 2. 伤害公式 → 委托给 FormulaSystem
     // -------------------------------------------------------
 

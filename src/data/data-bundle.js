@@ -1581,10 +1581,10 @@ __DATA_BUNDLE__['weapons'] = [
     "damage_lv2": 20,
     "damage_lv3": 30,
     "damage_lv4": 40,
-    "cooldown_lv1": 1,
-    "cooldown_lv2": 0.93,
-    "cooldown_lv3": 0.86,
-    "cooldown_lv4": 0.79,
+    "cooldown_lv1": 0.5,
+    "cooldown_lv2": 0.47,
+    "cooldown_lv3": 0.44,
+    "cooldown_lv4": 0.4,
     "speedMult": 0,
     "critChanceAdd": 0,
     "critDamageAdd": 0,
@@ -1597,7 +1597,7 @@ __DATA_BUNDLE__['weapons'] = [
     "bulletMaxRange": 0,
     "attackRange": 320,
     "spread": 0.1,
-    "pierce": 0,
+    "pierce": 1,
     "burnDps": 0,
     "burnMaxStacks": 0,
     "chainCount": 0,
@@ -7748,6 +7748,13 @@ __DATA_BUNDLE__['system'] = [
     "group": "orbit"
   },
   {
+    "key": "weaponRotationOffset",
+    "value": "1.57079632679",
+    "valueType": "number",
+    "desc": "武器渲染旋转偏移(弧度 默认PI/2)",
+    "group": "orbit"
+  },
+  {
     "key": "shop.refreshCost",
     "value": "2",
     "valueType": "number",
@@ -7823,5 +7830,1132 @@ __DATA_BUNDLE__['system'] = [
     "valueType": "number",
     "desc": "部分适配(class或class_2命中)权重加值",
     "group": "shop"
+  },
+  {
+    "key": "hpScale",
+    "value": "0.15",
+    "valueType": "number",
+    "desc": "敌人HP每波缩放系数",
+    "group": "difficulty"
+  },
+  {
+    "key": "dmgScale",
+    "value": "0.15",
+    "valueType": "number",
+    "desc": "敌人伤害每波缩放系数",
+    "group": "difficulty"
+  },
+  {
+    "key": "spdScale",
+    "value": "0.05",
+    "valueType": "number",
+    "desc": "敌人速度每波缩放系数",
+    "group": "difficulty"
+  },
+  {
+    "key": "spdMult",
+    "value": "2",
+    "valueType": "number",
+    "desc": "敌人速度缩放翻倍系数",
+    "group": "difficulty"
+  },
+  {
+    "key": "eliteStartWave",
+    "value": "8",
+    "valueType": "number",
+    "desc": "精英从第几波开始额外缩放",
+    "group": "difficulty"
+  },
+  {
+    "key": "eliteExtraScale",
+    "value": "0.15",
+    "valueType": "number",
+    "desc": "精英每波额外缩放系数",
+    "group": "difficulty"
+  },
+  {
+    "key": "bossStartWave",
+    "value": "12",
+    "valueType": "number",
+    "desc": "Boss从第几波开始额外缩放",
+    "group": "difficulty"
+  },
+  {
+    "key": "bossExtraScale",
+    "value": "0.20",
+    "valueType": "number",
+    "desc": "Boss每波额外缩放系数",
+    "group": "difficulty"
+  },
+  {
+    "key": "bossHpScale",
+    "value": "0.15",
+    "valueType": "number",
+    "desc": "Boss HP每波缩放系数",
+    "group": "difficulty"
+  },
+  {
+    "key": "bossDmgScale",
+    "value": "0.12",
+    "valueType": "number",
+    "desc": "Boss伤害每波缩放系数",
+    "group": "difficulty"
+  },
+  {
+    "key": "bossSpdScale",
+    "value": "0.05",
+    "valueType": "number",
+    "desc": "Boss速度每波缩放系数",
+    "group": "difficulty"
+  },
+  {
+    "key": "baseBudget",
+    "value": "10",
+    "valueType": "number",
+    "desc": "基础波次预算",
+    "group": "difficulty"
+  },
+  {
+    "key": "budgetScale",
+    "value": "0.3",
+    "valueType": "number",
+    "desc": "每级预算缩放系数",
+    "group": "difficulty"
+  },
+  {
+    "key": "budgetMaxScale",
+    "value": "6",
+    "valueType": "number",
+    "desc": "预算最大倍率",
+    "group": "difficulty"
+  },
+  {
+    "key": "maxEnemies",
+    "value": "40",
+    "valueType": "number",
+    "desc": "最大同屏敌人数",
+    "group": "difficulty"
+  },
+  {
+    "key": "baseEnemies",
+    "value": "8",
+    "valueType": "number",
+    "desc": "基础同屏敌人数",
+    "group": "difficulty"
+  },
+  {
+    "key": "enemiesPerLevel",
+    "value": "1.5",
+    "valueType": "number",
+    "desc": "每波额外敌人数系数",
+    "group": "difficulty"
+  },
+  {
+    "key": "bossInterval",
+    "value": "5",
+    "valueType": "number",
+    "desc": "Boss波间隔(difficulty.bossWaves为空时回退)",
+    "group": "difficulty"
+  },
+  {
+    "key": "maxLevel",
+    "value": "20",
+    "valueType": "number",
+    "desc": "普通模式最高关卡",
+    "group": "difficulty"
+  },
+  {
+    "key": "bossBudget",
+    "value": "10",
+    "valueType": "number",
+    "desc": "Boss波预留预算",
+    "group": "difficulty"
+  },
+  {
+    "key": "endlessBudgetBase",
+    "value": "4",
+    "valueType": "number",
+    "desc": "无尽模式16+预算基数",
+    "group": "difficulty"
+  },
+  {
+    "key": "endlessBudgetPerLevel",
+    "value": "0.5",
+    "valueType": "number",
+    "desc": "无尽模式每级额外预算",
+    "group": "difficulty"
+  },
+  {
+    "key": "spawnRateMult",
+    "value": "0.7",
+    "valueType": "number",
+    "desc": "每批生成数量受难度影响系数",
+    "group": "difficulty"
+  },
+  {
+    "key": "spawnIntervalBase",
+    "value": "1.5",
+    "valueType": "number",
+    "desc": "基础生成间隔(秒)",
+    "group": "difficulty"
+  },
+  {
+    "key": "spawnIntervalDecay",
+    "value": "0.03",
+    "valueType": "number",
+    "desc": "每波生成间隔衰减",
+    "group": "difficulty"
+  },
+  {
+    "key": "minSpawnInterval",
+    "value": "0.3",
+    "valueType": "number",
+    "desc": "最小生成间隔",
+    "group": "difficulty"
+  },
+  {
+    "key": "bossSpawnDelay",
+    "value": "4",
+    "valueType": "number",
+    "desc": "Boss波延迟生成时间(秒)",
+    "group": "difficulty"
+  },
+  {
+    "key": "announceDuration",
+    "value": "1.5",
+    "valueType": "number",
+    "desc": "波次公告显示时间",
+    "group": "difficulty"
+  },
+  {
+    "key": "lifeStealCap",
+    "value": "0.5",
+    "valueType": "number",
+    "desc": "生命偷取最大上限",
+    "group": "statCap"
+  },
+  {
+    "key": "dodgeCap",
+    "value": "0.6",
+    "valueType": "number",
+    "desc": "闪避率最大上限",
+    "group": "statCap"
+  },
+  {
+    "key": "attackSpeedMin",
+    "value": "0.2",
+    "valueType": "number",
+    "desc": "攻击速度最小值",
+    "group": "statCap"
+  },
+  {
+    "key": "attackSpeedMax",
+    "value": "5.0",
+    "valueType": "number",
+    "desc": "攻击速度最大值",
+    "group": "statCap"
+  },
+  {
+    "key": "attackRangeMax",
+    "value": "500",
+    "valueType": "number",
+    "desc": "攻击范围最大值",
+    "group": "statCap"
+  },
+  {
+    "key": "critChanceCap",
+    "value": "0.8",
+    "valueType": "number",
+    "desc": "暴击率最大上限",
+    "group": "statCap"
+  },
+  {
+    "key": "speedMin",
+    "value": "50",
+    "valueType": "number",
+    "desc": "移动速度最小值",
+    "group": "statCap"
+  },
+  {
+    "key": "speedMax",
+    "value": "800",
+    "valueType": "number",
+    "desc": "移动速度最大值",
+    "group": "statCap"
+  },
+  {
+    "key": "luckMax",
+    "value": "50",
+    "valueType": "number",
+    "desc": "幸运最大值",
+    "group": "statCap"
+  },
+  {
+    "key": "harvestingMax",
+    "value": "500",
+    "valueType": "number",
+    "desc": "收获加成最大值",
+    "group": "statCap"
+  },
+  {
+    "key": "pierceMax",
+    "value": "10",
+    "valueType": "number",
+    "desc": "穿透最大值",
+    "group": "statCap"
+  },
+  {
+    "key": "pickupRangeMin",
+    "value": "10",
+    "valueType": "number",
+    "desc": "拾取范围最小值",
+    "group": "statCap"
+  },
+  {
+    "key": "pickupRangeMax",
+    "value": "300",
+    "valueType": "number",
+    "desc": "拾取范围最大值",
+    "group": "statCap"
+  },
+  {
+    "key": "armorFormulaDiv",
+    "value": "50",
+    "valueType": "number",
+    "desc": "护甲减伤公式除数",
+    "group": "statCap"
+  },
+  {
+    "key": "critMultCap",
+    "value": "6.0",
+    "valueType": "number",
+    "desc": "暴击伤害最大值",
+    "group": "statCap"
+  },
+  {
+    "key": "bulletCountCap",
+    "value": "20",
+    "valueType": "number",
+    "desc": "子弹数量最大值",
+    "group": "statCap"
+  },
+  {
+    "key": "bulletSpeedCap",
+    "value": "2000",
+    "valueType": "number",
+    "desc": "子弹速度最大值",
+    "group": "statCap"
+  },
+  {
+    "key": "armorCap",
+    "value": "100",
+    "valueType": "number",
+    "desc": "护甲最大值",
+    "group": "statCap"
+  },
+  {
+    "key": "unmatchedMult",
+    "value": "0.10",
+    "valueType": "number",
+    "desc": "武器标签不匹配惩罚倍率",
+    "group": "combat"
+  },
+  {
+    "key": "classFit0",
+    "value": "0.30",
+    "valueType": "number",
+    "desc": "class完全不匹配(0/2)倍率",
+    "group": "combat"
+  },
+  {
+    "key": "classFit1",
+    "value": "0.60",
+    "valueType": "number",
+    "desc": "class部分匹配(1/2)倍率",
+    "group": "combat"
+  },
+  {
+    "key": "classFit2",
+    "value": "1.00",
+    "valueType": "number",
+    "desc": "class完美匹配(2/2)倍率",
+    "group": "combat"
+  },
+  {
+    "key": "critFullCap",
+    "value": "0.8",
+    "valueType": "number",
+    "desc": "暴击率硬上限(所有来源)",
+    "group": "combat"
+  },
+  {
+    "key": "defaultCritDmg",
+    "value": "2.0",
+    "valueType": "number",
+    "desc": "默认暴击伤害倍率",
+    "group": "combat"
+  },
+  {
+    "key": "berserkerHpPct",
+    "value": "0.3",
+    "valueType": "number",
+    "desc": "狂战士触发血量百分比(低于此值激活)",
+    "group": "combat"
+  },
+  {
+    "key": "berserkerMult",
+    "value": "1.30",
+    "valueType": "number",
+    "desc": "狂战士伤害倍率",
+    "group": "combat"
+  },
+  {
+    "key": "minAtkSpeed",
+    "value": "0.2",
+    "valueType": "number",
+    "desc": "攻速乘区最小值(TYPE A)",
+    "group": "combat"
+  },
+  {
+    "key": "classFit_CritDmgDefault",
+    "value": "2.0",
+    "valueType": "number",
+    "desc": "classFit暴伤默认值",
+    "group": "combat"
+  },
+  {
+    "key": "invincibleDuration",
+    "value": "0.5",
+    "valueType": "number",
+    "desc": "受伤无敌时间(秒)",
+    "group": "player"
+  },
+  {
+    "key": "damageFlashDuration",
+    "value": "0.15",
+    "valueType": "number",
+    "desc": "受伤闪烁时间(秒)",
+    "group": "player"
+  },
+  {
+    "key": "sweepAnimDuration",
+    "value": "0.35",
+    "valueType": "number",
+    "desc": "横扫攻击动画时间(秒)",
+    "group": "player"
+  },
+  {
+    "key": "thrustAnimDuration",
+    "value": "0.25",
+    "valueType": "number",
+    "desc": "突刺攻击动画时间(秒)",
+    "group": "player"
+  },
+  {
+    "key": "rangedAnimDuration",
+    "value": "0.3",
+    "valueType": "number",
+    "desc": "远程攻击动画时间(秒)",
+    "group": "player"
+  },
+  {
+    "key": "knockbackPixelsPerUnit",
+    "value": "2.5",
+    "valueType": "number",
+    "desc": "击退单位转像素系数",
+    "group": "player"
+  },
+  {
+    "key": "maxKbPixels",
+    "value": "150",
+    "valueType": "number",
+    "desc": "击退像素绝对值上限",
+    "group": "player"
+  },
+  {
+    "key": "kbImmuneTime",
+    "value": "0.3",
+    "valueType": "number",
+    "desc": "击退免疫时间(秒)",
+    "group": "player"
+  },
+  {
+    "key": "stunRanged",
+    "value": "0.15",
+    "valueType": "number",
+    "desc": "远程击退眩晕时间(秒)",
+    "group": "player"
+  },
+  {
+    "key": "stunMelee",
+    "value": "0.25",
+    "valueType": "number",
+    "desc": "近战击退眩晕时间(秒)",
+    "group": "player"
+  },
+  {
+    "key": "kbSpeed",
+    "value": "600",
+    "valueType": "number",
+    "desc": "击退动画速度(像素/秒)",
+    "group": "player"
+  },
+  {
+    "key": "splitCount",
+    "value": "2",
+    "valueType": "number",
+    "desc": "分裂数量基数",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "splitRandomExtra",
+    "value": "1",
+    "valueType": "number",
+    "desc": "分裂额外随机上限(+0~1)",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "splitHpPct",
+    "value": "0.5",
+    "valueType": "number",
+    "desc": "分裂体继承HP比例",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "splitSpeedMult",
+    "value": "0.8",
+    "valueType": "number",
+    "desc": "分裂体速度倍率",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "splitDmgMult",
+    "value": "0.7",
+    "valueType": "number",
+    "desc": "分裂体伤害倍率",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "splitRadiusMult",
+    "value": "0.7",
+    "valueType": "number",
+    "desc": "分裂体半径倍率",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "splitInvulnTime",
+    "value": "1.0",
+    "valueType": "number",
+    "desc": "分裂体无敌时间(秒)",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "splitAtkCdMult",
+    "value": "0.8",
+    "valueType": "number",
+    "desc": "分裂体攻击间隔倍率",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "splitSpawnOffset",
+    "value": "20",
+    "valueType": "number",
+    "desc": "分裂体生成偏移(像素)",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "shieldHpPct",
+    "value": "0.5",
+    "valueType": "number",
+    "desc": "护盾值占最大HP比例",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "leechPct",
+    "value": "0.3",
+    "valueType": "number",
+    "desc": "吸血百分比",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "reflectPct",
+    "value": "0.2",
+    "valueType": "number",
+    "desc": "反伤百分比",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "freezeSlowDuration",
+    "value": "1.5",
+    "valueType": "number",
+    "desc": "冰冻减速持续时间(秒)",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "freezeSlowFactor",
+    "value": "0.5",
+    "valueType": "number",
+    "desc": "冰冻减速幅度",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "bomberExplosionRadius",
+    "value": "80",
+    "valueType": "number",
+    "desc": "自爆者爆炸半径(像素)",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "bomberExplosionDmgMult",
+    "value": "1.5",
+    "valueType": "number",
+    "desc": "自爆者爆炸伤害倍率",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "bomberKbForce",
+    "value": "400",
+    "valueType": "number",
+    "desc": "自爆者爆炸击退力",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "bomberEnemyDmgPct",
+    "value": "0.5",
+    "valueType": "number",
+    "desc": "自爆者对友军伤害比例",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "bomberFuseTime",
+    "value": "0.8",
+    "valueType": "number",
+    "desc": "自爆者引信时间(秒)",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "bomberProximityDist",
+    "value": "40",
+    "valueType": "number",
+    "desc": "自爆者触发距离(像素)",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "bomberChargeBoostDist",
+    "value": "250",
+    "valueType": "number",
+    "desc": "自爆者冲刺加速距离(像素)",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "swarmPackRadius",
+    "value": "100",
+    "valueType": "number",
+    "desc": "群聚检测半径(像素)",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "swarmPackCount",
+    "value": "3",
+    "valueType": "number",
+    "desc": "群聚加速所需数量",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "swarmPackSpeedMult",
+    "value": "1.3",
+    "valueType": "number",
+    "desc": "群聚加速倍率",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "summonerMaxSummons",
+    "value": "5",
+    "valueType": "number",
+    "desc": "召唤者最大召唤数",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "summonerSpawnCount",
+    "value": "3",
+    "valueType": "number",
+    "desc": "召唤者单次生成数",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "summonerSpawnOffset",
+    "value": "60",
+    "valueType": "number",
+    "desc": "召唤者生成偏移(像素)",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "summonerCooldown",
+    "value": "4.0",
+    "valueType": "number",
+    "desc": "召唤者召唤间隔(秒)",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "summonerMatMult",
+    "value": "0.5",
+    "valueType": "number",
+    "desc": "召唤物材料倍率",
+    "group": "enemyMechanics"
+  },
+  {
+    "key": "dropItemProb",
+    "value": "0.40",
+    "valueType": "number",
+    "desc": "宝箱出道具概率",
+    "group": "loot"
+  },
+  {
+    "key": "dropWeaponProb",
+    "value": "0.40",
+    "valueType": "number",
+    "desc": "宝箱出武器概率",
+    "group": "loot"
+  },
+  {
+    "key": "dropGoldProb",
+    "value": "0.20",
+    "valueType": "number",
+    "desc": "宝箱出金币概率",
+    "group": "loot"
+  },
+  {
+    "key": "lootBiasStrength",
+    "value": "0.3",
+    "valueType": "number",
+    "desc": "宝箱流派偏向强度",
+    "group": "loot"
+  },
+  {
+    "key": "chestNormalItemCount",
+    "value": "2",
+    "valueType": "number",
+    "desc": "普通宝箱选项数",
+    "group": "loot"
+  },
+  {
+    "key": "chestEliteItemCount",
+    "value": "3",
+    "valueType": "number",
+    "desc": "精英宝箱选项数",
+    "group": "loot"
+  },
+  {
+    "key": "chestLegendaryItemCount",
+    "value": "3",
+    "valueType": "number",
+    "desc": "传奇宝箱选项数",
+    "group": "loot"
+  },
+  {
+    "key": "chestAdvancedItemCount",
+    "value": "4",
+    "valueType": "number",
+    "desc": "高级宝箱选项数",
+    "group": "loot"
+  },
+  {
+    "key": "chestNormalGoldMin",
+    "value": "10",
+    "valueType": "number",
+    "desc": "普通宝箱金币下限",
+    "group": "loot"
+  },
+  {
+    "key": "chestNormalGoldMax",
+    "value": "25",
+    "valueType": "number",
+    "desc": "普通宝箱金币上限",
+    "group": "loot"
+  },
+  {
+    "key": "chestEliteGoldMin",
+    "value": "25",
+    "valueType": "number",
+    "desc": "精英宝箱金币下限",
+    "group": "loot"
+  },
+  {
+    "key": "chestEliteGoldMax",
+    "value": "50",
+    "valueType": "number",
+    "desc": "精英宝箱金币上限",
+    "group": "loot"
+  },
+  {
+    "key": "chestLegendaryGoldMin",
+    "value": "50",
+    "valueType": "number",
+    "desc": "传奇宝箱金币下限",
+    "group": "loot"
+  },
+  {
+    "key": "chestLegendaryGoldMax",
+    "value": "100",
+    "valueType": "number",
+    "desc": "传奇宝箱金币上限",
+    "group": "loot"
+  },
+  {
+    "key": "chestAdvancedGoldMin",
+    "value": "100",
+    "valueType": "number",
+    "desc": "高级宝箱金币下限",
+    "group": "loot"
+  },
+  {
+    "key": "chestAdvancedGoldMax",
+    "value": "250",
+    "valueType": "number",
+    "desc": "高级宝箱金币上限",
+    "group": "loot"
+  },
+  {
+    "key": "burnDefaultDuration",
+    "value": "3.0",
+    "valueType": "number",
+    "desc": "燃烧默认持续时间(秒)",
+    "group": "effects"
+  },
+  {
+    "key": "burnDefaultMaxStacks",
+    "value": "3",
+    "valueType": "number",
+    "desc": "燃烧默认最大层数",
+    "group": "effects"
+  },
+  {
+    "key": "slowDefaultAmount",
+    "value": "0.5",
+    "valueType": "number",
+    "desc": "减速默认幅度",
+    "group": "effects"
+  },
+  {
+    "key": "slowDefaultDuration",
+    "value": "2.0",
+    "valueType": "number",
+    "desc": "减速默认持续时间(秒)",
+    "group": "effects"
+  },
+  {
+    "key": "explosionDefaultRadius",
+    "value": "100",
+    "valueType": "number",
+    "desc": "爆炸默认半径",
+    "group": "effects"
+  },
+  {
+    "key": "explosionDefaultDmgPct",
+    "value": "1.0",
+    "valueType": "number",
+    "desc": "爆炸默认伤害百分比",
+    "group": "effects"
+  },
+  {
+    "key": "reflectDefaultPct",
+    "value": "0.3",
+    "valueType": "number",
+    "desc": "默认反弹伤害百分比",
+    "group": "effects"
+  },
+  {
+    "key": "burnSpreadDefaultRange",
+    "value": "100",
+    "valueType": "number",
+    "desc": "燃烧传播默认范围",
+    "group": "effects"
+  },
+  {
+    "key": "burnSpreadDefaultLayers",
+    "value": "1",
+    "valueType": "number",
+    "desc": "燃烧传播默认层数",
+    "group": "effects"
+  },
+  {
+    "key": "levelUpTierIUnlock",
+    "value": "1",
+    "valueType": "number",
+    "desc": "Tier I解锁等级",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIIUnlock",
+    "value": "5",
+    "valueType": "number",
+    "desc": "Tier II解锁等级",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIIIUnlock",
+    "value": "10",
+    "valueType": "number",
+    "desc": "Tier III解锁等级",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIVUnlock",
+    "value": "25",
+    "valueType": "number",
+    "desc": "Tier IV解锁等级",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIWeight",
+    "value": "60",
+    "valueType": "number",
+    "desc": "Tier I基础权重",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIIWeight",
+    "value": "25",
+    "valueType": "number",
+    "desc": "Tier II基础权重",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIIIWeight",
+    "value": "10",
+    "valueType": "number",
+    "desc": "Tier III基础权重",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIVWeight",
+    "value": "5",
+    "valueType": "number",
+    "desc": "Tier IV基础权重",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIIIscaleStart",
+    "value": "10",
+    "valueType": "number",
+    "desc": "Tier III加权起始等级",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIIIscaleMult",
+    "value": "0.2",
+    "valueType": "number",
+    "desc": "Tier III每级权重增加系数",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIIIscaleMax",
+    "value": "3",
+    "valueType": "number",
+    "desc": "Tier III权重上限倍率",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIVscaleStart",
+    "value": "25",
+    "valueType": "number",
+    "desc": "Tier IV加权起始等级",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIVscaleMult",
+    "value": "0.3",
+    "valueType": "number",
+    "desc": "Tier IV每级权重增加系数",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpTierIVscaleMax",
+    "value": "4",
+    "valueType": "number",
+    "desc": "Tier IV权重上限倍率",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpRerollWaveMult",
+    "value": "0.75",
+    "valueType": "number",
+    "desc": "重掷基础费用 = wave × 系数",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpRerollIncMult",
+    "value": "0.40",
+    "valueType": "number",
+    "desc": "重掷递增费用 = wave × 系数",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpRerollMaxCost",
+    "value": "200",
+    "valueType": "number",
+    "desc": "重掷费用上限",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpGuaranteedThreshold",
+    "value": "5",
+    "valueType": "number",
+    "desc": "保底Tier判定间隔等级(5=每5级)",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpDefaultCardCount",
+    "value": "4",
+    "valueType": "number",
+    "desc": "默认升级卡牌数量",
+    "group": "levelUp"
+  },
+  {
+    "key": "levelUpDefaultWeaponSlots",
+    "value": "4",
+    "valueType": "number",
+    "desc": "默认武器槽数(升级前)",
+    "group": "levelUp"
+  },
+  {
+    "key": "playerBaseMaxHp",
+    "value": "100",
+    "valueType": "number",
+    "desc": "玩家基础最大生命",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseSpeed",
+    "value": "100",
+    "valueType": "number",
+    "desc": "玩家基础速度(像素/秒",
+    "group": "applyToPlayer会覆盖)"
+  },
+  {
+    "key": "playerBaseDamage",
+    "value": "15",
+    "valueType": "number",
+    "desc": "玩家基础伤害",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseAttackSpeed",
+    "value": "1.0",
+    "valueType": "number",
+    "desc": "玩家基础攻击速度",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseCritChance",
+    "value": "0.05",
+    "valueType": "number",
+    "desc": "玩家基础暴击率",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseCritDamage",
+    "value": "2.0",
+    "valueType": "number",
+    "desc": "玩家基础暴击伤害",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBasePickupRange",
+    "value": "15",
+    "valueType": "number",
+    "desc": "玩家基础拾取范围",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseHpRegen",
+    "value": "0.5",
+    "valueType": "number",
+    "desc": "玩家基础生命回复",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseBulletSpeed",
+    "value": "500",
+    "valueType": "number",
+    "desc": "玩家基础子弹速度",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseRadius",
+    "value": "18",
+    "valueType": "number",
+    "desc": "玩家碰撞半径",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseBulletCount",
+    "value": "1",
+    "valueType": "number",
+    "desc": "玩家基础子弹数量",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseWeaponSlots",
+    "value": "6",
+    "valueType": "number",
+    "desc": "玩家默认武器槽数",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseInvincibleDuration",
+    "value": "0.5",
+    "valueType": "number",
+    "desc": "受伤无敌时间(秒)",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseArmor",
+    "value": "0",
+    "valueType": "number",
+    "desc": "玩家基础护甲",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseDodge",
+    "value": "0",
+    "valueType": "number",
+    "desc": "玩家基础闪避",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseLuck",
+    "value": "0",
+    "valueType": "number",
+    "desc": "玩家基础幸运",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "playerBaseHarvesting",
+    "value": "0",
+    "valueType": "number",
+    "desc": "玩家基础采集",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "bossBaseHp",
+    "value": "1500",
+    "valueType": "number",
+    "desc": "Boss基础生命",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "bossBaseDamage",
+    "value": "25",
+    "valueType": "number",
+    "desc": "Boss基础伤害",
+    "group": "playerDefaults"
+  },
+  {
+    "key": "bossBaseSpeed",
+    "value": "40",
+    "valueType": "number",
+    "desc": "Boss基础速度",
+    "group": "playerDefaults"
   }
 ];

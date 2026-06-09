@@ -1,4 +1,4 @@
-# audio.csv — 音频配置表
+﻿# audio.csv — 音频配置表
 # 列: category,id,type,file,name,categoryTag
 # category: bgm=BGM曲目, sfx_type=type→seId映射, sfx_file=seId→文件名映射
 # - bgm:  id=曲目ID,  file=音频文件路径,  name=显示名称

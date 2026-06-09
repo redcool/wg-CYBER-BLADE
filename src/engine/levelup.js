@@ -36,29 +36,50 @@
 //
 // 非保底等级：在已解锁 Tier 内按权重随机
 // ============================================================
-const TIER_UNLOCK = { I: 1, II: 5, III: 10, IV: 25 };
-const TIER_WEIGHTS = { I: 60, II: 25, III: 10, IV: 5 };
 const TIER_LEVELS = ['I', 'II', 'III', 'IV'];
+
+/** 懒加载 Tier 解锁等级（避免模块加载时 SystemConfig 未就绪） */
+function getTierUnlock() {
+    return {
+        I: SystemConfig.get('levelUpTierIUnlock'),
+        II: SystemConfig.get('levelUpTierIIUnlock'),
+        III: SystemConfig.get('levelUpTierIIIUnlock'),
+        IV: SystemConfig.get('levelUpTierIVUnlock'),
+    };
+}
+
+/** 懒加载 Tier 基础权重 */
+function getTierWeights() {
+    return {
+        I: SystemConfig.get('levelUpTierIWeight'),
+        II: SystemConfig.get('levelUpTierIIWeight'),
+        III: SystemConfig.get('levelUpTierIIIWeight'),
+        IV: SystemConfig.get('levelUpTierIVWeight'),
+    };
+}
 
 /** 判断当前等级是否有保底 Tier，有则返回该 Tier 名，否则返回 null */
 function getGuaranteedTier(playerLevel) {
+    const interval = SystemConfig.get('levelUpGuaranteedThreshold');
     if (playerLevel === 1) return 'I';
-    if (playerLevel === 5) return 'II';
-    if (playerLevel % 5 === 0 && playerLevel >= 10 && playerLevel <= 20) return 'III';
-    if (playerLevel % 5 === 0 && playerLevel >= 25) return 'IV';
+    if (playerLevel === SystemConfig.get('levelUpTierIIUnlock')) return 'II';
+    if (playerLevel % interval === 0 && playerLevel >= SystemConfig.get('levelUpTierIIIUnlock') && playerLevel <= SystemConfig.get('levelUpTierIVUnlock') - interval) return 'III';
+    if (playerLevel % interval === 0 && playerLevel >= SystemConfig.get('levelUpTierIVUnlock')) return 'IV';
     return null;
 }
 
 /** 获取当前等级下各 Tier 的权重（非保底等级时使用） */
 function getTierWeightsByLevel(playerLevel) {
-    const unlocked = TIER_LEVELS.filter(t => playerLevel >= TIER_UNLOCK[t]);
+    const tierUnlock = getTierUnlock();
+    const unlocked = TIER_LEVELS.filter(t => playerLevel >= tierUnlock[t]);
     if (unlocked.length === 0) return { I: 100 };
 
+    const tierWeights = getTierWeights();
     const weights = {};
     for (const t of unlocked) {
-        let w = TIER_WEIGHTS[t] || 10;
-        if (t === 'III') w *= Math.min(3, 1 + (playerLevel - 10) * 0.2);
-        if (t === 'IV') w *= Math.min(4, 1 + (playerLevel - 25) * 0.3);
+        let w = tierWeights[t] || 10;
+        if (t === 'III') w *= Math.min(SystemConfig.get('levelUpTierIIIscaleMax'), 1 + (playerLevel - SystemConfig.get('levelUpTierIIIscaleStart')) * SystemConfig.get('levelUpTierIIIscaleMult'));
+        if (t === 'IV') w *= Math.min(SystemConfig.get('levelUpTierIVscaleMax'), 1 + (playerLevel - SystemConfig.get('levelUpTierIVscaleStart')) * SystemConfig.get('levelUpTierIVscaleMult'));
         weights[t] = Math.round(w);
     }
 
@@ -170,14 +191,14 @@ const LevelUpSystem = {
 
             // 简单随机选 4 张
             const shuffled = [...tierPool].sort(() => Math.random() - 0.5);
-            this.currentCards = shuffled.slice(0, Math.min(4, shuffled.length));
+            this.currentCards = shuffled.slice(0, Math.min(SystemConfig.get('levelUpDefaultCardCount'), shuffled.length));
         } else {
             // 非保底等级：按 Tier 权重加权选择
             const tierWeights = getTierWeightsByLevel(playerLevel);
 
             // 选 4 张（不重复）
             const used = new Set();
-            const count = Math.min(4, pool.length);
+            const count = Math.min(SystemConfig.get('levelUpDefaultCardCount'), pool.length);
             for (let i = 0; i < count; i++) {
                 const selected = this._weightedSelect(pool, tierWeights, used);
                 if (!selected) break;
@@ -364,11 +385,11 @@ const LevelUpSystem = {
             wave = Math.max(1, WaveSystem.currentLevel || 1);
         }
 
-        const base = Math.floor(wave * 0.75);
-        const increase = Math.max(1, Math.floor(wave * 0.40));
+        const base = Math.floor(wave * SystemConfig.get('levelUpRerollWaveMult'));
+        const increase = Math.max(1, Math.floor(wave * SystemConfig.get('levelUpRerollIncMult')));
         // _rerollCount: 0 = 第一次重掷, 1 = 第二次...
         const cost = base + increase * (this._rerollCount + 1);
-        return Math.min(cost, 200); // 上限防止溢出
+        return Math.min(cost, SystemConfig.get('levelUpRerollMaxCost')); // 上限防止溢出
     },
 
     // -------------------------------------------------------
@@ -402,7 +423,7 @@ const LevelUpSystem = {
 
     _applyWeaponSlotUp(player) {
         if (!player) return;
-        player.weaponSlots = (player.weaponSlots || 4) + 1;
+        player.weaponSlots = (player.weaponSlots || SystemConfig.get('levelUpDefaultWeaponSlots')) + 1;
     },
 
     // -------------------------------------------------------

@@ -30,8 +30,8 @@ const EFFECT_HANDLERS = {
         if (!context || !context.target) return;
         const target = context.target;
         target._burnDps = (target._burnDps || 0) + (effect.dps || 0);
-        target._burnDuration = effect.duration || 3.0;
-        target._burnMaxStacks = effect.maxStacks || 3;
+        target._burnDuration = effect.duration || SystemConfig.get('burnDefaultDuration');
+        target._burnMaxStacks = effect.maxStacks || SystemConfig.get('burnDefaultMaxStacks');
         target._burnTimer = target._burnDuration;
     },
 
@@ -39,8 +39,8 @@ const EFFECT_HANDLERS = {
     applySlow: (effect, player, context) => {
         if (!context || !context.target) return;
         const target = context.target;
-        target._slowAmount = (target._slowAmount || 0) + (effect.amount || 0.5);
-        target._slowDuration = effect.duration || 2.0;
+        target._slowAmount = (target._slowAmount || 0) + (effect.amount || SystemConfig.get('slowDefaultAmount'));
+        target._slowDuration = effect.duration || SystemConfig.get('slowDefaultDuration');
         target._slowTimer = target._slowDuration;
     },
 
@@ -55,8 +55,8 @@ const EFFECT_HANDLERS = {
     explosion: (effect, player, context) => {
         if (!context || !context.target) return;
         context._explosion = {
-            radius: effect.radius || 100,
-            damagePercent: effect.damagePercent || 1.0,
+            radius: effect.radius || SystemConfig.get('explosionDefaultRadius'),
+            damagePercent: effect.damagePercent || SystemConfig.get('explosionDefaultDmgPct'),
             x: context.target.x,
             y: context.target.y,
         };
@@ -65,7 +65,7 @@ const EFFECT_HANDLERS = {
     /** 反弹伤害给攻击者: { percent } — 优先使用 EnemySystem 以正确触发护甲/击杀处理 */
     reflectDamage: (effect, player, context) => {
         if (!context || !context.attacker) return;
-        const pct = effect.percent || 0.3;
+        const pct = effect.percent || SystemConfig.get('reflectDefaultPct');
         const dmg = Math.floor((context.damage || 0) * pct);
         if (typeof EnemySystem !== 'undefined' && EnemySystem.takeDamage) {
             EnemySystem.takeDamage(context.attacker, dmg);
@@ -78,8 +78,8 @@ const EFFECT_HANDLERS = {
     spreadBurn: (effect, player, context) => {
         if (!context || !context.target) return;
         context._spreadBurn = {
-            range: effect.range || 100,
-            layers: effect.layers || 1,
+            range: effect.range || SystemConfig.get('burnSpreadDefaultRange'),
+            layers: effect.layers || SystemConfig.get('burnSpreadDefaultLayers'),
             x: context.target.x,
             y: context.target.y,
         };

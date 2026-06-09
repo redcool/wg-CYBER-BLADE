@@ -170,6 +170,13 @@ const UISystem = {
                 this._selectWeapon(wid);
             }
         });
+        // 详情按钮事件（点击武器名字旁边的📊按钮）
+        document.getElementById('weaponDetail').addEventListener('click', (e) => {
+            const btn = e.target.closest('.wpn-detail-btn');
+            if (!btn) return;
+            const wid = btn.dataset.weaponId;
+            if (wid) this._showWeaponFitPopup(wid);
+        });
         document.getElementById('weaponSelectConfirm').addEventListener('click', () => {
             if (this._selectedWeaponId) {
                 this._confirmWeapon(this._selectedWeaponId);
@@ -322,7 +329,7 @@ const UISystem = {
         detail.innerHTML = `
             <div class="weapon-detail-avatar">${AssetSystem.weaponIconHTML(weapon.id, 72)}</div>
             <div class="weapon-detail-info">
-                <div class="weapon-detail-name">${weapon.name}</div>
+                <div class="weapon-detail-name">${weapon.name}<span class="wpn-detail-btn" data-weapon-id="${weapon.id}" title="查看详细属性与适配度">📊</span></div>
                 <div class="weapon-detail-tag" style="color:${tagColor}">${tagStr}${classStr ? ' · ' + classStr : ''}${warnBadge}</div>
                 ${fitBar}
                 <div class="weapon-detail-desc">${weapon.desc || ''}</div>
@@ -335,6 +342,141 @@ const UISystem = {
         const radarContainer = document.getElementById('weaponRadarContainer');
         if (radarContainer) {
             radarContainer.appendChild(this._renderWeaponRadarChart(weapon));
+        }
+    },
+
+    /** 武器选择界面：弹出详细属性+适配度面板 (复用 weaponDetailModal) */
+    _showWeaponFitPopup(weaponId) {
+        const weapon = ShopSystem.allWeapons.find(w => w.id === weaponId);
+        if (!weapon) return;
+
+        // 填充 Icon + 名称
+        document.getElementById('wdIcon').innerHTML = AssetSystem.weaponIconHTML(weapon.id, 48);
+        document.getElementById('wdName').textContent = weapon.name;
+
+        // 品质
+        const tagDef = TagSystem.getTagDef(weapon.tag);
+        const qualityColors = {
+            common: { c: '#9e9e9e', label: '普通' }, uncommon: { c: '#4caf50', label: '罕见' },
+            rare: { c: '#2196f3', label: '稀有' }, epic: { c: '#9c27b0', label: '史诗' },
+            legendary: { c: '#ff9800', label: '传说' },
+        };
+        const qKey = weapon.rarity || weapon.quality || 'common';
+        const q = qualityColors[qKey] || qualityColors.common;
+        const qEl = document.getElementById('wdQuality');
+        qEl.textContent = q.label;
+        qEl.style.color = q.c;
+        qEl.style.borderColor = q.c;
+        document.getElementById('wdLevel').textContent = '';
+
+        // 统计属性
+        const statsRows = [];
+        const fmt = (v, suffix = '') => v == null || v === '—' ? '—' : `${v}${suffix}`;
+        const dmg = weapon.damage_lv1 || 0;
+        const cd  = weapon.cooldown_lv1 || 0;
+        const rng = weapon.attackRange || 0;
+        const kbg = weapon.knockback != null ? weapon.knockback : '—';
+        statsRows.push(`<div class="wd-stat-row"><span class="wd-stat-label">⚔️ 伤害</span><span class="wd-stat-value dmg">${fmt(dmg)}</span></div>`);
+        statsRows.push(`<div class="wd-stat-row"><span class="wd-stat-label">⏱ 冷却</span><span class="wd-stat-value cd">${fmt(cd, 's')}</span></div>`);
+        statsRows.push(`<div class="wd-stat-row"><span class="wd-stat-label">📏 射程</span><span class="wd-stat-value rng">${fmt(rng)}</span></div>`);
+        statsRows.push(`<div class="wd-stat-row"><span class="wd-stat-label">💥 击退</span><span class="wd-stat-value">${fmt(kbg)}</span></div>`);
+        if (weapon.bulletSpeed) statsRows.push(`<div class="wd-stat-row"><span class="wd-stat-label">🚀 弹速</span><span class="wd-stat-value spd">${fmt(weapon.bulletSpeed)}</span></div>`);
+        if (weapon.bulletCount) statsRows.push(`<div class="wd-stat-row"><span class="wd-stat-label">🔢 弹数</span><span class="wd-stat-value">${fmt(weapon.bulletCount)}</span></div>`);
+        if (weapon.pierce) statsRows.push(`<div class="wd-stat-row"><span class="wd-stat-label">🎯 穿透</span><span class="wd-stat-value">${fmt(weapon.pierce)}</span></div>`);
+        if (tagDef) statsRows.push(`<div class="wd-stat-row"><span class="wd-stat-label">🏷 标签</span><span class="wd-stat-value tag">${tagDef.icon} ${tagDef.name || weapon.tag}</span></div>`);
+        document.getElementById('wdStats').innerHTML = statsRows.join('');
+
+        // 特殊效果区域 → 改为显示适配度
+        const charId = CharacterSystem.selectedCharacterId;
+        const ch = CharacterSystem.getCharacterDef(charId);
+        let specialHtml = '';
+        if (ch) {
+            const score = WeaponDisplay.getWeaponFitScore(weapon, ch);
+            const pct = score === 1 ? '100' : (score === 0.5 ? '50' : '0');
+            const fitColors = { '0': '#ff4444', '50': '#ffaa00', '100': '#44cc44' };
+            const fitLabel = { '0': '不推荐', '50': '部分适配', '100': '完美适配' };
+            // Class 显示
+            const classDefs = (typeof DataLoader !== 'undefined' && DataLoader._cache && DataLoader._cache.classes) || [];
+            const wClass = classDefs.find(c => c.id === weapon.class);
+            const c2Def = classDefs.find(c => c.id === weapon.class_2);
+            const classInfo = [];
+            if (wClass) classInfo.push(`⚜ ${wClass['中文名']} (${weapon.class})`);
+            if (c2Def) classInfo.push(`└ ${c2Def['中文名']} (${weapon.class_2})`);
+            const prefer1 = ch.preferredClasses || [];
+            const prefer2 = ch.preferredClasses_2 || [];
+            const classMatch = weapon.class && prefer1.includes(weapon.class) ? '✅' : '❌';
+            const subMatch  = weapon.class_2 && prefer2.includes(weapon.class_2) ? '✅' : '❌';
+
+            specialHtml = `
+                <div style="margin:8px 0 0;padding:8px;background:rgba(255,255,255,0.03);border-radius:6px">
+                    <div style="display:flex;justify-content:space-between;font-size:0.85em;margin-bottom:4px">
+                        <span>角色适配度</span>
+                        <span style="color:${fitColors[pct]};font-weight:600">${fitLabel[pct]}</span>
+                    </div>
+                    <div class="wd-fit-bar"><div class="wd-fit-fill fit-${pct}"></div></div>
+                    <div style="margin-top:6px;font-size:0.8em;color:rgba(255,255,255,0.6)">
+                        ${classMatch} 主分类 ${weapon.class || '—'} ${prefer1.length ? `(偏好: ${prefer1.join(', ')})` : ''}<br>
+                        ${subMatch} 细分类 ${weapon.class_2 || '—'} ${prefer2.length ? `(偏好: ${prefer2.join(', ')})` : ''}
+                    </div>
+                </div>`;
+        }
+        document.getElementById('wdSpecial').innerHTML = specialHtml;
+
+        // 隐藏商店按钮，显示取消
+        document.getElementById('wdBtnSell').style.display = 'none';
+        document.getElementById('wdBtnMerge').style.display = 'none';
+        document.getElementById('wdBtnCancel').textContent = '关闭';
+        document.getElementById('wdBtnCancel').style.display = '';
+
+        // === 伤害计算（从角色定义构建临时玩家对象） ===
+        const playerProxy = {
+            tags: ch && ch.tags ? ch.tags : [],
+            preferredClasses: ch && ch.preferredClasses ? ch.preferredClasses : [],
+            preferredClasses_2: ch && ch.preferredClasses_2 ? ch.preferredClasses_2 : [],
+            damagePercent: ch ? (ch.damagePercent || 0) : 0,
+            _baseDamage: 15,
+        };
+        this._renderDamageBreakdown(weapon, playerProxy, 1);
+
+        // 绑定关闭
+        const modal = document.getElementById('weaponDetailModal');
+        const closeModal = () => modal.classList.add('hidden');
+        document.getElementById('wdBtnCancel').onclick = closeModal;
+        document.getElementById('wdClose').onclick = closeModal;
+
+        modal.classList.remove('hidden');
+    },
+
+    /** 伤害计算细分面板（共享方法，商店/选择界面共用） */
+    _renderDamageBreakdown(def, player, level) {
+        const old = document.getElementById('wdDmgBreakdown');
+        if (old) old.remove();
+        if (typeof FormulaSystem === 'undefined' || !FormulaSystem._calcBaseDamage) return;
+        try {
+            const bDmg = FormulaSystem._calcBaseDamage(def, player, level || 1);
+            const fDmg = FormulaSystem._calcFlatDamage(def, player);
+            const pMult = FormulaSystem._calcPercentMultiplier(player);
+            const tag = def ? (def.tag || '') : '';
+            const tagMatched = FormulaSystem._isTagMatched(player, tag);
+            const tagMult = tagMatched ? 1.0 : FormulaSystem.UNMATCHED_MULT;
+            const classMult = FormulaSystem._calcClassFitMult(player, def);
+            const combinedMult = pMult * tagMult * classMult;
+            const effDmg = Math.max(1, Math.round((bDmg + fDmg) * combinedMult));
+            if (bDmg <= 0 && fDmg <= 0) return;
+            const el = document.getElementById('wdStats');
+            if (!el) return;
+            el.insertAdjacentHTML('afterend',
+                `<div id="wdDmgBreakdown" class="wd-dmg-breakdown"><div class="wd-dmg-breakdown-title">📐 伤害计算</div>
+                <div class="wd-dmg-breakdown-row"><span>武器基础</span><span>${bDmg.toFixed(1)}</span></div>
+                ${fDmg > 0 ? `<div class="wd-dmg-breakdown-row"><span>角色加成</span><span class="dmg">+${fDmg.toFixed(1)}</span></div>` : ''}
+                <div class="wd-dmg-breakdown-row"><span>伤害倍率</span><span>×${(pMult * 100).toFixed(0)}%</span></div>
+                ${!tagMatched ? `<div class="wd-dmg-breakdown-row" style="color:#f88"><span>标签惩罚</span><span>×${(tagMult * 100).toFixed(0)}%</span></div>` : ''}
+                ${classMult < 1.0 ? `<div class="wd-dmg-breakdown-row" style="color:#f88"><span>职业适配</span><span>×${(classMult * 100).toFixed(0)}%</span></div>` : ''}
+                <div class="wd-dmg-breakdown-row wd-dmg-breakdown-total"><span>有效伤害</span><span class="dmg">${effDmg}</span></div>
+                </div>`
+            );
+        } catch (e) {
+            // 静默跳过
         }
     },
 
@@ -596,6 +738,23 @@ const UISystem = {
             }).filter(Boolean).join('');
             const passivesSection = passiveHTML ? `<div class="char-detail-passives"><div class="char-detail-section-title">被动技能</div>${passiveHTML}</div>` : '';
 
+            // 构建武器适配度展示
+            const classDefs = (cache && cache.classes) || (bundle && bundle.classes) || [];
+            const prefClasses = ch.preferredClasses || [];
+            const prefSubs = ch.preferredClasses_2 || [];
+            let affinityHTML = '';
+            if (prefClasses.length > 0 || prefSubs.length > 0) {
+                const classNames = prefClasses.map(cId => {
+                    const d = classDefs.find(c => c.id === cId);
+                    return d ? `${d['中文名']}(${cId})` : cId;
+                }).join(' / ');
+                const subsStr = prefSubs.length > 0 ? prefSubs.join(' · ') : '';
+                affinityHTML = `<div class="char-detail-affinities"><div class="char-detail-section-title">适配武器</div>
+                    <div class="char-affinity-item"><span style="color:#ffcc66">${classNames}</span></div>
+                    ${subsStr ? `<div class="char-affinity-item" style="font-size:0.85em;color:rgba(255,255,255,0.5);margin-top:2px">${subsStr}</div>` : ''}
+                </div>`;
+            }
+
             detail.innerHTML = `
                 <div class="char-detail-avatar">${AssetSystem.charIconHTML(ch.id, 80)}</div>
                 <div class="char-detail-info">
@@ -604,6 +763,7 @@ const UISystem = {
                     <div class="char-detail-stats">
                         ${this._buildCharStatLines(ch)}
                     </div>
+                    ${affinityHTML}
                     ${passivesSection}
                 </div>
                 <div class="char-detail-radar" id="charRadarContainer"></div>
@@ -1314,29 +1474,8 @@ const UISystem = {
         if (def.behavior) statsRows.push(`<div class="wd-stat-row"><span class="wd-stat-label">🎬 行为</span><span class="wd-stat-value">${def.behavior}</span></div>`);
         document.getElementById('wdStats').innerHTML = statsRows.join('');
 
-        // === 伤害细分（先清理旧实例，防止重复追加） ===
-        const oldBreakdown = document.getElementById('wdDmgBreakdown');
-        if (oldBreakdown) oldBreakdown.remove();
-        if (typeof FormulaSystem !== 'undefined' && FormulaSystem._calcBaseDamage) {
-            try {
-                const bDmg = FormulaSystem._calcBaseDamage(def, player, level);
-                const fDmg = FormulaSystem._calcFlatDamage(def, player);
-                const pMult = FormulaSystem._calcPercentMultiplier(player);
-                const effDmg = Math.round((bDmg + fDmg) * pMult);
-                if (bDmg > 0 || fDmg > 0) {
-                    document.getElementById('wdStats').insertAdjacentHTML('afterend',
-                        `<div id="wdDmgBreakdown" class="wd-dmg-breakdown"><div class="wd-dmg-breakdown-title">📐 伤害计算</div>
-                        <div class="wd-dmg-breakdown-row"><span>武器基础</span><span>${bDmg.toFixed(1)}</span></div>
-                        ${fDmg > 0 ? `<div class="wd-dmg-breakdown-row"><span>角色加成</span><span class="dmg">+${fDmg.toFixed(1)}</span></div>` : ''}
-                        <div class="wd-dmg-breakdown-row"><span>伤害倍率</span><span>×${(pMult * 100).toFixed(0)}%</span></div>
-                        <div class="wd-dmg-breakdown-row wd-dmg-breakdown-total"><span>有效伤害</span><span class="dmg">${effDmg}</span></div>
-                        </div>`
-                    );
-                }
-            } catch (e) {
-                // FormulaSystem 计算过程中出错则静默跳过伤害细分
-            }
-        }
+        // === 伤害细分 ===
+        this._renderDamageBreakdown(def, player, level);
 
         // === 羁绊加成（先清理旧实例） ===
         const oldSyn = document.getElementById('wdSynergy');

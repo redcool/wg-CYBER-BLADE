@@ -19,27 +19,27 @@ const PlayerSystem = {
             y: startY,
             // 动画状态 (Animator 类)
             animator: _Animator ? _Animator.create({ phase: 0 }) : null,
-            radius: 18,
+            radius: SystemConfig.get('playerBaseRadius'),
             // 当前战斗属性（基础值，会被角色+武器修正）
-            hp: 100,
-            maxHp: 100,
-            speed: 800,  // px/s, 加倍 (旧 500 偏慢)
-            damage: 15,
-            attackSpeed: 1.0,
+            hp: SystemConfig.get('playerBaseMaxHp'),
+            maxHp: SystemConfig.get('playerBaseMaxHp'),
+            speed: SystemConfig.get('playerBaseSpeed'),  // px/s, 会被 applyToPlayer 覆盖 (角色 70-150)
+            damage: SystemConfig.get('playerBaseDamage'),
+            attackSpeed: SystemConfig.get('playerBaseAttackSpeed'),
             attackRange: 0,  // 加法风格: 武器 + 角色(由 csv 加载)
-            armor: 0,
-            dodge: 0,
-            critChance: 0.05,
-            critMultiplier: 2.0,
-            luck: 0,
-            harvesting: 0,
-            pickupRange: 15,
-            bulletCount: 1,
+            armor: SystemConfig.get('playerBaseArmor'),
+            dodge: SystemConfig.get('playerBaseDodge'),
+            critChance: SystemConfig.get('playerBaseCritChance'),
+            critMultiplier: SystemConfig.get('playerBaseCritDamage'),
+            luck: SystemConfig.get('playerBaseLuck'),
+            harvesting: SystemConfig.get('playerBaseHarvesting'),
+            pickupRange: SystemConfig.get('playerBasePickupRange'),
+            bulletCount: SystemConfig.get('playerBaseBulletCount'),
             bulletPierce: 0,
-            bulletSpeed: 500,
+            bulletSpeed: SystemConfig.get('playerBaseBulletSpeed'),
             lifeSteal: 0,
             knockback: 0,
-            hpRegen: 0.5,
+            hpRegen: SystemConfig.get('playerBaseHpRegen'),
             // 新属性
             xpGain: 0,
             meleeDamage: 0,
@@ -56,7 +56,7 @@ const PlayerSystem = {
             totalDamage: 0,
             // 无敌帧
             invincibleTimer: 0,
-            invincibleDuration: 0.5,
+            invincibleDuration: SystemConfig.get('playerBaseInvincibleDuration'),
             // 受伤闪烁
             damageFlashTimer: 0,
             // 击退
@@ -80,7 +80,7 @@ const PlayerSystem = {
             bloodPactDrain: 0,
             compressionVuln: false,
             weaponParams: {},
-            weaponSlots: 6,
+            weaponSlots: SystemConfig.get('playerBaseWeaponSlots'),
             // 面向方向（替代鼠标）
             facingAngle: 0,
             // 武器攻击动画队列
@@ -461,25 +461,34 @@ const PlayerSystem = {
      * 用于每帧碰撞检测
      */
     _getWeaponSpritePos(p, wp, i, count) {
-        const baseDist = (typeof SystemConfig !== 'undefined' ? SystemConfig.get('weaponOrbitDistance', 128) : 128);
-        const extraPerSlot = (typeof SystemConfig !== 'undefined' ? SystemConfig.get('weaponOrbitExtraPerSlot', 6) : 6);
+        const baseDist = SystemConfig.get('weaponOrbitDistance');
+        const extraPerSlot = SystemConfig.get('weaponOrbitExtraPerSlot');
         const dist = baseDist + Math.max(0, (wp.slots || 1) - 1) * extraPerSlot;
-        let angle, drawDist = dist;
+        let angle = (i / count) * Math.PI * 2 - Math.PI / 2, drawDist = dist;
         if (wp._attackAnimTimer && wp._attackAnimTimer > 0 && wp._attackAnimDuration > 0) {
             const progress = 1 - (wp._attackAnimTimer / wp._attackAnimDuration);
             const aa = wp._attackAngle;
+            const AIM_END = 0.25;
             if (wp._attackBehavior === 'melee_thrust') {
-                // Brotato 加法: 刺击距离 = 武器 + 角色加成
-                const maxDist = dist + ((wp.attackRange || 60) + (p.attackRange || 0)) * 0.7;
-                drawDist = dist + (maxDist - dist) * Math.sin(progress * Math.PI);
-                angle = aa;
+                if (progress < AIM_END) {
+                    angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+                    drawDist = dist;
+                } else {
+                    const strikeP = (progress - AIM_END) / (1 - AIM_END);
+                    const maxDist = dist + ((wp.attackRange || 60) + (p.attackRange || 0)) * 0.7;
+                    drawDist = dist + (maxDist - dist) * Math.sin(strikeP * Math.PI);
+                    angle = aa;
+                }
             } else if (wp._attackBehavior === 'melee_sweep') {
-                angle = aa - Math.PI / 2 + progress * Math.PI;
+                if (progress < AIM_END) {
+                    angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+                } else {
+                    const sweepP = (progress - AIM_END) / (1 - AIM_END);
+                    angle = aa - Math.PI / 2 + sweepP * Math.PI;
+                }
             } else {
                 angle = aa;
             }
-        } else {
-            angle = (i / count) * Math.PI * 2 - Math.PI / 2;
         }
         return {
             x: p.x + Math.cos(angle) * drawDist,
@@ -667,8 +676,8 @@ const PlayerSystem = {
         const count = Math.min(weapons.length, 6);
         if (count === 0) return [];
         // 距离配置(系统参数,允许运行时调整,csv/system.csv)
-        const baseDist = SystemConfig.get('weaponOrbitDistance', 128);
-        const extraPerSlot = SystemConfig.get('weaponOrbitExtraPerSlot', 6);
+        const baseDist = SystemConfig.get('weaponOrbitDistance');
+        const extraPerSlot = SystemConfig.get('weaponOrbitExtraPerSlot');
         const positions = [];
         for (let i = 0; i < count; i++) {
             const w = weapons[i];
@@ -709,7 +718,7 @@ const PlayerSystem = {
         let actualBehavior = params.behavior;
         const meleeRange = (params.attackRange || 60) + (p.attackRange || 0);
         if (actualBehavior === 'melee_sweep') {
-            // 周围 attackRange 内怪数 ≥3 才用 sweep
+            // 周围 attackRange 内怪数 ≥2 才用 sweep, 否则用 thrust
             let nearCount = 0;
             if (typeof EnemySystem !== 'undefined' && EnemySystem.enemies) {
                 const enemies = EnemySystem.enemies;
@@ -720,7 +729,7 @@ const PlayerSystem = {
                     if (dx * dx + dy * dy <= meleeRange * meleeRange) nearCount++;
                 }
             }
-            actualBehavior = (nearCount >= 3) ? 'melee_sweep' : 'melee_thrust';
+            actualBehavior = (nearCount >= 2) ? 'melee_sweep' : 'melee_thrust';
         } else if (actualBehavior === 'melee') {
             const weaponDef = ShopSystem.allWeapons.find(d => d.id === weaponId);
             if (weaponDef && weaponDef.tag === 'lance') {

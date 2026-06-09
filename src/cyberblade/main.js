@@ -110,7 +110,7 @@ GameEngine.startGame = function(startWeaponId, difficulty) {
     // 8. 开始第一波
     WaveSystem.startNextLevel();
     this.state = 'playing';
-    this.announceTimer = 1.5;
+    this.announceTimer = SystemConfig.get('announceDuration');
     UISystem.showHUD();
 
     // 9. 启动背景音乐
@@ -497,7 +497,7 @@ GameEngine.closeShop = function(endless = false) {
             AudioSystem.unduckBGM();
         }
     }
-    this.announceTimer = 1.5;
+    this.announceTimer = SystemConfig.get('announceDuration');
     UISystem.updateHUD();
 };
 
