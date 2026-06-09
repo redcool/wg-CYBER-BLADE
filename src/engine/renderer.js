@@ -466,6 +466,18 @@ const Renderer = {
                     }
                 }
 
+                // Idle 远程武器: 平滑跟踪最近敌人
+                if (!(wp._attackAnimTimer && wp._attackAnimTimer > 0 && wp._attackAnimDuration > 0)
+                    && wp._attackBehavior !== 'melee_thrust' && wp._attackBehavior !== 'melee_sweep'
+                    && wp._trackTargetAngle !== undefined) {
+                    if (wp._trackAngle === undefined) wp._trackAngle = drawRotation;
+                    let d = wp._trackTargetAngle - wp._trackAngle;
+                    while (d > Math.PI) d -= Math.PI * 2;
+                    while (d < -Math.PI) d += Math.PI * 2;
+                    wp._trackAngle += d * 0.12;
+                    drawRotation = wp._trackAngle;
+                }
+
                 const wx = Math.cos(angle) * drawDist;
                 const wy = Math.sin(angle) * drawDist;
 

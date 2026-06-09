@@ -231,6 +231,7 @@ const PlayerSystem = {
         this._updateAutoAttack(dt, p);
         this._updateDelayedAttacks(dt, p);
         this._updateItems(dt, p);
+        this._updateWeaponTracking(p);
 
         // 动画状态推进 (Animator)
         if (_Animator && p.animator) {
@@ -665,6 +666,43 @@ const PlayerSystem = {
         this._pickupMaterials();
     },
 
+    /** 远程武器 idle 跟踪: 冷却期间平滑旋转瞄准最近敌人 (每3帧搜索一次) */
+    _updateWeaponTracking(p) {
+        if (!p.weaponParams || !p.weapons) return;
+        this._trackFrame = (this._trackFrame || 0) + 1;
+        if (this._trackFrame % 3 !== 0) return; // 每3帧搜一次
+
+        const enemies = (typeof EnemySystem !== 'undefined' && EnemySystem.enemies) || [];
+        if (enemies.length === 0) return;
+
+        const allWeapons = typeof ShopSystem !== 'undefined' ? ShopSystem.allWeapons : null;
+        for (let i = 0; i < p.weapons.length; i++) {
+            const w = p.weapons[i];
+            const wp = p.weaponParams[w.id];
+            if (!wp) continue;
+            // 只对远程武器做 idle 跟踪
+            if (wp._attackBehavior === 'melee_thrust' || wp._attackBehavior === 'melee_sweep') continue;
+            // 攻击中不动跟踪（攻击时 renderer 用 _attackAngle）
+            if (wp._attackAnimTimer && wp._attackAnimTimer > 0) continue;
+
+            // 在攻击范围内找最近敌人
+            const weaponDef = allWeapons ? allWeapons.find(d => d.id === w.id) : null;
+            const range = (weaponDef ? (weaponDef.attackRange || 60) : 60) + (p.attackRange || 0);
+            const rangeSq = range * range;
+            let nearest = null, nearDistSq = rangeSq;
+            for (const e of enemies) {
+                if (!e.alive) continue;
+                const dx = e.x - p.x, dy = e.y - p.y;
+                const dSq = dx * dx + dy * dy;
+                if (dSq < nearDistSq) { nearDistSq = dSq; nearest = e; }
+            }
+            if (nearest) {
+                wp._trackTargetAngle = Math.atan2(nearest.y - p.y, nearest.x - p.x);
+            }
+            // 无敌人则保持当前角度（不重置）
+        }
+    },
+
     /**
      * 计算各武器的轨道位置(与渲染器逻辑保持一致)
      * 距离公式: SystemConfig.weaponOrbitDistance(默认 128) + (slots-1) * weaponOrbitExtraPerSlot(默认 6)
@@ -756,6 +794,9 @@ const PlayerSystem = {
             params._attackAnimDuration = 0.3;
             params._attackAngle = fireAngle;
             params._attackBehavior = 'ranged';
+            // 同步跟踪角度，保证攻击结束时平滑过渡
+            params._trackAngle = fireAngle;
+            params._trackTargetAngle = fireAngle;
         }
 
         // 记录攻击动画（非近战存 fireAngle 供渲染器使用）
