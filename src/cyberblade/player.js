@@ -963,7 +963,7 @@ const PlayerSystem = {
 
             // 击退（使用武器自身击退值, 默认骑枪600/其他400；精英/Boss 免疫）
             const kbStr = (params.knockback > 0 ? params.knockback : (isLance ? 600 : 400)) + (p.knockback || 0);
-            EnemySystem.applyKnockback(e, dx, dy, dist, kbStr);
+            EnemySystem.applyKnockback(e, dx, dy, dist, kbStr, { ranged: true });
 
             // 燃烧效果
             if (params.burnDps > 0 && e.alive) {

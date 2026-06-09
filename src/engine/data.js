@@ -11,8 +11,8 @@ const DataLoader = {
     _basePath: 'src/data/',
     /** UI 字符表路径 (i18n 字符串,非 CSV 生成) */
     _charsDataPath: 'src/charsData/',
-    /** 数据版本（改数据时 +1 强制刷新） */
-    _dataVersion: '7.11',
+    /** 数据版本（改数据时 +1 强制刷新，跟随 cache-version.js 中的 CACHE_VER） */
+    _dataVersion: typeof CACHE_VER !== 'undefined' ? CACHE_VER : '7.12',
 
     /**
      * 加载 JSON 数据文件

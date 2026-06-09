@@ -750,15 +750,6 @@ const EnemySystem = {
         enemy.hp -= actualDamage;
         enemy.flashTimer = 0.1;
 
-        // 击退
-        if (typeof PlayerSystem !== 'undefined' && PlayerSystem.player) {
-            const p = PlayerSystem.player;
-            const dx = enemy.x - p.x;
-            const dy = enemy.y - p.y;
-            const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-            this.applyKnockback(enemy, dx, dy, dist, 300);
-        }
-
         // 受击特效
         if (typeof ParticleSystem !== 'undefined') {
             ParticleSystem.emit(enemy.x, enemy.y, 4, {
@@ -828,6 +819,15 @@ const EnemySystem = {
         const PIXELS_PER_UNIT = 2.5;
         const MAX_KB_PIXELS = 150;
         const final = (kbStr * rangedFactor * PIXELS_PER_UNIT) / mass;
+        // [DEBUG] 击退日志: [KB-RANGED]=射击武器, [KB]=近战/其他
+        const tag = opts.ranged ? 'KB-RANGED' : 'KB';
+        console.warn(
+            `[${tag}] src=${new Error().stack.split('\n')[2]?.trim()||'?'} `+
+            `enemy="${e.name||e.type||e._uid||'?'}" r=${radius} mass=${mass.toFixed(2)} `+
+            `kbRaw=${kbStr} ranged=${!!opts.ranged} rf=${rangedFactor} `+
+            `final=${final.toFixed(0)} capped=${Math.min(MAX_KB_PIXELS,Math.abs(final))} `+
+            `playerKb=${typeof PlayerSystem!=='undefined'&&PlayerSystem.player?(PlayerSystem.player.knockback||0):'?'}`
+        );
 
         if (Math.abs(final) < 0.1) return 0;
 
