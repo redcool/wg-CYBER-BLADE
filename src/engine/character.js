@@ -21,7 +21,7 @@
  *   - Phase 1 硬编码 9 角色在 characters.json，无需 CSV 解析
  *   - 代价 (penalties) 在 applyToPlayer 时叠加到玩家属性上
  *   - 被动技能通过 player._passiveIds 注册，由 PassiveSystem 消费
- *   - 兼容层: _baseDamage, damage, critMultiplier 映射新字段
+ *   - 兼容层: critMultiplier 映射新字段
  */
 const CharacterSystem = {
     // -------------------------------------------------------
@@ -55,10 +55,10 @@ const CharacterSystem = {
             console.warn('[CharacterSystem] characters.json 加载失败，使用默认角色');
             chars = [{
                 id: 'default', name: '默认', desc: '均衡型角色', icon: '👤',
-                unlocked: true, weaponSlots: 6,
+                unlocked: true, maxWeapons: 6,
                 maxHp: 100, hpRegen: 0.5, speed: 220,
                 attackSpeed: 1.0, attackRange: 280,
-                armor: 1, dodge: 0.02, critChance: 0.05, critDamage: 2.0,
+                armor: 1, dodge: 0.02, critChance: 0.05, critDamage: 0,
                 lifeSteal: 0, damagePercent: 0,
                 meleeDamage: 0, rangedDamage: 0, elementalDamage: 0, engineering: 0,
                 harvesting: 0, luck: 0, xpGain: 0, materialGain: 0,
@@ -114,7 +114,7 @@ const CharacterSystem = {
      * 5. 设置 hp = maxHp
      * 6. 调用 StatsSystem.clampPlayer
      * 7. 注册被动技能到 _passiveIds
-     * 8. 设置兼容字段 (_baseDamage, damage, critMultiplier)
+     * 8. 设置兼容字段 (critMultiplier)
      */
     applyToPlayer(player, characterId) {
         const ch = this.getCharacterDef(characterId);
@@ -126,7 +126,7 @@ const CharacterSystem = {
             'armor', 'dodge', 'critChance', 'critDamage', 'lifeSteal',
             'pickupRange',
             'damagePercent', 'meleeDamage', 'rangedDamage', 'elementalDamage',
-            'engineering', 'harvesting', 'luck', 'xpGain', 'materialGain',
+            'engineering', 'harvesting', 'luck', 'xpGain',
             // 核心战斗属性
             'bulletCount', 'bulletPierce', 'bulletSpeed',
         ];
@@ -145,13 +145,13 @@ const CharacterSystem = {
             }
         }
 
-        // 3. 设置身份字段
-        player.weaponSlots = ch.weaponSlots || 6;
+        // 3. 设置身份字段 (CSV 列名 maxWeapons)
+        player.weaponSlots = ch.maxWeapons ?? 6;
         player.characterId = characterId;
-        player.tags = [...(ch.tags || [])];
+        player.tags = [...(ch.tags ?? [])];
         // 存储 class 亲和偏好（供伤害公式 class 匹配倍率用）
-        player.preferredClasses = [...(ch.preferredClasses || [])];
-        player.preferredClasses_2 = [...(ch.preferredClasses_2 || [])];
+        player.preferredClasses = [...(ch.preferredClasses ?? [])];
+        player.preferredClasses_2 = [...(ch.preferredClasses_2 ?? [])];
 
         // 4. 重置 HP
         player.hp = player.maxHp;
@@ -174,13 +174,12 @@ const CharacterSystem = {
             FormulaSystem.applyLevelGrowth(player, player._characterLevel);
         }
 
-        // 8. 兼容字段
-        player._baseDamage = 15;
-        // damagePercent 是百分比加成（如 0.15 = +15%），不是 base damage
-        player.damage = 15 + (player.meleeDamage || 0) + (player.rangedDamage || 0) + (player.elementalDamage || 0);
-        // critDamage 为 0 表示"使用默认 2.0"（角色 CSV 中未填暴伤加成）
+        // 8. 暴击伤害: 加算值, 0=不加成(用默认), 0.5=默认2.0+0.5=2.5x
+        const defaultCD = SystemConfig.get('defaultCritDmg');
         if (player.critDamage === undefined || player.critDamage === null || player.critDamage === 0) {
-            player.critDamage = 2.0;
+            player.critDamage = defaultCD;
+        } else {
+            player.critDamage = defaultCD + player.critDamage;
         }
         player.critMultiplier = player.critDamage;
 

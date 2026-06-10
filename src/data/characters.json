@@ -30,10 +30,11 @@
       "lance"
     ],
     "unlockType": "",
-    "unlockValue": 0,
+    "unlockValue": null,
     "passives": [
       "swordsman_blade_master"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Blade",
       "Heavy",
@@ -77,10 +78,11 @@
       "gun"
     ],
     "unlockType": "",
-    "unlockValue": 0,
+    "unlockValue": null,
     "passives": [
       "gunslinger_gun_expert"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Gun"
     ],
@@ -121,10 +123,11 @@
       "magic"
     ],
     "unlockType": "",
-    "unlockValue": 0,
+    "unlockValue": null,
     "passives": [
       "fire_mage_nova"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Elemental",
       "Explosive"
@@ -165,10 +168,11 @@
       "bow"
     ],
     "unlockType": "",
-    "unlockValue": 0,
+    "unlockValue": null,
     "passives": [
       "archer_eagle_eye"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Bow",
       "Crossbow"
@@ -216,6 +220,7 @@
     "passives": [
       "mech_heavy_armor"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Heavy",
       "Gun"
@@ -264,6 +269,7 @@
     "passives": [
       "assassin_shadow_step"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Precise",
       "Blade"
@@ -310,6 +316,7 @@
     "passives": [
       "medic_emergency"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Medical",
       "Elemental"
@@ -357,6 +364,7 @@
     "passives": [
       "paladin_holy_shield"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Blade",
       "Medical",
@@ -371,10 +379,10 @@
     ]
   },
   {
-    "id": "engineer",
-    "name": "工程师",
-    "desc": "科技暴击流枪械元素双修",
-    "icon": "🔧",
+    "id": "magic_gunner",
+    "name": "魔枪手",
+    "desc": "枪械与元素魔法的双修射手",
+    "icon": "⚡",
     "unlocked": true,
     "maxWeapons": 6,
     "maxHp": 23,
@@ -405,6 +413,7 @@
     "passives": [
       "engineer_overclock"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Gun",
       "Elemental",
@@ -417,6 +426,51 @@
       "lightning",
       "grenade",
       "rocket"
+    ]
+  },
+  {
+    "id": "engineer",
+    "name": "工程师",
+    "desc": "扳手近战·炮塔建造者",
+    "icon": "🔧",
+    "unlocked": false,
+    "maxWeapons": 6,
+    "maxHp": 28,
+    "hpRegen": 0.1,
+    "speed": 100,
+    "damagePercent": 0,
+    "attackSpeed": 1,
+    "attackRange": 0,
+    "armor": 1,
+    "dodge": 0.02,
+    "critChance": 0.05,
+    "critDamage": 0,
+    "lifeSteal": 0,
+    "pickupRange": 15,
+    "harvesting": 0,
+    "luck": 0,
+    "xpGain": 0,
+    "meleeDamage": 0,
+    "rangedDamage": 0,
+    "elementalDamage": 0,
+    "engineering": 3,
+    "tags": [
+      "melee",
+      "tech"
+    ],
+    "unlockType": "totalKills",
+    "unlockValue": 200,
+    "passives": [
+      "engineer_turret_master"
+    ],
+    "startingWeapons": [
+      "wrench"
+    ],
+    "preferredClasses": [
+      "Tool"
+    ],
+    "preferredClasses_2": [
+      "wrench"
     ]
   },
   {
@@ -458,6 +512,7 @@
     "passives": [
       "berserker_rage"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Blade",
       "Blunt",
@@ -568,6 +623,7 @@
     "passives": [
       "dragon_knight_breath"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Heavy"
     ],
@@ -611,6 +667,7 @@
     "passives": [
       "crossbowman_pierce"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Crossbow",
       "Bow"
@@ -657,6 +714,7 @@
     "passives": [
       "boxer_quick_combo"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Heavy",
       "Blunt"
@@ -703,6 +761,7 @@
     "passives": [
       "axeman_whirlwind"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Heavy"
     ],
@@ -748,6 +807,7 @@
     "passives": [
       "lancer_phalanx"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Heavy"
     ],
@@ -793,6 +853,7 @@
     "passives": [
       "blade_wielder_flash"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Blade",
       "Precise"
@@ -841,6 +902,7 @@
     "passives": [
       "ninja_shadow_dance"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Precise",
       "Blade"
@@ -888,6 +950,7 @@
     "passives": [
       "ji_master_chi"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Elemental",
       "Medical"
@@ -936,6 +999,7 @@
     "passives": [
       "teng_pai_iron_wall"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Medical"
     ],

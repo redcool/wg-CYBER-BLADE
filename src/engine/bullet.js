@@ -33,12 +33,15 @@ const BulletSystem = {
             const def = ShopSystem.getWeaponDef(weaponId);
             b.weaponTag = def ? def.tag : null;
             b.knockback = def ? (def.knockback || 0) : 0;
+            b.behavior = def ? (def.behavior || 'bullet') : (extra.behavior || 'bullet');
         } else {
             b.weaponTag = null;
             b.knockback = 0;
+            b.behavior = extra.behavior || 'bullet';
         }
         // 清除池复用污染（强制重置所有特殊属性，防止上一轮残留）
         b.isMortar = false;
+        b.cosmetic = extra.cosmetic || false;  // true = 纯视觉子弹, 不检测碰撞不造成伤害
         b.splashOnHitOnly = false; // true = 命中敌人才触发溅射(冰爆/冰霜), false = 飞行超时爆炸(火箭筒)
         // 特殊属性
         b.chainCount = extra.chainCount || 0;
@@ -118,7 +121,7 @@ const BulletSystem = {
             }
 
             // ====== 玩家子弹命中检测 (修复: 之前普通子弹飞到死不扣血) ======
-            if (b.isPlayer) {
+            if (b.isPlayer && !b.cosmetic) {
                 const hit = this._checkHit(b);
                 if (hit) {
                     const killed = EnemySystem.takeDamage(hit, b.damage);

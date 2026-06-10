@@ -115,9 +115,11 @@ const GameEngine = {
         Renderer.drawWorldBounds();
 
         for (const mat of GameWorld.materials) Renderer.drawMaterial(mat);
-        if (typeof MedkitSystem !== 'undefined') {
-            for (const crate of MedkitSystem.crates) Renderer.drawCrate(crate);
-            for (const pk of MedkitSystem.pickups) Renderer.drawHealthPickup(pk);
+        if (typeof ContainerSystem !== 'undefined') {
+            for (const crate of ContainerSystem.crates) Renderer.drawCrate(crate);
+        }
+        if (typeof HealthPickupSystem !== 'undefined') {
+            for (const pk of HealthPickupSystem.pickups) Renderer.drawHealthPickup(pk);
         }
         if (typeof LootSystem !== 'undefined') {
             for (const chest of LootSystem.pendingChests) {
@@ -128,6 +130,10 @@ const GameEngine = {
         for (const p of ParticleSystem.particles) Renderer.drawParticle(p);
         Renderer.drawPlayer(player);
         for (const b of BulletSystem.bullets) Renderer.drawBullet(b);
+        if (typeof TurretSystem !== 'undefined') {
+            for (const t of TurretSystem.turrets) Renderer.drawTurret(t);
+            for (const b of TurretSystem.bullets) Renderer.drawTurretBullet(b);
+        }
 
         if (this.state === 'playing' && this.announceTimer > 0) {
             Renderer.drawWaveAnnouncement(WaveSystem.currentLevel);

@@ -213,7 +213,8 @@ const UnlockSystem = {
             { id: 'assassin', condition: () => this.stats.totalKills >= 100 },
             { id: 'medic', condition: () => this.stats.totalKills >= 80 },
             { id: 'paladin', condition: () => this.stats.maxLevel >= 10 },
-            { id: 'engineer', condition: () => this.stats.totalKills >= 200 },
+            { id: 'magic_gunner', condition: () => this.stats.totalKills >= 200 },
+            { id: 'engineer', condition: () => this.stats.totalKills >= 150 },
             { id: 'berserker', condition: () => this.stats.maxLevel >= 15 },
             { id: 'dragon_knight', condition: () => this.stats.totalKills >= 300 },
         ];

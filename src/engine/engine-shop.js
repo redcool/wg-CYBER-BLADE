@@ -628,6 +628,11 @@ const ShopSystem = {
                 const existingIdx = player.weapons.findIndex(w => w.id === shopItem.id);
                 if (existingIdx !== -1) {
                     const existing = player.weapons[existingIdx];
+                    // lv4 武器不可合并升级
+                    if ((existing.level || 1) >= 4) {
+                        this._lastBuyError = _ESHOP_STR.error_slot_full;
+                        return null;
+                    }
                     existing.level = (existing.level || 1) + 1;
                     this._updateWeaponParams(player, shopItem.id);
                     result = { item: shopItem, cost: shopItem.cost, action: 'merged', weaponId: shopItem.id };
@@ -724,8 +729,11 @@ const ShopSystem = {
         if (!target || !source || target.id !== source.id) return false;
         if (targetIdx === sourceIdx) return false;
 
+        // lv4 武器不能再合并
+        if ((target.level || 1) >= 4 || (source.level || 1) >= 4) return false;
+
         const fromLevel = source.level || 1;
-        target.level = (target.level || 1) + fromLevel;
+        target.level = Math.min(4, (target.level || 1) + fromLevel);
 
         // 移除来源武器
         const actualSrcIdx = player.weapons.indexOf(source);
@@ -824,6 +832,9 @@ const ShopSystem = {
         const weapons = player.weapons.filter(w => w.id === weaponId);
         if (weapons.length === 0) {
             delete player.weaponParams[weaponId];
+            if (typeof PlayerSystem !== 'undefined' && PlayerSystem._recalcWeaponStatMods) {
+                PlayerSystem._recalcWeaponStatMods(player);
+            }
             return;
         }
 
@@ -831,45 +842,42 @@ const ShopSystem = {
         if (!def) return;
 
         const maxLevel = Math.max(...weapons.map(w => w.level || 1));
-        const levelBonus = 1 + (maxLevel - 1) * 0.25;
 
         player.weaponParams[weaponId] = {
-            behavior: def.behavior || 'bullet',
-            tag: def.tag || '',
-            slots: def.slots || 1,
-            bulletCount: def.bulletCount || 1,
-            bulletSpeed: def.bulletSpeed || 500,
-            damageMult: (def.damageMult || 1.0) * levelBonus,
-            attackSpeedMult: def.attackSpeedMult || 1.0,
-            spread: def.spread || 0.1,
-            pierce: def.pierce || 0,
-            chainCount: def.chainCount || 0,
-            splashRadius: def.splashRadius || 0,
-            homingStrength: def.homingStrength || 0,
+            behavior: def.behavior ?? 'bullet',
+            tag: def.tag ?? '',
+            bulletCount: def.bulletCount ?? 1,
+            bulletSpeed: def.bulletSpeed ?? 500,
+            spread: def.spread ?? 0,
+            pierce: def.pierce ?? 0,
+            chainCount: def.chainCount ?? 0,
+            splashRadius: def.splashRadius ?? 0,
+            homingStrength: def.homingStrength ?? 0,
             level: maxLevel,
-            healOnHit: def.healOnHit || 0,
-            killHeal: def.killHeal || 0,
-            auraHeal: def.auraHeal || 0,
-            auraRadius: def.auraRadius || 0,
-            damageReductionAura: def.damageReductionAura || 0,
-            burnDps: def.burnDps || 0,
-            burnMaxStacks: def.burnMaxStacks || 0,
-            sprayCone: def.sprayCone || 0,
-            attackRange: def.attackRange || 0,
-            bulletMaxRange: def.bulletMaxRange || 0,
-            iceExplosionRadius: def.iceExplosionRadius || 0,
-            critBounce: def.critBounce || 0,
+            healOnHit: def.healOnHit ?? 0,
+            killHeal: def.killHeal ?? 0,
+            auraHeal: def.auraHeal ?? 0,
+            auraRadius: def.auraRadius ?? 0,
+            damageReductionAura: def.damageReductionAura ?? 0,
+            burnDps: def.burnDps ?? 0,
+            burnMaxStacks: def.burnMaxStacks ?? 0,
+            sprayCone: def.sprayCone ?? 0,
+            attackRange: def.attackRange ?? 0,
+            bulletMaxRange: def.bulletMaxRange ?? 0,
             // 新字段: 暴击独立面板
-            critChanceAdd: def.critChanceAdd || 0,
-            critDamageAdd: def.critDamageAdd || 0,
+            critChanceAdd: def.critChanceAdd ?? 0,
+            critDamageAdd: def.critDamageAdd ?? 0,
             // 新字段: 武器类别（BroTato Class 系统）
-            class: def.class || 'Primitive',
+            class: def.class ?? 'Primitive',
             // 新字段: 击退力度
-            knockback: (def.knockback !== undefined && def.knockback !== null) ? def.knockback : 0,
+            knockback: def.knockback ?? 0,
             // FormulaSystem 引用
             _weaponDef: def,
             _weaponLevel: maxLevel,
         };
+        if (typeof PlayerSystem !== 'undefined' && PlayerSystem._recalcWeaponStatMods) {
+            PlayerSystem._recalcWeaponStatMods(player);
+        }
     },
 
     getOwnedItems(player) {

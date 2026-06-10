@@ -35,3 +35,4 @@ blade_wielder_flash,刀光,攻击20%几率触发刀气造成50%范围伤害,💥
 ninja_shadow_dance,影舞,闪避+0.1，移速+15%,🥷,Passive,,1.0,"{""type"":""statMod"",""dodge"":0.1,""speed"":15}",player,crit,0
 ji_master_chi,气功,元素伤害+3，每秒回复0.5HP,☯️,Passive,,1.0,"{""type"":""statMod"",""elementalDamage"":3,""hpRegen"":0.5}",player,fire,0
 teng_pai_iron_wall,铁壁,护甲+4，闪避+0.03,🛡️,Passive,,1.0,"{""type"":""statMod"",""armor"":4,""dodge"":0.03}",player,melee,0
+engineer_turret_master,工程精通,工程+3 炮塔伤害+30%,🔧,Passive,,1.0,"{""type"":""statMod"",""engineering"":3,""turretDamage"":0.3}",player,tech,0

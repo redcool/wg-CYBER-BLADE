@@ -355,5 +355,24 @@
       "melee"
     ],
     "cooldown": 0
+  },
+  {
+    "id": "engineer_turret_master",
+    "name": "工程精通",
+    "desc": "工程+3 炮塔伤害+30%",
+    "icon": "🔧",
+    "triggerType": "Passive",
+    "condition": null,
+    "chance": 1,
+    "effect": {
+      "type": "statMod",
+      "engineering": 3,
+      "turretDamage": 0.3
+    },
+    "target": "player",
+    "tags": [
+      "tech"
+    ],
+    "cooldown": 0
   }
 ]

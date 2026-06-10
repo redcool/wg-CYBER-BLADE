@@ -524,6 +524,48 @@ const Renderer = {
 
     },
 
+        /** 子弹视觉配置缓存 { 'behavior|tag': { shape, color, size, glowColor, glowSize, trail, image } } */
+    _bulletConfigMap: null,
+    /** 子弹图片缓存 { imageName: HTMLImageElement } */
+    _bulletImages: {},
+
+    /** 懒加载子弹视觉配置 */
+    _getBulletConfig(behavior, tag) {
+        if (!this._bulletConfigMap) {
+            this._bulletConfigMap = {};
+            let data = typeof window !== 'undefined' && window.__DATA_BUNDLE__ && window.__DATA_BUNDLE__.bulletTypes;
+            if (!data && typeof DataLoader !== 'undefined' && DataLoader._cache) {
+                data = DataLoader._cache.bulletTypes;
+            }
+            if (!data && typeof DataLoader !== 'undefined') {
+                try { data = DataLoader.loadSync?.('bulletTypes') || DataLoader._cache?.bulletTypes; } catch(e) {}
+            }
+            if (data) {
+                for (const row of data) {
+                    this._bulletConfigMap[`${row.behavior}|${row.tag}`] = row;
+                }
+            }
+        }
+        // 精确匹配 → tag 通配 → behavior 默认 → 全局默认
+        const exact = this._bulletConfigMap?.[`${behavior}|${tag}`];
+        if (exact) return exact;
+        const wild = this._bulletConfigMap?.[`${behavior}|*`];
+        if (wild) return wild;
+        const defaultExact = this._bulletConfigMap?.[`bullet|${tag}`];
+        if (defaultExact) return defaultExact;
+        return this._bulletConfigMap?.['bullet|*'] || null;
+    },
+
+    /** 懒加载子弹图片 */
+    _loadBulletImage(name) {
+        if (!name) return null;
+        if (this._bulletImages[name]) return this._bulletImages[name];
+        const img = new Image();
+        img.src = `assets/bulletTypes/${name}.png?${CACHE_VER}`;
+        this._bulletImages[name] = img;
+        return img;
+    },
+
     /** 绘制子弹 */
     drawBullet(bullet) {
         const ctx = this.ctx;
@@ -568,6 +610,43 @@ const Renderer = {
             }
         }
 
+        // ====== 从 bulletTypes 配置驱动弹道形状 ======
+        const bConfig = bullet.behavior && this._getBulletConfig(bullet.behavior, bullet.weaponTag);
+
+        // 优先使用图片（非空 image 字段）
+        if (bConfig && bConfig.image) {
+            const img = this._loadBulletImage(bConfig.image);
+            if (img && img.complete && img.naturalWidth > 0) {
+                const s = bConfig.size || 8;
+                ctx.drawImage(img, bullet.x - s, bullet.y - s, s * 2, s * 2);
+                ctx.restore();
+                return;
+            }
+        }
+
+        const shape = bConfig ? bConfig.shape : (
+            (bullet.chainCount > 0 && bullet.isPlayer) ? 'bolt' : 'circle'
+        );
+
+        if (shape === 'bolt' && bullet.isPlayer) {
+            this._drawLightningBolt(ctx, bullet, color);
+            ctx.restore();
+            return;
+        }
+
+        if (shape === 'arrow') {
+            this._drawBulletArrow(ctx, bullet, color);
+            ctx.restore();
+            return;
+        }
+
+        if (shape === 'beam') {
+            this._drawBulletBeam(ctx, bullet, color);
+            ctx.restore();
+            return;
+        }
+
+        // ====== 默认: 圆形子弹 ======
         ctx.fillStyle = color;
         ctx.shadowColor = color;
         ctx.shadowBlur = 12;
@@ -593,6 +672,158 @@ const Renderer = {
             ctx.lineTo(bullet.x - bullet.vx * 0.05, bullet.y - bullet.vy * 0.05);
             ctx.stroke();
         }
+
+        ctx.restore();
+    },
+
+    /** 绘制锯齿闪电线（shock 武器专用） */
+    _drawLightningBolt(ctx, bullet, color) {
+        const dx = bullet.x - bullet.startX;
+        const dy = bullet.y - bullet.startY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 5) { // 太短退化为圆形
+            ctx.fillStyle = color;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.arc(bullet.x, bullet.y, 4, 0, Math.PI * 2);
+            ctx.fill();
+            return;
+        }
+
+        const segs = Math.max(4, Math.floor(dist / 12));
+        const spread = Math.min(8, dist * 0.08);
+
+        // 外发光层
+        ctx.strokeStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 20;
+        ctx.lineWidth = 3.5;
+        ctx.globalAlpha = 0.7;
+        this._drawZigzag(ctx, bullet, dx, dy, segs, spread);
+
+        // 核心亮线
+        ctx.shadowBlur = 8;
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.8;
+        ctx.globalAlpha = 0.85;
+        this._drawZigzag(ctx, bullet, dx, dy, segs, spread * 0.5);
+
+        // 分支小闪电（随机 1-2 条）
+        ctx.shadowBlur = 10;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.globalAlpha = 0.4;
+        const branchCount = 1 + (Math.abs(bullet.startX * 7 + bullet.startY * 13) % 2);
+        for (let i = 0; i < branchCount; i++) {
+            const t = 0.3 + (Math.abs(bullet.startX * 31 + bullet.startY * 47 + i * 19) % 50) / 100 * 0.5;
+            this._drawBranch(ctx, bullet, dx, dy, dist, t, spread * 1.5);
+        }
+    },
+
+    /** 画一条锯齿线 */
+    _drawZigzag(ctx, bullet, dx, dy, segs, spread) {
+        const perpAngle = Math.atan2(dy, dx) + Math.PI / 2;
+        const seed = bullet.startX * 1000 + bullet.startY;
+        ctx.beginPath();
+        ctx.moveTo(bullet.startX, bullet.startY);
+        for (let i = 1; i < segs; i++) {
+            const t = i / segs;
+            const bx = bullet.startX + dx * t;
+            const by = bullet.startY + dy * t;
+            const hash = Math.abs(Math.floor(seed * (i + 1) * 7.3)) % 1000 / 1000;
+            const jitter = (hash - 0.5) * 2 * spread;
+            ctx.lineTo(
+                bx + Math.cos(perpAngle) * jitter,
+                by + Math.sin(perpAngle) * jitter
+            );
+        }
+        ctx.lineTo(bullet.x, bullet.y);
+        ctx.stroke();
+    },
+
+    /** 画一条分支闪电 */
+    _drawBranch(ctx, bullet, dx, dy, dist, t, spread) {
+        const bx = bullet.startX + dx * t;
+        const by = bullet.startY + dy * t;
+        const perpAngle = Math.atan2(dy, dx) + Math.PI / 2;
+        const side = (Math.abs(bullet.startX * 53 + bullet.startY * 71 + Math.floor(t * 100)) % 2 === 0) ? 1 : -1;
+        const branchLen = dist * 0.15 * (0.5 + Math.abs(bullet.startX * 97 + bullet.startY * 113) % 50 / 100);
+        const endX = bx + Math.cos(perpAngle) * side * spread * 2;
+        const endY = by + Math.sin(perpAngle) * side * spread * 2;
+        ctx.beginPath();
+        ctx.moveTo(bx, by);
+        ctx.lineTo(endX, endY);
+        ctx.stroke();
+    },
+
+    /** 绘制箭头弹道（枪械/弓 — 小椭圆+方向尾迹） */
+    _drawBulletArrow(ctx, bullet, color) {
+        const r = bullet.radius || 4;
+        const angle = Math.atan2(bullet.vy, bullet.vx);
+        ctx.save();
+        ctx.translate(bullet.x, bullet.y);
+        ctx.rotate(angle);
+
+        // 发光
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 14;
+
+        // 弹头（椭圆）
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, r * 1.6, r, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 尾部拖线
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = color;
+        ctx.globalAlpha = 0.35;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(-r * 0.5, 0);
+        ctx.lineTo(-r * 2.5, 0);
+        ctx.stroke();
+
+        ctx.restore();
+    },
+
+    /** 绘制光束弹道（魔法/冰/火 — 发光长条） */
+    _drawBulletBeam(ctx, bullet, color) {
+        const r = bullet.radius || 5;
+        const dx = bullet.x - bullet.startX;
+        const dy = bullet.y - bullet.startY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 10) {
+            // 太短退化为圆
+            ctx.fillStyle = color;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 16;
+            ctx.beginPath();
+            ctx.arc(bullet.x, bullet.y, r, 0, Math.PI * 2);
+            ctx.fill();
+            return;
+        }
+
+        const angle = Math.atan2(dy, dx);
+
+        ctx.save();
+        ctx.translate(bullet.startX, bullet.startY);
+        ctx.rotate(angle);
+
+        // 外发光层
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 20;
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(0, -r * 0.6, dist, r * 1.2);
+
+        // 核心亮层
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = '#ffffff';
+        ctx.globalAlpha = 0.6;
+        ctx.fillRect(0, -r * 0.25, dist, r * 0.5);
 
         ctx.restore();
     },
@@ -652,6 +883,81 @@ const Renderer = {
         ctx.fillText('❤️', pickup.x, pickup.y);
         ctx.shadowBlur = 0;
 
+        ctx.restore();
+    },
+
+    /** 绘制炮塔 */
+    drawTurret(turret) {
+        if (!turret.alive) return;
+        const ctx = this.ctx;
+        ctx.save();
+
+        const r = turret.radius || 14;
+
+        // 底座 (暗色金属)
+        ctx.fillStyle = '#445566';
+        ctx.shadowColor = '#ffaa44';
+        ctx.shadowBlur = 8;
+        roundRect(ctx, turret.x - r, turret.y - r * 0.6, r * 2, r * 1.2, 3);
+        ctx.fill();
+
+        // 旋转座 (亮色圆盘)
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = '#667788';
+        ctx.beginPath();
+        ctx.arc(turret.x, turret.y - r * 0.2, r * 0.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 炮管 (朝向角)
+        ctx.shadowBlur = 10;
+        ctx.strokeStyle = '#ffaa44';
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        const barrelLen = r * 1.2;
+        ctx.moveTo(turret.x, turret.y - r * 0.2);
+        ctx.lineTo(
+            turret.x + Math.cos(turret.angle) * barrelLen,
+            turret.y - r * 0.2 + Math.sin(turret.angle) * barrelLen
+        );
+        ctx.stroke();
+
+        // 炮口
+        ctx.shadowBlur = 15;
+        ctx.fillStyle = '#ffcc66';
+        ctx.beginPath();
+        ctx.arc(
+            turret.x + Math.cos(turret.angle) * barrelLen,
+            turret.y - r * 0.2 + Math.sin(turret.angle) * barrelLen,
+            3, 0, Math.PI * 2
+        );
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+        ctx.restore();
+    },
+
+    /** 绘制炮塔子弹 */
+    drawTurretBullet(bullet) {
+        const ctx = this.ctx;
+        ctx.save();
+
+        // 发光核心
+        ctx.shadowColor = '#ffaa44';
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = '#ffcc66';
+        ctx.beginPath();
+        ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 白核心
+        ctx.shadowBlur = 6;
+        ctx.fillStyle = '#fff8e0';
+        ctx.beginPath();
+        ctx.arc(bullet.x, bullet.y, bullet.radius * 0.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
         ctx.restore();
     },
 

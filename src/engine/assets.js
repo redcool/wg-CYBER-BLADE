@@ -129,7 +129,7 @@ const AssetSystem = {
             'stim','heavy_bullets','penetrator','medkit','war_helm','adrenaline','thieves_blade','elemental_ring','xp_boost','hunting_trophy','coupon','magnet',
             'glass_cannon','energy_shield','blood_pact','replicator','scope','reactive_armor','life_stealer','iron_will','berserker','ice_core','burn_spreader','element_amp',
             'tardigrade','ricochet','titan_heart','ghost_cloak','kings_crown','baby_eagle','bloody_hand','lightning_core','anvil'],
-            char: ['swordsman','gunslinger','fire_mage','archer','mech','assassin','medic','paladin','engineer','berserker','dragon_knight','crossbowman','boxer','axeman','lancer','blade_wielder','ninja','ji_master','teng_pai_guard'],
+            char: ['swordsman','gunslinger','fire_mage','archer','mech','assassin','medic','paladin','magic_gunner','berserker','dragon_knight','crossbowman','boxer','axeman','lancer','blade_wielder','ninja','ji_master','teng_pai_guard'],
             enemy: ['basic','fast','exploder','tank','healer','ranged','mortar','blinker','elite','boss'],
         };
 

@@ -1,0 +1,36 @@
+# 武器弹道视觉类型配置
+# behavior: 武器行为标识 (bullet/spread/explode/frost/homing/shock/spray/heal_bullet/melee_sweep/melee_thrust/shield_aura)
+# tag: 武器标签 (gun/bow/magic/medic/lance/melee/*), * 通配全标签
+# shape: 弹道形状 circle(圆) / arrow(箭/弹头) / bolt(闪电线) / beam(光束) / cone(扇形) / none(无弹道)
+# color: 默认主色 hex
+# size: 基础半径 px
+# glowColor: 发光色 hex (空=同主色)
+# glowSize: 发光模糊半径 px
+# trail: 拖尾类型 line(短线) / spark(火花) / none(无)
+# image: 图片文件名（assets/bulletTypes/{imageName}.png）, 空=使用程序绘制
+behavior,tag,shape,color,size,glowColor,glowSize,trail,image
+bullet,gun,arrow,#ffffff,4,#ffffff,12,line,bullet_gun
+bullet,bow,arrow,#ffffff,4,#ffffff,12,line,bullet_bow
+bullet,magic,circle,#ffffaa,5,#ffffaa,14,line,bullet_magic
+bullet,medic,circle,#aaffaa,5,#aaffaa,14,line,bullet_medic
+bullet,lance,circle,#ffdd44,4,#ffdd44,12,line,bullet_lance
+bullet,melee,circle,#ffdd44,4,#ffdd44,12,line,bullet_melee
+bullet,*,circle,#ffff44,4,#ffff44,12,line,bullet_default
+spread,gun,arrow,#ffffff,3,#ffffff,10,line,spread_gun
+spread,bow,arrow,#ffffff,3,#ffffff,10,line,spread_bow
+spread,magic,circle,#ffffaa,4,#ffffaa,12,line,spread_magic
+spread,*,circle,#ffff44,3,#ffff44,10,line,spread_default
+explode,*,beam,#ff4444,8,#ff6600,18,spark,explode
+frost,bow,arrow,#88ddff,4,#88ddff,14,spark,frost_bow
+frost,magic,beam,#88ddff,6,#aaffff,16,spark,frost_magic
+frost,*,beam,#88ddff,5,#88ddff,14,spark,frost_default
+homing,bow,arrow,#ffff44,4,#ffff44,14,line,homing_bow
+homing,magic,circle,#ffff44,5,#ffffaa,16,line,homing_magic
+homing,*,circle,#ffff44,4,#ffff44,14,line,homing_default
+shock,*,bolt,#ffaa44,3,#ffaa44,20,spark,shock
+spray,*,cone,#ffffff,3,#ffffff,12,none,spray
+heal_bullet,medic,circle,#00ff88,5,#00ff88,16,line,heal_bullet
+heal_bullet,*,circle,#00ff88,4,#00ff88,14,line,heal_bullet
+melee_sweep,*,none,,0,,0,none,
+melee_thrust,*,none,,0,,0,none,
+shield_aura,*,none,,0,,0,none,

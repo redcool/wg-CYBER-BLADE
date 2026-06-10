@@ -25,6 +25,9 @@ GameEngine.startGame = function(startWeaponId, difficulty) {
     ShopSystem.reset();
     LevelUpSystem.reset();
     LootSystem.reset();
+    if (typeof ContainerSystem !== 'undefined') ContainerSystem.reset();
+    if (typeof HealthPickupSystem !== 'undefined') HealthPickupSystem.reset();
+    if (typeof TurretSystem !== 'undefined') TurretSystem.reset();
     BulletSystem.clear();
     ParticleSystem.clear();
     CombatLogSystem.clear();
@@ -107,8 +110,14 @@ GameEngine.startGame = function(startWeaponId, difficulty) {
         }
     };
 
-    // 8. 开始第一波
+    // 8. 开始第一波 + 生成容器
     WaveSystem.startNextLevel();
+    if (typeof ContainerSystem !== 'undefined') {
+        ContainerSystem.spawnCrates(2, PlayerSystem.player);
+    }
+    if (typeof TurretSystem !== 'undefined') {
+        TurretSystem.spawnTurrets(PlayerSystem.player);
+    }
     this.state = 'playing';
     this.announceTimer = SystemConfig.get('announceDuration');
     UISystem.showHUD();
@@ -154,15 +163,21 @@ GameEngine._updatePlaying = function(dt) {
     // 4. 敌人 + Boss 更新
     EnemySystem.update(dt, player);
     BossSystem.update(dt, player);
+    if (typeof TurretSystem !== 'undefined') TurretSystem.update(dt, EnemySystem.enemies, player);
 
     // 5. 子弹 + 碰撞
     BulletSystem.update(dt);
     this._checkBulletCollisions(player);
+    this._checkCrateCollisions(player);
 
     // 6. 波次更新
     WaveSystem.update(dt, player);
 
-    // 7. 其他
+    // 7. 容器 + 拾取物更新
+    if (typeof ContainerSystem !== 'undefined') ContainerSystem.update(dt);
+    if (typeof HealthPickupSystem !== 'undefined') HealthPickupSystem.update(dt, player);
+
+    // 8. 材料 + 粒子
     this._updateMaterials(dt, player);
     ParticleSystem.update(dt);
     CombatLogSystem.update(dt);
@@ -175,6 +190,7 @@ GameEngine._updatePlaying = function(dt) {
             if (e.alive) this._dropMaterials(e);
         }
         EnemySystem.clear();
+        if (typeof TurretSystem !== 'undefined') TurretSystem.clear();
         GameWorld.materials = [];
 
         // 记录通关关卡数
@@ -404,15 +420,16 @@ GameEngine._updateMaterials = function(dt, player) {
     }
 };
 
-GameEngine._checkMedkitCollisions = function(player) {
+GameEngine._checkCrateCollisions = function(player) {
+    if (typeof ContainerSystem === 'undefined') return;
     for (let i = BulletSystem.bullets.length - 1; i >= 0; i--) {
         const b = BulletSystem.bullets[i];
-        if (!b.isPlayer) continue;
-        for (const crate of MedkitSystem.crates) {
+        if (!b.isPlayer || b.cosmetic) continue;
+        for (const crate of ContainerSystem.crates) {
             if (!crate.alive) continue;
             const dx = b.x - crate.x, dy = b.y - crate.y;
             if (dx * dx + dy * dy < (b.radius + crate.radius) * (b.radius + crate.radius)) {
-                MedkitSystem.takeDamage(crate, b.damage);
+                ContainerSystem.takeDamage(crate, b.damage);
                 BulletSystem.pool.push(b);
                 BulletSystem.bullets.splice(i, 1);
                 break;
@@ -488,6 +505,19 @@ GameEngine.closeShop = function(endless = false) {
     }
 
     WaveSystem.startNextLevel();
+
+    // 每波生成可击破容器（医疗箱）
+    if (typeof ContainerSystem !== 'undefined') {
+        const wave = WaveSystem.currentLevel;
+        const count = wave <= 3 ? 2 : wave <= 10 ? 3 : 4;
+        ContainerSystem.spawnCrates(count, p);
+    }
+
+    // 每波召唤炮塔 (Tool 武器 + synergy)
+    if (typeof TurretSystem !== 'undefined') {
+        TurretSystem.spawnTurrets(p);
+    }
+
     this.state = 'playing';
     // 出商店/升级:从 duck 状态恢复(因为进入 playing,需要满音量 BGM)
     if (typeof AudioSystem !== 'undefined') {

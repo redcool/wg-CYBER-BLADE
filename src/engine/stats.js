@@ -144,13 +144,6 @@ const StatsSystem = {
     },
 
     /**
-     * @deprecated 请使用 FormulaSystem._calcFlatDamage
-     */
-    _calcFlatDamage(weapon, player) {
-        return FormulaSystem._calcFlatDamage(weapon, player);
-    },
-
-    /**
      * @deprecated 请使用 FormulaSystem._calcPercentMultiplier
      */
     _calcPercentMultiplier(player) {
@@ -365,7 +358,7 @@ const StatsSystem = {
     _cumulativeFromTable(level) {
         if (!this._xpTable || this._xpTable.length === 0) return 0;
         const idx = Math.min(Math.max(level - 1, 0), this._xpTable.length - 1);
-        return this._xpTable[idx].xpRequired || 0;
+        return this._xpTable[idx].xpRequired ?? 0;
     },
 
     /**

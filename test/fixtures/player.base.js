@@ -4,7 +4,6 @@
  */
 export const basePlayer = {
     // 旧字段（兼容层，逐步移除）
-    damage: 0,
     critMultiplier: 2.0,
     bulletCount: 1,
     bulletPierce: 0,
@@ -12,7 +11,6 @@ export const basePlayer = {
     pickupRange: 60,
 
     // 基础
-    _baseDamage: 15,
     hp: 100,
     maxHp: 100,
 

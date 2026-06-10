@@ -9,10 +9,10 @@ import { CharacterSystem } from '../../src/engine/character.js';
 const MOCK_CHARACTERS = [
     {
         id: 'default', name: '默认', desc: '均衡型角色', icon: '👤',
-        unlocked: true, weaponSlots: 6,
+        unlocked: true, maxWeapons: 6,
         maxHp: 100, hpRegen: 0.5, speed: 220,
         attackSpeed: 1.0, attackRange: 280,
-        armor: 1, dodge: 0.02, critChance: 0.05, critDamage: 2.0,
+        armor: 1, dodge: 0.02, critChance: 0.05, critDamage: 0,
         lifeSteal: 0, damagePercent: 0,
         meleeDamage: 0, rangedDamage: 0, elementalDamage: 0, engineering: 0,
         harvesting: 0, luck: 0, xpGain: 0, materialGain: 0,
@@ -22,10 +22,10 @@ const MOCK_CHARACTERS = [
     },
     {
         id: 'glassCannon', name: '玻璃大炮', desc: '+50% 伤害 -5 护甲', icon: '💥',
-        unlocked: true, weaponSlots: 6,
+        unlocked: true, maxWeapons: 6,
         maxHp: 80, hpRegen: 0.3, speed: 240,
         attackSpeed: 1.2, attackRange: 300,
-        armor: 5, dodge: 0.03, critChance: 0.08, critDamage: 2.0,
+        armor: 5, dodge: 0.03, critChance: 0.08, critDamage: 0,
         lifeSteal: 0, damagePercent: 0.50,
         meleeDamage: 0, rangedDamage: 0, elementalDamage: 0, engineering: 0,
         harvesting: 0, luck: 0, xpGain: 0, materialGain: 0,
@@ -35,10 +35,10 @@ const MOCK_CHARACTERS = [
     },
     {
         id: 'assassin', name: '刺客', desc: '高暴击高闪避', icon: '🗡️',
-        unlocked: false, weaponSlots: 4,
+        unlocked: false, maxWeapons: 4,
         maxHp: 70, hpRegen: 0.8, speed: 280,
         attackSpeed: 1.5, attackRange: 220,
-        armor: 2, dodge: 0.15, critChance: 0.15, critDamage: 2.5,
+        armor: 2, dodge: 0.15, critChance: 0.15, critDamage: 0.5,
         lifeSteal: 0.03, damagePercent: 0,
         meleeDamage: 0, rangedDamage: 0, elementalDamage: 0, engineering: 0,
         harvesting: 0, luck: 2, xpGain: 0, materialGain: 0,
@@ -137,10 +137,6 @@ describe('CharacterSystem - applyToPlayer', () => {
     it('C7: 设置兼容字段', () => {
         const p = makePlayer();
         CharacterSystem.applyToPlayer(p, 'glassCannon');
-        expect(p._baseDamage).toBe(15);
-        // damage = 15 + meleeDamage + rangedDamage + elementalDamage
-        // glassCannon 三项=0, so damage=15 (damagePercent=0.50 是独立字段)
-        expect(p.damage).toBe(15);
         expect(p.critMultiplier).toBe(2.0);
     });
 
@@ -248,9 +244,9 @@ describe('CharacterSystem - 旧标签兼容', () => {
     it('C21: 新系统 tags 精确, 不再映射 gun→ranged', async () => {
         global.DataLoader.load = async (name) => {
             if (name === 'characters') {
-                return [{ id: 'gunslinger', name: '枪手', tags: ['gun'], unlocked: true, weaponSlots: 6,
+                return [{ id: 'gunslinger', name: '枪手', tags: ['gun'], unlocked: true, maxWeapons: 6,
                     maxHp: 90, hpRegen: 0.4, speed: 220, attackSpeed: 1.3, attackRange: 350,
-                    armor: 1, dodge: 0.02, critChance: 0.08, critDamage: 2.2,
+                    armor: 1, dodge: 0.02, critChance: 0.08, critDamage: 0.2,
                     lifeSteal: 0, damagePercent: 0,
                     meleeDamage: 0, rangedDamage: 0, elementalDamage: 0, engineering: 0,
                     harvesting: 0, luck: 1, xpGain: 0, materialGain: 0,

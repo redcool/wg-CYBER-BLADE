@@ -49,7 +49,7 @@ const CSV2JSON = {
     _castValue(raw, type) {
         if (raw === '' || raw === undefined || raw === null) {
             switch (type) {
-                case 'number': return 0;
+                case 'number': return null;  // 与 0 区分: 空单元格=null, 显示填 0=0
                 case 'boolean': return false;
                 case 'array': return [];
                 case 'json': return null;
@@ -214,6 +214,7 @@ const CSV2JSON = {
             { name: 'system',csv: 'csv/system.csv',json: 'src/data/system.json',schema: systemSchema },
             { name: 'synergies',csv: 'csv/synergies.csv',json: 'src/data/synergies.json',schema: synergySchema },
             { name: 'passives',csv: 'csv/passives.csv',json: 'src/data/passives.json',schema: passivesSchema },
+            { name: 'bulletTypes',csv: 'csv/weaponBulletTypes.csv',json: 'src/data/bulletTypes.json',schema: bulletTypeSchema },
         ];
 
         let success = 0;
@@ -241,11 +242,11 @@ const CSV2JSON = {
 
 /**
  * characters.csv Schema
- * 列: id,name,desc,icon,unlocked,maxWeapons,maxHp,hpRegen,speed,
+ *     列: id,name,desc,icon,unlocked,maxWeapons,maxHp,hpRegen,speed,
  *     damagePercent,attackSpeed,attackRange,armor,dodge,critChance,critDamage,
  *     lifeSteal,harvesting,luck,xpGain,meleeDamage,rangedDamage,
  *     elementalDamage,engineering,tags,unlockType,unlockValue,passives,
- *     preferredClasses,preferredClasses_2
+ *     startingWeapons,preferredClasses,preferredClasses_2
  * 注: v1.1 武器槽位=1, weaponSlots 改 maxWeapons (角色可装备武器总数 4-6)
  *     preferredClasses = 1级分类偏好, preferredClasses_2 = 2级细分类偏好
  */
@@ -279,6 +280,7 @@ const characterSchema = {
     unlockType: 'string',
     unlockValue: 'number',
     passives: 'array',
+    startingWeapons: 'array',
     preferredClasses: 'array',
     preferredClasses_2: 'array',
 };
@@ -583,6 +585,22 @@ const synergySchema = {
 };
 
 /**
+ * weaponBulletTypes.csv Schema
+ * 武器弹道视觉类型配置
+ */
+const bulletTypeSchema = {
+    behavior: 'string',
+    tag: 'string',
+    shape: 'string',
+    color: 'string',
+    size: 'number',
+    glowColor: 'string',
+    glowSize: 'number',
+    trail: 'string',
+    image: 'string',
+};
+
+/**
  *  level_duration.csv Schema
  * 列: level,duration
  *  - level: 关卡(整数) 或 "default"
@@ -638,7 +656,7 @@ if (require.main === module) {
     process.exit(ok ? 0 : 1);
 }
 
-module.exports = { CSV2JSON, characterSchema, characterLevelSchema, weaponSchema, itemSchema, enemySchema, bossSchema, waveSchema, weaponStatSchema, charStatSchema, difficultySchema, debugSchema, levelUpCardsSchema, rarityColorsSchema, audioSchema, classSchema, levelDurationSchema, passivesSchema, synergySchema };
+module.exports = { CSV2JSON, characterSchema, characterLevelSchema, weaponSchema, itemSchema, enemySchema, bossSchema, waveSchema, weaponStatSchema, charStatSchema, difficultySchema, debugSchema, levelUpCardsSchema, rarityColorsSchema, audioSchema, classSchema, levelDurationSchema, passivesSchema, synergySchema, bulletTypeSchema };
 
 /**
  * level_duration.csv Schema

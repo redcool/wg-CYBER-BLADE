@@ -96,9 +96,7 @@ const PlayerSystem = {
             currentWeaponIdx: 0,
         };
         // 从角色系统应用基础属性
-        p._baseDamage = p.damage;
         CharacterSystem.applyToPlayer(p, CharacterSystem.selectedCharacterId);
-        p._baseDamage = p.damage;
         // 初始化武器参数
         this._initWeaponParams(p);
         // 初始化羁绊状态
@@ -124,7 +122,7 @@ const PlayerSystem = {
         if (prev.critChance) p.critChance = Math.max(0, p.critChance - prev.critChance);
         if (prev.critDamage) p.critMultiplier = Math.max(1, p.critMultiplier - prev.critDamage);
         if (prev.lifeSteal) p.lifeSteal = Math.max(0, p.lifeSteal - prev.lifeSteal);
-        if (prev.bulletCount) p.bulletCount = Math.max(1, (p.bulletCount || 1) - prev.bulletCount);
+        if (prev.bulletCount) p.bulletCount = Math.max(1, (p.bulletCount ?? 1) - prev.bulletCount);
         if (prev.armor) p.armor = Math.max(0, p.armor - prev.armor);
         if (prev.knockback) p.knockback = Math.max(0, p.knockback - prev.knockback);
         if (prev.engineering) p.engineering = Math.max(0, p.engineering - prev.engineering);
@@ -150,15 +148,15 @@ const PlayerSystem = {
         if (newMods.critChance) p.critChance = Math.min(0.9, p.critChance + newMods.critChance);
         if (newMods.critDamage) p.critMultiplier += newMods.critDamage;
         if (newMods.lifeSteal) p.lifeSteal += newMods.lifeSteal;
-        if (newMods.bulletCount) p.bulletCount = Math.min(20, (p.bulletCount || 1) + newMods.bulletCount);
+        if (newMods.bulletCount) p.bulletCount = Math.min(20, (p.bulletCount ?? 1) + newMods.bulletCount);
         if (newMods.armor) p.armor = StatsSystem.clampStat('armor', p.armor + newMods.armor);
-        if (newMods.knockback) p.knockback = (p.knockback || 0) + newMods.knockback;
-        if (newMods.engineering) p.engineering = (p.engineering || 0) + newMods.engineering;
-        if (newMods.luck) p.luck = (p.luck || 0) + newMods.luck;
+        if (newMods.knockback) p.knockback = (p.knockback ?? 0) + newMods.knockback;
+        if (newMods.engineering) p.engineering = (p.engineering ?? 0) + newMods.engineering;
+        if (newMods.luck) p.luck = (p.luck ?? 0) + newMods.luck;
         if (newMods.xpGain) p.xpGain *= (1 + newMods.xpGain);
-        if (newMods.elementalDamage) p.elementalDamage = (p.elementalDamage || 0) + newMods.elementalDamage;
-        if (newMods.meleeDamage) p.meleeDamage = (p.meleeDamage || 0) + newMods.meleeDamage;
-        if (newMods.rangedDamage) p.rangedDamage = (p.rangedDamage || 0) + newMods.rangedDamage;
+        if (newMods.elementalDamage) p.elementalDamage = (p.elementalDamage ?? 0) + newMods.elementalDamage;
+        if (newMods.meleeDamage) p.meleeDamage = (p.meleeDamage ?? 0) + newMods.meleeDamage;
+        if (newMods.rangedDamage) p.rangedDamage = (p.rangedDamage ?? 0) + newMods.rangedDamage;
 
         // 4) 存储当前羁绊状态
         p._synergyMods = newMods;
@@ -178,34 +176,32 @@ const PlayerSystem = {
         for (const w of p.weapons) {
             const def = weaponPool.find(d => d.id === w.id);
             if (def) {
-                const level = w.level || 1;
+                const level = w.level ?? 1;
                 const params = {
-                    behavior: def.behavior || 'bullet',
-                    bulletCount: def.bulletCount || 1,
-                    bulletSpeed: def.bulletSpeed || 500,
-                    spread: def.spread || 0.1,
-                    pierce: def.pierce || 0,
-                    chainCount: def.chainCount || 0,
-                    splashRadius: def.splashRadius || 0,
-                    homingStrength: def.homingStrength || 0,
+                    behavior: def.behavior ?? 'bullet',
+                    bulletCount: def.bulletCount ?? 1,
+                    bulletSpeed: def.bulletSpeed ?? 500,
+                    spread: def.spread ?? 0,
+                    pierce: def.pierce ?? 0,
+                    chainCount: def.chainCount ?? 0,
+                    splashRadius: def.splashRadius ?? 0,
+                    homingStrength: def.homingStrength ?? 0,
                     level: level,
-                    healOnHit: def.healOnHit || 0,
-                    auraHeal: def.auraHeal || 0,
-                    auraRadius: def.auraRadius || 0,
-                    burnDps: def.burnDps || 0,
-                    burnMaxStacks: def.burnMaxStacks || 0,
-                    critBounce: def.critBounce || 0,
-                    attackRange: def.attackRange || 0,
-                    bulletMaxRange: def.bulletMaxRange || 0,
-                    meleeRange: def.meleeRange || 0,
-                    tag: def.tag || '',
+                    healOnHit: def.healOnHit ?? 0,
+                    auraHeal: def.auraHeal ?? 0,
+                    auraRadius: def.auraRadius ?? 0,
+                    burnDps: def.burnDps ?? 0,
+                    burnMaxStacks: def.burnMaxStacks ?? 0,
+                    attackRange: def.attackRange ?? 0,
+                    bulletMaxRange: def.bulletMaxRange ?? 0,
+                    tag: def.tag ?? '',
                     // 新字段: 暴击独立面板
-                    critChanceAdd: def.critChanceAdd || 0,
-                    critDamageAdd: def.critDamageAdd || 0,
+                    critChanceAdd: def.critChanceAdd ?? 0,
+                    critDamageAdd: def.critDamageAdd ?? 0,
                     // 新字段: 武器类别（BroTato Class 系统）
-                    class: def.class || 'Primitive',
+                    class: def.class ?? 'Primitive',
                     // 新字段: 击退力度
-                    knockback: (def.knockback !== undefined && def.knockback !== null) ? def.knockback : 0,
+                    knockback: def.knockback ?? 0,
                     // 存储原始 def 引用和等级, 供 FormulaSystem 使用
                     _weaponDef: def,
                     _weaponLevel: level,
@@ -218,6 +214,44 @@ const PlayerSystem = {
                 }
             }
         }
+        // 初始化后应用武器 stat 修正 (Bugs 3-5: speedMult/armorAdd/hpRegenAdd/maxHpAdd/lifeStealAdd)
+        this._recalcWeaponStatMods(p);
+    },
+
+    /**
+     * 重新计算武器 stat 修正 (speedMult/armorAdd/hpRegenAdd/maxHpAdd/lifeStealAdd)
+     * 模式: rollback 旧值 → sum 新值 → apply
+     */
+    _recalcWeaponStatMods(p) {
+        if (!p) return;
+        const prev = p._weaponStatMods || {};
+        // rollback 旧值
+        if (prev.speedMult) p.speed /= (1 + prev.speedMult);
+        if (prev.armorAdd) p.armor = Math.max(0, p.armor - prev.armorAdd);
+        if (prev.hpRegenAdd) p.hpRegen = Math.max(0, p.hpRegen - prev.hpRegenAdd);
+        if (prev.maxHpAdd) p.maxHp = Math.max(1, p.maxHp - prev.maxHpAdd);
+        if (prev.lifeStealAdd) p.lifeSteal = Math.max(0, p.lifeSteal - prev.lifeStealAdd);
+        // sum 新值
+        let speedMult = 0, armorAdd = 0, hpRegenAdd = 0, maxHpAdd = 0, lifeStealAdd = 0;
+        if (p.weaponParams && p.weapons) {
+            for (const w of p.weapons) {
+                const def = p.weaponParams[w.id] && p.weaponParams[w.id]._weaponDef;
+                if (!def) continue;
+                speedMult += def.speedMult ?? 0;
+                armorAdd += def.armorAdd ?? 0;
+                hpRegenAdd += def.hpRegenAdd ?? 0;
+                maxHpAdd += def.maxHpAdd ?? 0;
+                lifeStealAdd += def.lifeStealAdd ?? 0;
+            }
+        }
+        const newMods = { speedMult, armorAdd, hpRegenAdd, maxHpAdd, lifeStealAdd };
+        // apply 新值
+        if (speedMult) p.speed *= (1 + speedMult);
+        if (armorAdd) p.armor = StatsSystem.clampStat('armor', p.armor + armorAdd);
+        if (hpRegenAdd) p.hpRegen = StatsSystem.clampStat('hpRegen', p.hpRegen + hpRegenAdd);
+        if (maxHpAdd) p.maxHp = Math.max(1, p.maxHp + maxHpAdd);
+        if (lifeStealAdd) p.lifeSteal = StatsSystem.clampStat('lifeSteal', p.lifeSteal + lifeStealAdd);
+        p._weaponStatMods = newMods;
     },
 
     // ================================================================
@@ -260,11 +294,11 @@ const PlayerSystem = {
         // 玩家身上重叠的怪被推开, 怪不会"合体"在玩家位置.
         // 同时也避免多只怪都判定 dist < _touchDist 都打玩家.
         if (typeof EnemySystem !== 'undefined' && EnemySystem.enemies) {
-            const pR = p.radius || 10;
+            const pR = p.radius ?? 10;
             for (let i = 0; i < EnemySystem.enemies.length; i++) {
                 const e = EnemySystem.enemies[i];
                 if (!e.alive) continue;
-                const eR = e.radius || 14;
+                const eR = e.radius ?? 14;
                 const minD = eR + pR;
                 const dx = e.x - p.x;
                 const dy = e.y - p.y;
@@ -298,7 +332,7 @@ const PlayerSystem = {
             if (!this._tickCooldown(w, dt)) continue;
 
             const weaponPos = positions[i] || { x: p.x, y: p.y, dist: 0 };
-            const range = this._getAttackRange(p, params, weaponPos.dist || 0);
+            const range = this._getAttackRange(p, params, weaponPos.dist ?? 0);
             const target = this._findNearestTarget(p, weaponPos, range, params);
             if (target) this._performAttack(p, w, params, target, weaponPos);
         }
@@ -328,8 +362,8 @@ const PlayerSystem = {
     _getAttackRange(p, params, orbitDist) {
         const isMelee = params.behavior === 'melee' || params.behavior === 'melee_sweep' || params.behavior === 'melee_thrust';
         // Brotato 加法风格: 武器 + 角色(无乘数, 默认武器 attackRange × 1)
-        const weaponRange = params.attackRange || (isMelee ? 80 : 320);
-        return weaponRange + (p.attackRange || 0);  // 关键: 不再加 orbitDist
+        const weaponRange = params.attackRange ?? (isMelee ? 80 : 300);
+        return weaponRange + (p.attackRange ?? 0);  // 关键: 不再加 orbitDist
     },
 
     /**
@@ -348,9 +382,9 @@ const PlayerSystem = {
             const d = this._dist2(e, searchCenter);
             if (d < range && d < nearDist) { nearDist = d; nearest = e; }
         }
-        if (!nearest && typeof MedkitSystem !== 'undefined' && MedkitSystem.crates.length > 0) {
+        if (!nearest && typeof ContainerSystem !== 'undefined' && ContainerSystem.crates.length > 0) {
             const crateRange = isMelee ? range + 18 : range;
-            for (const c of MedkitSystem.crates) {
+            for (const c of ContainerSystem.crates) {
                 if (!c.alive) continue;
                 const d = this._dist2(c, searchCenter);
                 if (d < crateRange && d < nearDist) { nearDist = d; nearest = c; }
@@ -400,15 +434,15 @@ const PlayerSystem = {
         p.spriteAttackEndTime = Date.now() + 480;
 
         const cd = this._calcWeaponCooldown(weapon, params, p);
-        const magSize = (params._weaponDef && params._weaponDef.magSize) || 0;
+        const magSize = params._weaponDef?.magSize ?? 0;
 
         if (magSize > 0) {
             // 弹匣模式: 先开火再判断是否换弹
             weapon.cooldownTimer = cd;
             this._fireWeapon(weapon.id, params, target, weaponPos, dist);
-            weapon.shotsFired = (weapon.shotsFired || 0) + 1;
+            weapon.shotsFired = (weapon.shotsFired ?? 0) + 1;
             if (weapon.shotsFired >= magSize) {
-                weapon.cooldownTimer = params._weaponDef.reloadTime || 1.0;
+                weapon.cooldownTimer = params._weaponDef.reloadTime ?? 1.0;
                 weapon.shotsFired = 0;
             }
         } else {
@@ -421,7 +455,7 @@ const PlayerSystem = {
     /** 计算武器冷却(含狂暴血脉 < 30% HP 加成 + Brotato 范围平衡: 范围大→cd 增加) */
     _calcWeaponCooldown(weapon, params, p) {
         const rawDef = params._weaponDef;
-        const lv = params._weaponLevel || weapon.level || 1;
+        const lv = params._weaponLevel ?? weapon.level ?? 1;
         let cd = FormulaSystem.calcWeaponCooldown(rawDef, p, lv);
         if (p.berserkerBlood && p.hp < p.maxHp * 0.3) cd *= 0.667;
         // Brotato 平衡: 范围加成越大, 近战/所有武器冷却越长 (200 像素 ≈ +100% cd)
@@ -464,7 +498,7 @@ const PlayerSystem = {
     _getWeaponSpritePos(p, wp, i, count) {
         const baseDist = SystemConfig.get('weaponOrbitDistance');
         const extraPerSlot = SystemConfig.get('weaponOrbitExtraPerSlot');
-        const dist = baseDist + Math.max(0, (wp.slots || 1) - 1) * extraPerSlot;
+        const dist = baseDist + Math.max(0, (wp.slots ?? 1) - 1) * extraPerSlot;
         let angle = (i / count) * Math.PI * 2 - Math.PI / 2, drawDist = dist;
         if (wp._attackAnimTimer && wp._attackAnimTimer > 0 && wp._attackAnimDuration > 0) {
             const progress = 1 - (wp._attackAnimTimer / wp._attackAnimDuration);
@@ -476,7 +510,7 @@ const PlayerSystem = {
                     drawDist = dist;
                 } else {
                     const strikeP = (progress - AIM_END) / (1 - AIM_END);
-                    const maxDist = dist + ((wp.attackRange || 60) + (p.attackRange || 0)) * 0.7;
+                    const maxDist = dist + ((wp.attackRange ?? 80) + (p.attackRange ?? 0)) * 0.7;
                     drawDist = dist + (maxDist - dist) * Math.sin(strikeP * Math.PI);
                     angle = aa;
                 }
@@ -495,7 +529,7 @@ const PlayerSystem = {
             x: p.x + Math.cos(angle) * drawDist,
             y: p.y + Math.sin(angle) * drawDist,
             // 武器 sprite 半径: 32~64 像素, 与数据驱动 attackRange 挂钩
-            radius: Math.max(32, ((wp.attackRange || 60) + (p.attackRange || 0)) * 0.4),
+            radius: Math.max(32, ((wp.attackRange ?? 80) + (p.attackRange ?? 0)) * 0.4),
         };
     },
 
@@ -529,7 +563,7 @@ const PlayerSystem = {
             if (!wp._attackAnimTimer || wp._attackAnimTimer <= 0) continue;
 
             // Brotato 加法: 武器 + 角色
-            const weaponRange = (wp.attackRange || 60) + (p.attackRange || 0);
+            const weaponRange = (wp.attackRange ?? 80) + (p.attackRange ?? 0);
             const aa = wp._attackAngle;
             // 锥形: Brotato 风格 (总角 = 2 * 半角)
             //   thrust 总角 5°  → 半角 2.5° = π/72
@@ -548,7 +582,7 @@ const PlayerSystem = {
                 // 1) 距离过滤: 怪距角色 ≤ weaponRange + eR
                 const dx = e.x - p.x, dy = e.y - p.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-                const eR = e.radius || 14;
+                const eR = e.radius ?? 14;
                 if (dist > weaponRange + eR) continue;
 
                 // 2) 锥形过滤: 怪在 attackAngle ± cone/2 范围内
@@ -561,7 +595,7 @@ const PlayerSystem = {
                 // 3) pierce 限制 (修复: 武士刀 pierce:3 之前被忽略, 只命中第一怪)
                 //    - pierce = 0: 一次只打一怪 (用 _meleeHit_uid 标记)
                 //    - pierce > 0: 累计命中, 超过 pierce 后 _meleeHit_uid 标记防重扣
-                const pierceCount = wp.pierce || 0;
+                const pierceCount = wp.pierce ?? 0;
                 const hitKey = '_meleeHit_' + (e._uid || (e._uid = ++_uidCounter));
                 if (wp[hitKey]) continue;
                 if (pierceCount > 0) {
@@ -572,14 +606,14 @@ const PlayerSystem = {
                     }
                 }
                 wp[hitKey] = true;
-                if (pierceCount > 0) wp._hitCount = (wp._hitCount || 0) + 1;
+                if (pierceCount > 0) wp._hitCount = (wp._hitCount ?? 0) + 1;
 
                 // 扣血
                 const dmg = StatsSystem.calcDamage(wp._weaponDef, p, e, wp);
                 const result = EnemySystem.takeDamage(e, dmg);
 
                 // 击退方向 (从 sprite 中心指向怪, 用 sprite→e 计算)
-                const kbStat = (wp.knockback || (wp._attackBehavior === 'melee_thrust' && wp.tag === 'lance' ? 45 : 30)) + (p.knockback || 0);
+                const kbStat = (wp.knockback ?? (wp._attackBehavior === 'melee_thrust' && wp.tag === 'lance' ? 45 : 30)) + (p.knockback ?? 0);
                 const kdx = e.x - sprite.x, kdy = e.y - sprite.y;
                 const kdist = Math.sqrt(kdx * kdx + kdy * kdy);
                 EnemySystem.applyKnockback(e, kdx, kdy, kdist, kbStat);
@@ -592,7 +626,7 @@ const PlayerSystem = {
 
                 // 燃烧
                 if (wp.burnDps > 0 && e.alive) {
-                    this._applyBurn(e, wp.burnDps, 3.0, wp.burnMaxStacks || 3);
+                    this._applyBurn(e, wp.burnDps, 3.0, wp.burnMaxStacks ?? 3);
                 }
 
                 // 粒子
@@ -629,7 +663,7 @@ const PlayerSystem = {
         }
         // 圣光盾光环治疗
         if (p.auraRadius && p.auraHeal) {
-            p._auraTimer = (p._auraTimer || 0) + dt;
+            p._auraTimer = (p._auraTimer ?? 0) + dt;
             if (p._auraTimer >= 1.0) {
                 p._auraTimer = 0;
                 this.heal(p.auraHeal);
@@ -637,7 +671,7 @@ const PlayerSystem = {
         }
         // 磁暴线圈
         if (p.magnetDmg > 0 && p.magnetRadius > 0) {
-            p.magnetTimer = (p.magnetTimer || 0) + dt;
+            p.magnetTimer = (p.magnetTimer ?? 0) + dt;
             if (p.magnetTimer >= 2.0) {
                 p.magnetTimer = 0;
                 for (const e of (EnemySystem.enemies || [])) {
@@ -654,7 +688,7 @@ const PlayerSystem = {
         }
         // 献血契约扣血
         if (p.bloodPactDrain > 0) {
-            p._bloodPactTimer = (p._bloodPactTimer || 0) + dt;
+            p._bloodPactTimer = (p._bloodPactTimer ?? 0) + dt;
             if (p._bloodPactTimer >= 1.0) {
                 p._bloodPactTimer = 0;
                 p.hp = Math.max(1, p.hp - p.bloodPactDrain);
@@ -669,7 +703,7 @@ const PlayerSystem = {
     /** 远程武器 idle 跟踪: 冷却期间平滑旋转瞄准最近敌人 (每3帧搜索一次) */
     _updateWeaponTracking(p) {
         if (!p.weaponParams || !p.weapons) return;
-        this._trackFrame = (this._trackFrame || 0) + 1;
+        this._trackFrame = (this._trackFrame ?? 0) + 1;
         if (this._trackFrame % 3 !== 0) return; // 每3帧搜一次
 
         const enemies = (typeof EnemySystem !== 'undefined' && EnemySystem.enemies) || [];
@@ -687,7 +721,7 @@ const PlayerSystem = {
 
             // 在攻击范围内找最近敌人
             const weaponDef = allWeapons ? allWeapons.find(d => d.id === w.id) : null;
-            const range = (weaponDef ? (weaponDef.attackRange || 60) : 60) + (p.attackRange || 0);
+            const range = (weaponDef ? (weaponDef.attackRange ?? 80) : 80) + (p.attackRange ?? 0);
             const rangeSq = range * range;
             let nearest = null, nearDistSq = rangeSq;
             for (const e of enemies) {
@@ -722,7 +756,7 @@ const PlayerSystem = {
             const weaponDef = ShopSystem.allWeapons.find(d => d.id === w.id);
             // 360° 均匀分布，从上方开始
             const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
-            const slots = weaponDef ? (weaponDef.slots || 1) : 1;
+            const slots = weaponDef ? (weaponDef.slots ?? 1) : 1;
             const dist = baseDist + Math.max(0, slots - 1) * extraPerSlot;
             positions.push({
                 x: x + Math.cos(angle) * dist,
@@ -754,7 +788,7 @@ const PlayerSystem = {
         // 2) melee (无明确): lance 永远 thrust, 其他按距离
         // 3) melee_thrust (武士刀/能量剑): 永远 thrust
         let actualBehavior = params.behavior;
-        const meleeRange = (params.attackRange || 60) + (p.attackRange || 0);
+        const meleeRange = (params.attackRange ?? 80) + (p.attackRange ?? 0);
         if (actualBehavior === 'melee_sweep') {
             // 周围 attackRange 内怪数 ≥2 才用 sweep, 否则用 thrust
             let nearCount = 0;
@@ -914,8 +948,8 @@ const PlayerSystem = {
     _fireBullet(angle, params, target, weaponId, spawnX, spawnY, weaponDef) {
         const p = this.player;
         const dmg = StatsSystem.calcDamage(weaponDef, p, target, params);
-        const totalPierce = (params.pierce || 0) + (p.bulletPierce || 0);
-        const bulletRange = params.bulletMaxRange > 0 ? params.bulletMaxRange : (params.attackRange || p.attackRange || 300);
+        const totalPierce = (params.pierce ?? 0) + (p.bulletPierce ?? 0);
+        const bulletRange = params.bulletMaxRange ?? params.attackRange ?? p.attackRange ?? 300;
         const startAngle = angle - params.spread * (params.bulletCount - 1) / 2;
         for (let i = 0; i < params.bulletCount; i++) {
             const a = startAngle + params.spread * i;
@@ -924,8 +958,8 @@ const PlayerSystem = {
                 a, dmg, params.bulletSpeed, totalPierce, true, weaponId,
                 { 
                     range: bulletRange,
-                    burnDps: params.burnDps || 0,
-                    burnMaxStacks: params.burnMaxStacks || 0
+                    burnDps: params.burnDps ?? 0,
+                    burnMaxStacks: params.burnMaxStacks ?? 0
                 }
             );
         }
@@ -935,9 +969,9 @@ const PlayerSystem = {
     _fireSpread(angle, params, target, weaponId, spawnX, spawnY, weaponDef) {
         const p = this.player;
         const dmg = StatsSystem.calcDamage(weaponDef, p, target, params);
-        const totalPierce = (params.pierce || 0) + (p.bulletPierce || 0);
-        const bulletRange = params.bulletMaxRange > 0 ? params.bulletMaxRange : (params.attackRange || p.attackRange || 300);
-        const spreadAngle = params.spread || 0.3;
+        const totalPierce = (params.pierce ?? 0) + (p.bulletPierce ?? 0);
+        const bulletRange = params.bulletMaxRange ?? params.attackRange ?? p.attackRange ?? 300;
+        const spreadAngle = params.spread ?? 0.3;
         const startAngle = angle - spreadAngle * (params.bulletCount - 1) / 2;
         for (let i = 0; i < params.bulletCount; i++) {
             const a = startAngle + spreadAngle * i + (Math.random() - 0.5) * 0.1;
@@ -953,8 +987,8 @@ const PlayerSystem = {
     _fireLaser(angle, params, target, weaponId, spawnX, spawnY, weaponDef) {
         const p = this.player;
         const dmg = StatsSystem.calcDamage(weaponDef, p, target, params);
-        const totalPierce = (params.pierce || 0) + (p.bulletPierce || 0);
-        const bulletRange = params.bulletMaxRange > 0 ? params.bulletMaxRange : (params.attackRange || p.attackRange || 300);
+        const totalPierce = (params.pierce ?? 0) + (p.bulletPierce ?? 0);
+        const bulletRange = params.bulletMaxRange ?? params.attackRange ?? p.attackRange ?? 300;
         for (let i = 0; i < 3; i++) {
             const a = angle + (Math.random() - 0.5) * 0.05;
             BulletSystem.create(
@@ -969,8 +1003,8 @@ const PlayerSystem = {
     _fireShock(angle, params, target, weaponId, spawnX, spawnY, weaponDef) {
         const p = this.player;
         const dmg = StatsSystem.calcDamage(weaponDef, p, target, params);
-        const range = params.attackRange || 120;
-        const pierceCount = params.pierce || 3;
+        const range = params.attackRange ?? 300;
+        const pierceCount = params.pierce ?? 3;
         const halfWidth = 15; // 窄宽度 ~30px
         let hits = 0;
 
@@ -1012,12 +1046,12 @@ const PlayerSystem = {
             const result = EnemySystem.takeDamage(e, dmg);
 
             // 击退（使用武器自身击退值, 默认骑枪600/其他400；精英/Boss 免疫）
-            const kbStr = (params.knockback > 0 ? params.knockback : (isLance ? 600 : 400)) + (p.knockback || 0);
+            const kbStr = (params.knockback ?? (isLance ? 600 : 400)) + (p.knockback ?? 0);
             EnemySystem.applyKnockback(e, dx, dy, dist, kbStr, { ranged: true });
 
             // 燃烧效果
             if (params.burnDps > 0 && e.alive) {
-                this._applyBurn(e, params.burnDps, 3.0, params.burnMaxStacks || 3);
+                this._applyBurn(e, params.burnDps, 3.0, params.burnMaxStacks ?? 3);
             }
 
             // 突刺命中特效（骑枪用紫色，其他用蓝色）
@@ -1037,8 +1071,8 @@ const PlayerSystem = {
         }
 
         // ---- 攻击医药箱（突刺直线穿透） ----
-        if (typeof MedkitSystem !== 'undefined') {
-            for (const crate of MedkitSystem.crates) {
+        if (typeof ContainerSystem !== 'undefined') {
+            for (const crate of ContainerSystem.crates) {
                 if (!crate.alive) continue;
                 const dx = crate.x - p.x, dy = crate.y - p.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
@@ -1050,7 +1084,7 @@ const PlayerSystem = {
                 if (diff < -Math.PI) diff += Math.PI * 2;
                 const perpendicularDist = Math.abs(Math.sin(diff) * dist);
                 if (perpendicularDist > halfWidth && Math.abs(diff) > 0.25) continue;
-                MedkitSystem.takeDamage(crate, dmg);
+                ContainerSystem.takeDamage(crate, dmg);
                 break; // 突刺穿透攻击，打中一个医药箱即可
             }
         }
@@ -1064,32 +1098,41 @@ const PlayerSystem = {
             5, { speed: 80, color: trailColor, life: 0.15, size: 5, type: 'spark' }
         );
 
+        // 创建纯视觉子弹（非 lance 武器, 如雷电杖/闪电杖, 显示飞行闪电弹）
+        if (!isLance && typeof BulletSystem !== 'undefined') {
+            const cosSpeed = params.bulletSpeed ?? 800;
+            BulletSystem.create(spawnX, spawnY, angle, 0, cosSpeed, 999, true, weaponId, {
+                range: range,
+                chainCount: params.chainCount ?? 0,
+                cosmetic: true,
+            });
+        }
     },
 
     /** 爆炸 */
     _fireExplode(angle, params, target, weaponId, spawnX, spawnY, weaponDef) {
-        const range = (params.bulletMaxRange > 0 ? params.bulletMaxRange : params.attackRange) || this.player.attackRange || 300;
+        const range = (params.bulletMaxRange ?? params.attackRange) ?? this.player.attackRange ?? 300;
         const dmg = StatsSystem.calcDamage(weaponDef, this.player, target, params);
         const b = BulletSystem.create(
             spawnX, spawnY,
             angle, dmg, params.bulletSpeed, 0, true, weaponId,
             { 
-                splashRadius: params.splashRadius || 60, 
+                splashRadius: params.splashRadius ?? 60, 
                 range,
-                burnDps: params.burnDps || 0,
-                burnMaxStacks: params.burnMaxStacks || 0
+                burnDps: params.burnDps ?? 0,
+                burnMaxStacks: params.burnMaxStacks ?? 0
             }
         );
-        b.splashRadius = params.splashRadius || 60;
+        b.splashRadius = params.splashRadius ?? 60;
     },
 
     /** 冰霜（含冰爆半径传递） */
     _fireFrost(angle, params, target, weaponId, spawnX, spawnY, weaponDef) {
         const p = this.player;
         const dmg = Math.max(1, StatsSystem.calcDamage(weaponDef, p, target, params));
-        const totalPierce = (params.pierce || 0) + (p.bulletPierce || 0);
-        const bulletRange = params.bulletMaxRange > 0 ? params.bulletMaxRange : (params.attackRange || p.attackRange || 300);
-        const splashR = params.splashRadius || 0;
+        const totalPierce = (params.pierce ?? 0) + (p.bulletPierce ?? 0);
+        const bulletRange = params.bulletMaxRange ?? params.attackRange ?? p.attackRange ?? 300;
+        const splashR = params.splashRadius ?? 0;
         const startAngle = angle - params.spread * (params.bulletCount - 1) / 2;
         for (let i = 0; i < params.bulletCount; i++) {
             const a = startAngle + params.spread * i;
@@ -1097,9 +1140,9 @@ const PlayerSystem = {
                 spawnX, spawnY,
                 a, dmg, params.bulletSpeed, totalPierce, true, weaponId,
                 { 
-                    slowAmount: 0.5, slowDuration: 2.0, splashRadius: splashR, range: bulletRange,
-                    burnDps: params.burnDps || 0,
-                    burnMaxStacks: params.burnMaxStacks || 0
+                    slowAmount: params.slowAmount ?? 0.5, slowDuration: params.slowDuration ?? 2.0, splashRadius: splashR, range: bulletRange,
+                    burnDps: params.burnDps ?? 0,
+                    burnMaxStacks: params.burnMaxStacks ?? 0
                 }
             );
             b.splashOnHitOnly = true; // 冰霜命中才冰爆
@@ -1110,40 +1153,40 @@ const PlayerSystem = {
     _fireHoming(angle, params, target, weaponId, spawnX, spawnY, weaponDef) {
         const p = this.player;
         const dmg = StatsSystem.calcDamage(weaponDef, p, target, params);
-        const totalPierce = (params.pierce || 0) + (p.bulletPierce || 0);
-        const bulletRange = params.bulletMaxRange > 0 ? params.bulletMaxRange : (params.attackRange || p.attackRange || 300);
+        const totalPierce = (params.pierce ?? 0) + (p.bulletPierce ?? 0);
+        const bulletRange = params.bulletMaxRange ?? params.attackRange ?? p.attackRange ?? 300;
         BulletSystem.create(
             spawnX, spawnY,
             angle, dmg, params.bulletSpeed, totalPierce, true, weaponId,
-            { homingStrength: params.homingStrength || 3, range: bulletRange }
+            { homingStrength: params.homingStrength ?? 3, range: bulletRange }
         );
     },
 
     /** 喷射 - 锥形多弹体穿透攻击 */
     _fireSpray(angle, params, target, weaponId, spawnX, spawnY, weaponDef) {
         const p = this.player;
-        const sprayCone = params.sprayCone || 0.8;
+        const sprayCone = params.sprayCone ?? 0.8;
         const bulletCount = Math.max(3, Math.floor(params.bulletCount * 3));
-        const dmgMult = p._sprayDamageMult || 1.0;
-        const pierceAdd = p._sprayPierceAdd || 0;
+        const dmgMult = p._sprayDamageMult ?? 1.0;
+        const pierceAdd = p._sprayPierceAdd ?? 0;
         const dmg = Math.max(1, Math.round(StatsSystem.calcDamage(weaponDef, p, target, params) * dmgMult));
-        const totalPierce = (params.pierce || 0) + pierceAdd + (p.bulletPierce || 0);
-        const bulletRange = (params.bulletMaxRange > 0 ? params.bulletMaxRange : params.attackRange) || 320;
+        const totalPierce = (params.pierce ?? 0) + pierceAdd + (p.bulletPierce ?? 0);
+        const bulletRange = (params.bulletMaxRange ?? params.attackRange) ?? 300;
         const startAngle = angle - sprayCone / 2;
         // 分成多个弹体覆盖锥形范围
         for (let i = 0; i < bulletCount; i++) {
             const a = startAngle + (sprayCone / (bulletCount - 1 || 1)) * i + (Math.random() - 0.5) * 0.15;
             const extra = {
-                slowAmount: params.slowAmount || 0,
-                slowDuration: params.slowDuration || 0,
-                burnDps: params.burnDps || 0,
-                burnMaxStacks: params.burnMaxStacks || 0,
-                splashRadius: params.splashRadius || 0,
+                slowAmount: params.slowAmount ?? 0,
+                slowDuration: params.slowDuration ?? 0,
+                burnDps: params.burnDps ?? 0,
+                burnMaxStacks: params.burnMaxStacks ?? 0,
+                splashRadius: params.splashRadius ?? 0,
                 range: bulletRange, // 喷射击中后冰爆,需正确射程判断消失
             };
             const b = BulletSystem.create(
                 spawnX, spawnY,
-                a, dmg, params.bulletSpeed || 300, totalPierce, true, weaponId, extra
+                a, dmg, params.bulletSpeed ?? 300, totalPierce, true, weaponId, extra
             );
             b.splashOnHitOnly = true; // 喷射击中才触发冰爆,不是飞行超时爆炸
         }
@@ -1161,18 +1204,18 @@ const PlayerSystem = {
     _fireHealBullet(angle, params, target, weaponId, spawnX, spawnY, weaponDef) {
         const p = this.player;
         const dmg = StatsSystem.calcDamage(weaponDef, p, target, params);
-        const totalPierce = (params.pierce || 0) + (p.bulletPierce || 0);
+        const totalPierce = (params.pierce ?? 0) + (p.bulletPierce ?? 0);
         BulletSystem.create(
             spawnX, spawnY,
             angle, dmg, params.bulletSpeed, totalPierce, true, weaponId,
-            { healOnHit: params.healOnHit || 3 }
+            { healOnHit: params.healOnHit ?? 3 }
         );
     },
 
     /** 近战横扫 - 仅触发挥动特效; 伤害/击退/燃烧 全部交给 _tickMeleeHitDetection */
     _fireMeleeSweep(angle, params, target, weaponId, weaponPos, weaponDef) {
         const p = this.player;
-        const meleeRange = (params.attackRange || (weaponDef ? weaponDef.attackRange : 60) || 60) + (p.attackRange || 0);
+        const meleeRange = (params.attackRange ?? weaponDef?.attackRange ?? 80) + (p.attackRange ?? 0);
         const originX = p.x;
         const originY = p.y;
 
@@ -1204,7 +1247,7 @@ const PlayerSystem = {
     _applyBurn(enemy, dps, duration, maxStacks) {
         if (!enemy || !enemy.alive) return;
         if (!enemy.burnStacks) enemy.burnStacks = [];
-        if (enemy.burnStacks.length >= (maxStacks || 3)) {
+        if (enemy.burnStacks.length >= (maxStacks ?? 3)) {
             // 已满层，刷新最久的一层
             enemy.burnStacks.sort((a, b) => a.remaining - b.remaining);
             enemy.burnStacks[0] = { dps: dps, remaining: duration };
@@ -1238,7 +1281,7 @@ const PlayerSystem = {
     _spreadBurn(enemy) {
         const p = this.player;
         if (!p || !p._burnSpreadLevel) return;
-        const range = p._burnSpreadRange || 200;
+        const range = p._burnSpreadRange ?? 200;
         const spreadLayers = Math.min(p._burnSpreadLevel, 3);
         for (const e of EnemySystem.enemies) {
             if (!e.alive || e === enemy) continue;

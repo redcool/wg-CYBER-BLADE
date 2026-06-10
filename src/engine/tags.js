@@ -327,7 +327,7 @@ const TagSystem = {
         if (!player || !bonuses) return;
         for (const [key, val] of Object.entries(bonuses)) {
             switch (key) {
-                case 'damagePercent': player.damage *= (1 + val); break;
+                case 'damagePercent': player.damagePercent = (player.damagePercent || 0) + val; break;
                 case 'lifeSteal': player.lifeSteal = (player.lifeSteal || 0) + val; break;
                 case 'armor': {
                     const v = (player.armor || 0) + val;

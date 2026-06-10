@@ -684,7 +684,7 @@ describe('ShopSystem - 武器管理', () => {
 
         ShopSystem._updateWeaponParams(player, 'plasma');
         expect(player.weaponParams.plasma).toBeDefined();
-        expect(player.weaponParams.plasma.damageMult).toBeGreaterThan(1.0);
+        expect(player.weaponParams.plasma.tag).toBe('melee');
         expect(player.weaponParams.plasma.behavior).toBe('melee_sweep');
         expect(player.weaponParams.plasma.level).toBe(2);
     });

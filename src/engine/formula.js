@@ -17,31 +17,29 @@ const TAG_TO_FLAT_STAT = {
 
 const FormulaSystem = {
     // -------------------------------------------------------
-    // 设计模式开关
-    //   'A' = 旧版: 武器 damageMult × 角色 _baseDamage
-    //   'B' = 新版: 武器 per-level 基础 + 角色 flat stat
+    // 目前已统一为 TYPE B: 武器 per-level 基础 + 角色 flat stat
     // -------------------------------------------------------
-    TYPE: 'B',
-
-    setType(type) {
-        this.TYPE = type;
-    },
 
     /**
      * 获取武器指定等级的 Base Damage（来源于 CSV 的 damage_lv1~lv4 列）
      * 如果该武器最低等级 > 请求等级, 使用其最低可用等级的数值
      */
     getWeaponBaseDamage(weaponDef, level) {
-        if (this.TYPE !== 'B') return 0; // TYPE A 不走此路径
-
-        // 优先: 精确匹配 level
+        // 优先: 从给定等级向下找有效值
         for (let lv = level; lv >= 1; lv--) {
             const field = `damage_lv${lv}`;
             if (weaponDef[field] !== undefined && weaponDef[field] !== null && weaponDef[field] > 0) {
                 return weaponDef[field];
             }
         }
-        // 如果所有 lv 都为空, 尝试用 damageMult 回退 (兼容旧数据)
+        // 如果给定等级无有效值（如高 minLevel 武器被 level=1 查询），
+        // 向上找最小可用等级
+        for (let lv = level + 1; lv <= 4; lv++) {
+            const field = `damage_lv${lv}`;
+            if (weaponDef[field] !== undefined && weaponDef[field] !== null && weaponDef[field] > 0) {
+                return weaponDef[field];
+            }
+        }
         return 0;
     },
 
@@ -49,8 +47,6 @@ const FormulaSystem = {
      * 获取武器指定等级的 Base Cooldown（秒）
      */
     getWeaponBaseCooldown(weaponDef, level) {
-        if (this.TYPE !== 'B') return 1.0;
-
         for (let lv = level; lv >= 1; lv--) {
             const field = `cooldown_lv${lv}`;
             if (weaponDef[field] !== undefined && weaponDef[field] !== null && weaponDef[field] > 0) {
@@ -61,44 +57,18 @@ const FormulaSystem = {
     },
 
     // -------------------------------------------------------
-    // B 层: 基础伤害
-    //   TYPE A: B = player._baseDamage × weapon.damageMult
-    //   TYPE B: B = weaponBaseDamage(level) + flatStat
+    // B 层: 基础伤害 = 武器基础(level) + 角色类型伤害(flat)
     // -------------------------------------------------------
     _calcBaseDamage(weaponDef, player, level) {
         level = level || 1;
-        if (this.TYPE === 'B') {
-            const weaponBase = this.getWeaponBaseDamage(weaponDef, level);
-            if (weaponBase > 0) {
-                const tag = weaponDef.tag || '';
-                const flatStatId = TAG_TO_FLAT_STAT[tag];
-                const flat = (flatStatId && player[flatStatId]) || 0;
-                return weaponBase + flat;
-            }
-            // 武器无 damage_lvN 数据 → TYPE B 回退: baseAtk * mult + flat（F 层折叠进 B）
-            const baseAtk = player._baseDamage || 15;
-            const mult = weaponDef.damageMult || 1.0;
-            const tag = weaponDef.tag || '';
+        const weaponBase = this.getWeaponBaseDamage(weaponDef, level);
+        if (weaponBase > 0) {
+            const tag = weaponDef.tag ?? '';
             const flatStatId = TAG_TO_FLAT_STAT[tag];
-            const flat = (flatStatId && player[flatStatId]) || 0;
-            return baseAtk * mult + flat;
+            const flat = player[flatStatId] ?? 0;
+            return weaponBase + flat;
         }
-        // TYPE A — 旧版兼容（F 层单独计算，此处不含 flat）
-        const baseAtk = player._baseDamage || 15;
-        const mult = weaponDef.damageMult || 1.0;
-        return baseAtk * mult;
-    },
-
-    // -------------------------------------------------------
-    // F 层: Flat stat (按 Tag 取对应角色属性)
-    //   注意: TYPE B 中 F 层已合并进 B 层, 此函数仅用于 TYPE A
-    // -------------------------------------------------------
-    _calcFlatDamage(weaponDef, player) {
-        if (this.TYPE === 'B') return 0; // B 层已包含 flat
-        const tag = weaponDef.tag || '';
-        const flatStat = TAG_TO_FLAT_STAT[tag];
-        if (!flatStat) return 0;
-        return player[flatStat] || 0;
+        return 0; // 无 weaponBase 时返回 0（不应发生，所有武器有 damage_lvN）
     },
 
     // -------------------------------------------------------
@@ -179,9 +149,9 @@ const FormulaSystem = {
     // C 层: 暴击倍率（单次随机判定）
     // -------------------------------------------------------
     _calcCritMultiplier(player, weaponParams) {
-        const weaponCrit = weaponParams ? (weaponParams.critChanceAdd || 0) : 0;
+        const weaponCrit = weaponParams ? (weaponParams.critChanceAdd ?? 0) : 0;
         const critCap = SystemConfig.get('critFullCap');
-        const critChance = Math.min(critCap, (player.critChance || 0) + weaponCrit);
+        const critChance = Math.min(critCap, (player.critChance ?? 0) + weaponCrit);
         const isCrit = Math.random() < critChance;
         player._lastCrit = isCrit;
 
@@ -191,7 +161,7 @@ const FormulaSystem = {
         const defaultCritDmg = SystemConfig.get('defaultCritDmg');
         let cd = player.critDamage;
         if (cd === undefined || cd === null || cd === 0) {
-            cd = player.critMultiplier || defaultCritDmg;
+            cd = player.critMultiplier ?? defaultCritDmg;
         }
         // 武器独立暴击伤害加成
         if (weaponParams && weaponParams.critDamageAdd) {
@@ -220,15 +190,9 @@ const FormulaSystem = {
     // -------------------------------------------------------
     calcWeaponCooldown(weaponDef, player, level) {
         level = level || 1;
-        const atkSpd = player.attackSpeed || 1.0;
-        if (this.TYPE === 'B') {
-            const baseCD = this.getWeaponBaseCooldown(weaponDef, level);
-            return baseCD / atkSpd;
-        }
-        // TYPE A
-        const mult = weaponDef.attackSpeedMult || 1.0;
-        const minMult = SystemConfig.get('minAtkSpeed');
-        return (1.0 / atkSpd) * Math.max(minMult, mult);
+        const atkSpd = player.attackSpeed ?? 1.0;
+        const baseCD = this.getWeaponBaseCooldown(weaponDef, level);
+        return baseCD / atkSpd;
     },
 
     // -------------------------------------------------------
@@ -242,18 +206,16 @@ const FormulaSystem = {
         const level = (weaponParams && weaponParams._weaponLevel) ? weaponParams._weaponLevel : 1;
 
         // --- Tag 匹配检查 ---
-        const tag = rawDef ? (rawDef.tag || '') : '';
+        const tag = rawDef ? (rawDef.tag ?? '') : '';
         const matched = this._isTagMatched(player, tag);
         const tagMult = matched ? 1.0 : this.UNMATCHED_MULT;
 
         const B = this._calcBaseDamage(rawDef, player, level);
-        const F = (this.TYPE === 'A') ? this._calcFlatDamage(rawDef, player) : 0;
         const P = this._calcPercentMultiplier(player);
         const C = this._calcCritMultiplier(player, weaponParams);
         const S = this._getSpecialModifier(player, target);
 
-        // 应用 tag 匹配惩罚: 伤害 = (B + F) × P × C × S × tagMult
-        let result = Math.max(1, Math.round((B + F) * P * C * S * tagMult));
+        let result = Math.max(1, Math.round(B * P * C * S * tagMult));
         // 应用 class 匹配倍率 (class/class_2 fit)
         const classMult = this._calcClassFitMult(player, rawDef);
         result = Math.max(1, Math.round(result * classMult));
@@ -268,28 +230,27 @@ const FormulaSystem = {
         const level = (weaponParams && weaponParams._weaponLevel) ? weaponParams._weaponLevel : 1;
 
         // --- Tag 匹配检查 (DPS 显示) ---
-        const tag = rawDef ? (rawDef.tag || '') : '';
+        const tag = rawDef ? (rawDef.tag ?? '') : '';
         const tagMult = this._isTagMatched(player, tag) ? 1.0 : this.UNMATCHED_MULT;
 
         const B = this._calcBaseDamage(rawDef, player, level);
-        const F = (this.TYPE === 'A') ? this._calcFlatDamage(rawDef, player) : 0;
         const P = this._calcPercentMultiplier(player);
 
-        const weaponCrit = weaponParams ? (weaponParams.critChanceAdd || 0) : 0;
+        const weaponCrit = weaponParams ? (weaponParams.critChanceAdd ?? 0) : 0;
         const critCap = SystemConfig.get('critFullCap');
         const defaultCritDmg = SystemConfig.get('defaultCritDmg');
         let cd = player.critDamage;
         if (cd === undefined || cd === null || cd === 0) {
-            cd = player.critMultiplier || defaultCritDmg;
+            cd = player.critMultiplier ?? defaultCritDmg;
         }
         if (weaponParams && weaponParams.critDamageAdd) {
             cd += weaponParams.critDamageAdd;
         }
-        const critChance = Math.min(critCap, (player.critChance || 0) + weaponCrit);
+        const critChance = Math.min(critCap, (player.critChance ?? 0) + weaponCrit);
         const C_exp = 1 + critChance * (cd - 1);
 
         const classMult = this._calcClassFitMult(player, rawDef);
-        const avgDamage = (B + F) * P * C_exp * tagMult * classMult;
+        const avgDamage = B * P * C_exp * tagMult * classMult;
 
         const cooldown = this.calcWeaponCooldown(rawDef, player, level);
         const atkSpeed = cooldown > 0 ? 1.0 / cooldown : 1.0;
@@ -301,7 +262,7 @@ const FormulaSystem = {
     // 武器升级后属性预览（用于 Shop 面板）
     // -------------------------------------------------------
     calcWeaponPreview(weaponDef, player, currentLevel, targetLevel) {
-        const tag = weaponDef ? (weaponDef.tag || '') : '';
+        const tag = weaponDef ? (weaponDef.tag ?? '') : '';
         const tagMult = this._isTagMatched(player, tag) ? 1.0 : this.UNMATCHED_MULT;
         const classMult = this._calcClassFitMult(player, weaponDef);
         const currentDmg = this._calcBaseDamage(weaponDef, player, currentLevel) * tagMult * classMult;
@@ -323,34 +284,33 @@ const FormulaSystem = {
         const level = (weaponParams && weaponParams._weaponLevel) ? weaponParams._weaponLevel : 1;
 
         // --- Tag 匹配检查 ---
-        const tag = rawDef ? (rawDef.tag || '') : '';
+        const tag = rawDef ? (rawDef.tag ?? '') : '';
         const tagMult = this._isTagMatched(player, tag) ? 1.0 : this.UNMATCHED_MULT;
 
         const B = this._calcBaseDamage(rawDef, player, level);
-        const F = (this.TYPE === 'A') ? this._calcFlatDamage(rawDef, player) : 0;
         const P = this._calcPercentMultiplier(player);
         const S = this._getSpecialModifier(player, target);
 
-        const weaponCrit = weaponParams ? (weaponParams.critChanceAdd || 0) : 0;
+        const weaponCrit = weaponParams ? (weaponParams.critChanceAdd ?? 0) : 0;
         const critCap = SystemConfig.get('critFullCap');
         const defaultCritDmg = SystemConfig.get('defaultCritDmg');
         let cd = player.critDamage;
         if (cd === undefined || cd === null || cd === 0) {
-            cd = player.critMultiplier || defaultCritDmg;
+            cd = player.critMultiplier ?? defaultCritDmg;
         }
         if (weaponParams && weaponParams.critDamageAdd) {
             cd += weaponParams.critDamageAdd;
         }
 
         const classMult = this._calcClassFitMult(player, rawDef);
-        const base = (B + F) * P * S * tagMult * classMult;
+        const base = B * P * S * tagMult * classMult;
         const critDmg = Math.round(base * (cd || 1.0));
 
         return {
             min: Math.round(base),
             normal: Math.round(base),
             crit: critDmg,
-            critChance: Math.min(critCap, (player.critChance || 0) + weaponCrit),
+            critChance: Math.min(critCap, (player.critChance ?? 0) + weaponCrit),
         };
     },
     // -------------------------------------------------------

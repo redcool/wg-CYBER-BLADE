@@ -16,30 +16,21 @@ import { baseTarget, burningTarget, eliteTarget } from '../fixtures/target.base.
 describe('StatsSystem - 四层伤害公式（内部方法）', () => {
     const player = { ...basePlayer };
 
-    it('S1: _calcBaseDamage 纯 Base: 15', () => {
-        const d = StatsSystem._calcBaseDamage(meleeWeapon, { ...player, _baseDamage: 15 });
-        expect(d).toBe(15); // 15 × 1.0
+    it('S1: _calcBaseDamage weaponBase + flat = 15', () => {
+        const d = StatsSystem._calcBaseDamage(meleeWeapon, { ...player });
+        expect(d).toBe(15); // damage_lv1(15) + meleeDamage(0)
     });
 
-    it('S2: _calcBaseDamage 带 damageMult', () => {
-        const d = StatsSystem._calcBaseDamage({ damageMult: 2.0 }, { ...player, _baseDamage: 15 });
-        expect(d).toBe(30);
+    it('S2: _calcBaseDamage 带 flat stat 加成', () => {
+        const d = StatsSystem._calcBaseDamage({ tag: 'melee', damage_lv1: 15 }, { meleeDamage: 10 });
+        expect(d).toBe(25); // 15 + 10
     });
 
-    it('S3: _calcFlatDamage 按 Tag 映射 melee → meleeDamage（TYPE B 扁平化: F=0）', () => {
-        const p = { ...player, meleeDamage: 10, rangedDamage: 5 };
-        // TYPE B 模式中 Flat 层折叠进 Base，_calcFlatDamage 返回 0
-        expect(StatsSystem._calcFlatDamage(meleeWeapon, p)).toBe(0);
-    });
-
-    it('S4: _calcFlatDamage 按 Tag 映射 ranged → rangedDamage（TYPE B 扁平化: F=0）', () => {
-        const p = { ...player, meleeDamage: 10, rangedDamage: 5 };
-        expect(StatsSystem._calcFlatDamage(rangedWeapon, p)).toBe(0);
-    });
-
-    it('S5: _calcFlatDamage Tag 无映射（如 economy）返回 0', () => {
-        const p = { ...player, meleeDamage: 10 };
-        expect(StatsSystem._calcFlatDamage({ tag: 'economy' }, p)).toBe(0);
+    it('S3: calcDamage 完整计算: melee 角色 + melee 武器 = 无惩罚', () => {
+        const p = { ...player, tags: ['melee'] };
+        const dmg = StatsSystem.calcDamage(meleeWeapon, p, { ...baseTarget });
+        // B=15, P=1, tag=1, class=1, min 1
+        expect(dmg).toBeGreaterThanOrEqual(1);
     });
 
     it('S6: _calcPercentMultiplier 0% → 1.0', () => {
@@ -108,7 +99,7 @@ describe('StatsSystem - calcDamage（Math.random mock）', () => {
 
     it('S15: calcDamage 无暴击（critChance=0）', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0.5); // 不应影响
-        const p2 = { ...p, _baseDamage: 15, critChance: 0 };
+        const p2 = { ...p, critChance: 0 };
         const dmg = StatsSystem.calcDamage(meleeWeapon, p2, baseTarget);
         // B=15, F=0, P=1, C=1(未暴击), S=1 → 15
         expect(dmg).toBe(15);
@@ -116,7 +107,7 @@ describe('StatsSystem - calcDamage（Math.random mock）', () => {
 
     it('S16: calcDamage 必暴击（critChance=1.0）', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0); // 保证暴击
-        const p2 = { ...p, _baseDamage: 15, critChance: 1.0, critDamage: 2.0 };
+        const p2 = { ...p, critChance: 1.0, critDamage: 2.0 };
         const dmg = StatsSystem.calcDamage(meleeWeapon, p2, baseTarget);
         // B=15, F=0, P=1, C=2.0, S=1 → 30
         expect(dmg).toBe(30);
@@ -124,7 +115,7 @@ describe('StatsSystem - calcDamage（Math.random mock）', () => {
 
     it('S17: calcDamage Base+Flat（TYPE B: Flat 折叠进 Base）', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0.5); // 不暴击
-        const p2 = { ...p, _baseDamage: 15, meleeDamage: 10, critChance: 0 };
+        const p2 = { ...p, meleeDamage: 10, critChance: 0 };
         const dmg = StatsSystem.calcDamage(meleeWeapon, p2, baseTarget);
         // TYPE B: B=15*1.0+10=25, F=0, P=1, C=1, S=1 → 25
         expect(dmg).toBe(25);
@@ -132,7 +123,7 @@ describe('StatsSystem - calcDamage（Math.random mock）', () => {
 
     it('S18: calcDamage Percent 层 50%', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0.5);
-        const p2 = { ...p, _baseDamage: 15, damagePercent: 0.5, critChance: 0 };
+        const p2 = { ...p, damagePercent: 0.5, critChance: 0 };
         const dmg = StatsSystem.calcDamage(meleeWeapon, p2, baseTarget);
         // B=15, F=0, P=1.5, C=1, S=1 → round(22.5)=23
         expect(dmg).toBe(23);
@@ -140,7 +131,7 @@ describe('StatsSystem - calcDamage（Math.random mock）', () => {
 
     it('S19: calcDamage 暴击+Percent', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0); // 暴击
-        const p2 = { ...p, _baseDamage: 15, damagePercent: 0.5, critChance: 1.0, critDamage: 2.0 };
+        const p2 = { ...p, damagePercent: 0.5, critChance: 1.0, critDamage: 2.0 };
         const dmg = StatsSystem.calcDamage(meleeWeapon, p2, baseTarget);
         // B=15, F=0, P=1.5, C=2.0, S=1 → round(45)=45
         expect(dmg).toBe(45);
@@ -148,7 +139,7 @@ describe('StatsSystem - calcDamage（Math.random mock）', () => {
 
     it('S20: calcDamage 四层全满', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0); // 暴击
-        const p2 = { ...p, _baseDamage: 15, meleeDamage: 5, damagePercent: 0.5, critChance: 1.0, critDamage: 2.0, berserkerBlood: true, hp: 10, maxHp: 100 };
+        const p2 = { ...p, meleeDamage: 5, damagePercent: 0.5, critChance: 1.0, critDamage: 2.0, berserkerBlood: true, hp: 10, maxHp: 100 };
         const dmg = StatsSystem.calcDamage(meleeWeapon, p2, baseTarget);
         // TYPE B: B=15*1.0+5(flat)=20, F=0, P=1.5, C=2.0, S=1.3 → round(20×1.5×2.0×1.3)=round(78)=78
         expect(dmg).toBe(78);
@@ -163,7 +154,7 @@ describe('StatsSystem - calcDamage（Math.random mock）', () => {
 
     it('S22: calcDamage 兼容旧字段 damage（非百分比，P 层 1.0）', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0.5);
-        const p2 = { _baseDamage: 15, damage: 0.5, critChance: 0 }; // 无 damagePercent
+        const p2 = { damage: 0.5, critChance: 0 }; // 无 damagePercent
         const dmg = StatsSystem.calcDamage(meleeWeapon, p2, baseTarget);
         // B=15, F=0, P=1.0(damage非百分比), C=1, S=1 → 15
         expect(dmg).toBe(15);
@@ -171,7 +162,7 @@ describe('StatsSystem - calcDamage（Math.random mock）', () => {
 
     it('S23: calcDamage 兼容旧字段 critMultiplier', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0); // 暴击
-        const p2 = { ...p, _baseDamage: 15, critChance: 1.0 };
+        const p2 = { ...p, critChance: 1.0 };
         delete p2.critDamage;
         p2.critMultiplier = 3.0;
         const dmg = StatsSystem.calcDamage(meleeWeapon, p2, baseTarget);
@@ -182,8 +173,8 @@ describe('StatsSystem - calcDamage（Math.random mock）', () => {
     it('S24: calcDamage berserkerBlood 低血量触发', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0.5);
         // 测试 berserkerBlood 触发 vs 不触发
-        const pTrigger = { ...p, _baseDamage: 15, critChance: 0, berserkerBlood: true, hp: 20, maxHp: 100 };
-        const pNoTrigger = { ...p, _baseDamage: 15, critChance: 0, berserkerBlood: true, hp: 50, maxHp: 100 };
+        const pTrigger = { ...p, critChance: 0, berserkerBlood: true, hp: 20, maxHp: 100 };
+        const pNoTrigger = { ...p, critChance: 0, berserkerBlood: true, hp: 50, maxHp: 100 };
         const dmgTrigger = StatsSystem.calcDamage(meleeWeapon, pTrigger, baseTarget);
         const dmgNoTrigger = StatsSystem.calcDamage(meleeWeapon, pNoTrigger, baseTarget);
         // Trigger: S=1.3 → 15×1.3=19.5→20

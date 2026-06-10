@@ -244,8 +244,11 @@ const UISystem = {
             return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
         });
 
-        // 选中第一个武器
-        this._selectedWeaponId = basicWeapons.length > 0 ? basicWeapons[0].id : 'pistol';
+        // 优先选中角色初始武器，否则选第一个
+        const startWp = ch.startingWeapons && ch.startingWeapons.length > 0 ? ch.startingWeapons[0] : null;
+        this._selectedWeaponId = startWp && basicWeapons.some(w => w.id === startWp)
+            ? startWp
+            : basicWeapons.length > 0 ? basicWeapons[0].id : 'pistol';
 
         // 顶部详情面板
         this._showWeaponDetail(this._selectedWeaponId);
@@ -326,10 +329,14 @@ const UISystem = {
                 <div class="wd-fit-bar"><div class="wd-fit-fill fit-${fitPct}"></div></div>
             </div>`;
 
+        const wsLvl = weapon.minLevel || 1;
+        const wsLvlEntry = RarityColorSystem.getByLevel(wsLvl);
+        const wsLvlColor = wsLvlEntry ? wsLvlEntry.color : '#00ffff';
+
         detail.innerHTML = `
             <div class="weapon-detail-avatar">${AssetSystem.weaponIconHTML(weapon.id, 72)}</div>
             <div class="weapon-detail-info">
-                <div class="weapon-detail-name">${weapon.name}<span class="wpn-detail-btn" data-weapon-id="${weapon.id}" title="查看详细属性与适配度">📊</span></div>
+                <div class="weapon-detail-name">${weapon.name}<span class="ws-level-badge" style="color:${wsLvlColor};border-color:${wsLvlColor}">Lv.${wsLvl}</span><span class="wpn-detail-btn" data-weapon-id="${weapon.id}" title="查看详细属性与适配度">📊</span></div>
                 <div class="weapon-detail-tag" style="color:${tagColor}">${tagStr}${classStr ? ' · ' + classStr : ''}${warnBadge}</div>
                 ${fitBar}
                 <div class="weapon-detail-desc">${weapon.desc || ''}</div>
@@ -367,13 +374,17 @@ const UISystem = {
         qEl.textContent = q.label;
         qEl.style.color = q.c;
         qEl.style.borderColor = q.c;
-        document.getElementById('wdLevel').textContent = '';
+        const fitLvl = weapon.minLevel || 1;
+        const fitLvlEntry = RarityColorSystem.getByLevel(fitLvl);
+        const fitLvlEl = document.getElementById('wdLevel');
+        fitLvlEl.textContent = `Lv.${fitLvl}`;
+        fitLvlEl.style.color = fitLvlEntry ? fitLvlEntry.color : '#ffd54f';
 
         // 统计属性
         const statsRows = [];
         const fmt = (v, suffix = '') => v == null || v === '—' ? '—' : `${v}${suffix}`;
-        const dmg = weapon.damage_lv1 || 0;
-        const cd  = weapon.cooldown_lv1 || 0;
+        const dmg = WeaponDisplay.getWeaponTierValue(weapon, 'damage_lv1');
+        const cd  = WeaponDisplay.getWeaponTierValue(weapon, 'cooldown_lv1');
         const rng = weapon.attackRange || 0;
         const kbg = weapon.knockback != null ? weapon.knockback : '—';
         statsRows.push(`<div class="wd-stat-row"><span class="wd-stat-label">⚔️ 伤害</span><span class="wd-stat-value dmg">${fmt(dmg)}</span></div>`);
@@ -434,9 +445,11 @@ const UISystem = {
             preferredClasses: ch && ch.preferredClasses ? ch.preferredClasses : [],
             preferredClasses_2: ch && ch.preferredClasses_2 ? ch.preferredClasses_2 : [],
             damagePercent: ch ? (ch.damagePercent || 0) : 0,
-            _baseDamage: 15,
+            meleeDamage: ch ? (ch.meleeDamage || 0) : 0,
+            rangedDamage: ch ? (ch.rangedDamage || 0) : 0,
+            elementalDamage: ch ? (ch.elementalDamage || 0) : 0,
         };
-        this._renderDamageBreakdown(weapon, playerProxy, 1);
+        this._renderDamageBreakdown(weapon, playerProxy, weapon.minLevel || 1);
 
         // 绑定关闭
         const modal = document.getElementById('weaponDetailModal');
@@ -454,7 +467,7 @@ const UISystem = {
         if (typeof FormulaSystem === 'undefined' || !FormulaSystem._calcBaseDamage) return;
         try {
             const bDmg = FormulaSystem._calcBaseDamage(def, player, level || 1);
-            const fDmg = FormulaSystem._calcFlatDamage(def, player);
+            const fDmg = 0;
             const pMult = FormulaSystem._calcPercentMultiplier(player);
             const tag = def ? (def.tag || '') : '';
             const tagMatched = FormulaSystem._isTagMatched(player, tag);
@@ -495,7 +508,10 @@ const UISystem = {
         const card = document.createElement('div');
         card.className = `weapon-select-card ${selected ? 'selected' : ''}`;
         card.dataset.weaponId = weapon.id;
-        card.innerHTML = `<div class="ws-icon">${AssetSystem.weaponIconHTML(weapon.id, 42)}</div>`;
+        const cardLvl = weapon.minLevel || 1;
+        const cardLvlEntry = RarityColorSystem.getByLevel(cardLvl);
+        const cardLvlColor = cardLvlEntry ? cardLvlEntry.color : '#fff';
+        card.innerHTML = `<div class="ws-icon">${AssetSystem.weaponIconHTML(weapon.id, 42)}</div><span class="ws-card-level" style="color:${cardLvlColor};border-color:${cardLvlColor}">Lv.${cardLvl}</span>`;
         container.appendChild(card);
     },
 
@@ -960,9 +976,11 @@ const UISystem = {
      * 攻速 = 1/cooldown (高=快), 射程 = attackRange
      */
     _getWeaponRadarValues(w) {
+        const radarDmg   = WeaponDisplay.getWeaponTierValue(w, 'damage_lv1');
+        const radarCd    = WeaponDisplay.getWeaponTierValue(w, 'cooldown_lv1');
         return {
-            damage:      w.damage_lv1 || w.damage_lv2 || 0,
-            attackSpeed: w.cooldown_lv1 > 0 ? +(1 / w.cooldown_lv1).toFixed(2) : 1,
+            damage:      radarDmg,
+            attackSpeed: radarCd > 0 ? +(1 / radarCd).toFixed(2) : 1,
             bulletSpeed: w.bulletSpeed || 0,
             range:       w.attackRange || 0,
             pierce:      w.pierce || 0,
@@ -1373,11 +1391,14 @@ const UISystem = {
 
             const tagDef = TagSystem.getTagDef(def.tag);
             const tagHtml = tagDef ? `<span class="slot-tag" style="color:${this._tagColor(tagDef.id)}">${tagDef.icon}</span>` : '';
+            const lvlEntry = RarityColorSystem.getByLevel(level);
+            const lvlColor = lvlEntry ? lvlEntry.color : '#ffcc00';
+            const lvlBg    = lvlEntry ? lvlEntry.bg : 'rgba(0,0,0,0.85)';
 
             div.innerHTML = `
                 ${AssetSystem.weaponIconHTML(def.id)}
                 ${tagHtml}
-                <span class="slot-level">Lv.${level}</span>
+                <span class="slot-level" style="color:${lvlColor};border-color:${lvlColor};background:${lvlBg}">Lv.${level}</span>
                 <span class="slot-actions" data-idx="${idx}">
                     <button class="slot-dropdown-btn" data-idx="${idx}" title="查看详情">▾</button>
                 </span>
@@ -1431,7 +1452,10 @@ const UISystem = {
         // === 填充上半详情 ===
         document.getElementById('wdIcon').innerHTML = AssetSystem.weaponIconHTML(def.id, 48);
         document.getElementById('wdName').textContent = def.name;
-        document.getElementById('wdLevel').textContent = `Lv.${level}`;
+        const detailLvlEntry = RarityColorSystem.getByLevel(level);
+        const detailLvlEl = document.getElementById('wdLevel');
+        detailLvlEl.textContent = `Lv.${level}`;
+        detailLvlEl.style.color = detailLvlEntry ? detailLvlEntry.color : '#ffd54f';
 
         // 品质: 从 tagDef 颜色推断 (com/common/rare/epic/legendary)
         const tagDef = TagSystem.getTagDef(def.tag);
@@ -1453,8 +1477,8 @@ const UISystem = {
         const statsRows = [];
         const fmt = (v, suffix = '') => v == null || v === '—' ? '—' : `${v}${suffix}`;
         // def 可能字段名不一致:damage / damage_lv1 / baseDamage 等
-        const dmgVal = stats?.damage ?? def.damage_lv1 ?? def.damage ?? def.baseDamage ?? 0;
-        const cdVal  = stats?.cooldown ?? def.cooldown_lv1 ?? def.cooldown ?? 0;
+        const dmgVal = stats?.damage ?? WeaponDisplay.getWeaponTierValue(def, 'damage_lv1') ?? def.damage ?? def.baseDamage ?? 0;
+        const cdVal  = stats?.cooldown ?? WeaponDisplay.getWeaponTierValue(def, 'cooldown_lv1') ?? def.cooldown ?? 0;
         const rngVal = stats?.range ?? def.attackRange ?? def.range ?? 0;
         const kbgVal = def.knockback != null ? def.knockback : '—';
         const spdVal = def.bulletSpeed || '—';

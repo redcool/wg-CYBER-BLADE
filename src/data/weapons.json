@@ -45,8 +45,8 @@
     "knockback": 300,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "axe",
@@ -94,8 +94,8 @@
     "knockback": 500,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "dagger",
@@ -143,8 +143,8 @@
     "knockback": 200,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "chainsaw",
@@ -192,8 +192,8 @@
     "knockback": 400,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "sword",
@@ -241,8 +241,8 @@
     "knockback": 250,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "katana",
@@ -290,8 +290,8 @@
     "knockback": 250,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "hammer",
@@ -339,8 +339,8 @@
     "knockback": 600,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "spear",
@@ -388,8 +388,8 @@
     "knockback": 300,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "claws",
@@ -437,8 +437,8 @@
     "knockback": 150,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "whip",
@@ -486,8 +486,57 @@
     "knockback": 200,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
+  },
+  {
+    "id": "wrench",
+    "name": "扳手",
+    "desc": "近战击退·每波召唤炮塔",
+    "icon": "🔧",
+    "cost": 8,
+    "tag": "melee",
+    "minLevel": 1,
+    "damage_lv1": 12,
+    "damage_lv2": 16,
+    "damage_lv3": 20,
+    "damage_lv4": 24,
+    "cooldown_lv1": 1.7,
+    "cooldown_lv2": 1.6,
+    "cooldown_lv3": 1.5,
+    "cooldown_lv4": 1.4,
+    "speedMult": 0,
+    "critChanceAdd": 0,
+    "critDamageAdd": 0,
+    "armorAdd": 0,
+    "hpRegenAdd": 0,
+    "maxHpAdd": 0,
+    "lifeStealAdd": 0,
+    "bulletCount": 1,
+    "bulletSpeed": 0,
+    "bulletMaxRange": 0,
+    "attackRange": 175,
+    "spread": 0,
+    "pierce": 0,
+    "burnDps": 0,
+    "burnMaxStacks": 0,
+    "chainCount": 0,
+    "splashRadius": 0,
+    "homingStrength": 0,
+    "slowAmount": 0,
+    "slowDuration": 0,
+    "healOnHit": 0,
+    "auraHeal": 0,
+    "auraRadius": 0,
+    "sprayCone": 0,
+    "behavior": "melee_sweep",
+    "class": "Tool",
+    "class_2": "wrench",
+    "knockback": 20,
+    "magSize": 0,
+    "reloadTime": 0,
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "pistol",
@@ -535,8 +584,8 @@
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "smg",
@@ -584,8 +633,8 @@
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "shotgun",
@@ -633,8 +682,8 @@
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "sniper",
@@ -682,8 +731,8 @@
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "gatling",
@@ -731,8 +780,8 @@
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "revolver",
@@ -780,8 +829,8 @@
     "knockback": 40,
     "magSize": 6,
     "reloadTime": 2,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "rifle",
@@ -829,8 +878,8 @@
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "rifle2",
@@ -878,8 +927,8 @@
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "shotgun_double",
@@ -927,8 +976,8 @@
     "knockback": 25,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "magnum",
@@ -976,8 +1025,8 @@
     "knockback": 25,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "minigun",
@@ -1025,8 +1074,8 @@
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "bow",
@@ -1074,8 +1123,8 @@
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "crossbow",
@@ -1123,8 +1172,8 @@
     "knockback": 90,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "longbow",
@@ -1172,8 +1221,8 @@
     "knockback": 200,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "recurve",
@@ -1221,8 +1270,8 @@
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "explosive_arrow",
@@ -1270,8 +1319,8 @@
     "knockback": 200,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "frost_arrow",
@@ -1319,8 +1368,8 @@
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "poison_arrow",
@@ -1368,8 +1417,8 @@
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "triple_shot",
@@ -1417,8 +1466,8 @@
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "piercing_shot",
@@ -1466,8 +1515,8 @@
     "knockback": 90,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "homing_bow",
@@ -1515,8 +1564,8 @@
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "fire_staff",
@@ -1564,8 +1613,8 @@
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "frost_staff",
@@ -1613,8 +1662,8 @@
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "thunder_staff",
@@ -1662,8 +1711,8 @@
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "energy_staff",
@@ -1711,8 +1760,8 @@
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "magic_orb",
@@ -1760,8 +1809,8 @@
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "poison_staff",
@@ -1809,8 +1858,8 @@
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "void_staff",
@@ -1858,8 +1907,8 @@
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "lightning_staff",
@@ -1907,8 +1956,8 @@
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "fire_wand",
@@ -1956,8 +2005,8 @@
     "knockback": 50,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "arcane_orb",
@@ -2005,8 +2054,8 @@
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "flame_spray",
@@ -2054,8 +2103,8 @@
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "poison_spray",
@@ -2103,8 +2152,8 @@
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "cold_spray",
@@ -2152,8 +2201,8 @@
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "heal_gun",
@@ -2201,8 +2250,8 @@
     "knockback": 50,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "shield",
@@ -2250,8 +2299,8 @@
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "holy_staff",
@@ -2299,8 +2348,8 @@
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "life_wand",
@@ -2348,8 +2397,8 @@
     "knockback": 50,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "blessing",
@@ -2397,8 +2446,8 @@
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "pike",
@@ -2446,8 +2495,8 @@
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "cavalry_lance",
@@ -2495,8 +2544,8 @@
     "knockback": 50,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "trident",
@@ -2544,7 +2593,7 @@
     "knockback": 35,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   }
 ]

@@ -61,7 +61,7 @@ const DataLoader = {
      * @returns {Promise<void>}
      */
     async preloadAll() {
-        const names = ['characters', 'characterLevel', 'weapons', 'items', 'enemies', 'bosses', 'waves', 'passives', 'level_duration', 'weaponStats', 'charStats', 'difficulty', 'debug', 'levelUpCards', 'rarityColors', 'rarity', 'audio', 'classes', 'system', 'synergies'];
+        const names = ['characters', 'characterLevel', 'weapons', 'items', 'enemies', 'bosses', 'waves', 'passives', 'level_duration', 'weaponStats', 'charStats', 'difficulty', 'debug', 'levelUpCards', 'rarityColors', 'rarity', 'audio', 'classes', 'system', 'synergies', 'bulletTypes'];
         await Promise.all(names.map(n => this.load(n)));
         if (typeof SystemConfig !== 'undefined') await SystemConfig.load();
         if (typeof StatsSystem !== 'undefined' && StatsSystem.loadCaps) {

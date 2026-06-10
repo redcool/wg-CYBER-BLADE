@@ -38,10 +38,11 @@ __DATA_BUNDLE__['characters'] = [
       "lance"
     ],
     "unlockType": "",
-    "unlockValue": 0,
+    "unlockValue": null,
     "passives": [
       "swordsman_blade_master"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Blade",
       "Heavy",
@@ -85,10 +86,11 @@ __DATA_BUNDLE__['characters'] = [
       "gun"
     ],
     "unlockType": "",
-    "unlockValue": 0,
+    "unlockValue": null,
     "passives": [
       "gunslinger_gun_expert"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Gun"
     ],
@@ -129,10 +131,11 @@ __DATA_BUNDLE__['characters'] = [
       "magic"
     ],
     "unlockType": "",
-    "unlockValue": 0,
+    "unlockValue": null,
     "passives": [
       "fire_mage_nova"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Elemental",
       "Explosive"
@@ -173,10 +176,11 @@ __DATA_BUNDLE__['characters'] = [
       "bow"
     ],
     "unlockType": "",
-    "unlockValue": 0,
+    "unlockValue": null,
     "passives": [
       "archer_eagle_eye"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Bow",
       "Crossbow"
@@ -224,6 +228,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "mech_heavy_armor"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Heavy",
       "Gun"
@@ -272,6 +277,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "assassin_shadow_step"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Precise",
       "Blade"
@@ -318,6 +324,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "medic_emergency"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Medical",
       "Elemental"
@@ -365,6 +372,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "paladin_holy_shield"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Blade",
       "Medical",
@@ -379,10 +387,10 @@ __DATA_BUNDLE__['characters'] = [
     ]
   },
   {
-    "id": "engineer",
-    "name": "工程师",
-    "desc": "科技暴击流枪械元素双修",
-    "icon": "🔧",
+    "id": "magic_gunner",
+    "name": "魔枪手",
+    "desc": "枪械与元素魔法的双修射手",
+    "icon": "⚡",
     "unlocked": true,
     "maxWeapons": 6,
     "maxHp": 23,
@@ -413,6 +421,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "engineer_overclock"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Gun",
       "Elemental",
@@ -425,6 +434,51 @@ __DATA_BUNDLE__['characters'] = [
       "lightning",
       "grenade",
       "rocket"
+    ]
+  },
+  {
+    "id": "engineer",
+    "name": "工程师",
+    "desc": "扳手近战·炮塔建造者",
+    "icon": "🔧",
+    "unlocked": false,
+    "maxWeapons": 6,
+    "maxHp": 28,
+    "hpRegen": 0.1,
+    "speed": 100,
+    "damagePercent": 0,
+    "attackSpeed": 1,
+    "attackRange": 0,
+    "armor": 1,
+    "dodge": 0.02,
+    "critChance": 0.05,
+    "critDamage": 0,
+    "lifeSteal": 0,
+    "pickupRange": 15,
+    "harvesting": 0,
+    "luck": 0,
+    "xpGain": 0,
+    "meleeDamage": 0,
+    "rangedDamage": 0,
+    "elementalDamage": 0,
+    "engineering": 3,
+    "tags": [
+      "melee",
+      "tech"
+    ],
+    "unlockType": "totalKills",
+    "unlockValue": 200,
+    "passives": [
+      "engineer_turret_master"
+    ],
+    "startingWeapons": [
+      "wrench"
+    ],
+    "preferredClasses": [
+      "Tool"
+    ],
+    "preferredClasses_2": [
+      "wrench"
     ]
   },
   {
@@ -466,6 +520,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "berserker_rage"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Blade",
       "Blunt",
@@ -576,6 +631,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "dragon_knight_breath"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Heavy"
     ],
@@ -619,6 +675,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "crossbowman_pierce"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Crossbow",
       "Bow"
@@ -665,6 +722,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "boxer_quick_combo"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Heavy",
       "Blunt"
@@ -711,6 +769,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "axeman_whirlwind"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Heavy"
     ],
@@ -756,6 +815,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "lancer_phalanx"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Heavy"
     ],
@@ -801,6 +861,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "blade_wielder_flash"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Blade",
       "Precise"
@@ -849,6 +910,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "ninja_shadow_dance"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Precise",
       "Blade"
@@ -896,6 +958,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "ji_master_chi"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Elemental",
       "Medical"
@@ -944,6 +1007,7 @@ __DATA_BUNDLE__['characters'] = [
     "passives": [
       "teng_pai_iron_wall"
     ],
+    "startingWeapons": [],
     "preferredClasses": [
       "Medical"
     ],
@@ -1125,8 +1189,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 300,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "axe",
@@ -1174,8 +1238,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 500,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "dagger",
@@ -1223,8 +1287,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 200,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "chainsaw",
@@ -1272,8 +1336,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 400,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "sword",
@@ -1321,8 +1385,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 250,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "katana",
@@ -1370,8 +1434,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 250,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "hammer",
@@ -1419,8 +1483,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 600,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "spear",
@@ -1468,8 +1532,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 300,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "claws",
@@ -1517,8 +1581,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 150,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "whip",
@@ -1566,8 +1630,57 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 200,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
+  },
+  {
+    "id": "wrench",
+    "name": "扳手",
+    "desc": "近战击退·每波召唤炮塔",
+    "icon": "🔧",
+    "cost": 8,
+    "tag": "melee",
+    "minLevel": 1,
+    "damage_lv1": 12,
+    "damage_lv2": 16,
+    "damage_lv3": 20,
+    "damage_lv4": 24,
+    "cooldown_lv1": 1.7,
+    "cooldown_lv2": 1.6,
+    "cooldown_lv3": 1.5,
+    "cooldown_lv4": 1.4,
+    "speedMult": 0,
+    "critChanceAdd": 0,
+    "critDamageAdd": 0,
+    "armorAdd": 0,
+    "hpRegenAdd": 0,
+    "maxHpAdd": 0,
+    "lifeStealAdd": 0,
+    "bulletCount": 1,
+    "bulletSpeed": 0,
+    "bulletMaxRange": 0,
+    "attackRange": 175,
+    "spread": 0,
+    "pierce": 0,
+    "burnDps": 0,
+    "burnMaxStacks": 0,
+    "chainCount": 0,
+    "splashRadius": 0,
+    "homingStrength": 0,
+    "slowAmount": 0,
+    "slowDuration": 0,
+    "healOnHit": 0,
+    "auraHeal": 0,
+    "auraRadius": 0,
+    "sprayCone": 0,
+    "behavior": "melee_sweep",
+    "class": "Tool",
+    "class_2": "wrench",
+    "knockback": 20,
+    "magSize": 0,
+    "reloadTime": 0,
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "pistol",
@@ -1615,8 +1728,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "smg",
@@ -1664,8 +1777,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "shotgun",
@@ -1713,8 +1826,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "sniper",
@@ -1762,8 +1875,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "gatling",
@@ -1811,8 +1924,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "revolver",
@@ -1860,8 +1973,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 6,
     "reloadTime": 2,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "rifle",
@@ -1909,8 +2022,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "rifle2",
@@ -1958,8 +2071,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "shotgun_double",
@@ -2007,8 +2120,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 25,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "magnum",
@@ -2056,8 +2169,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 25,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "minigun",
@@ -2105,8 +2218,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "bow",
@@ -2154,8 +2267,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "crossbow",
@@ -2203,8 +2316,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 90,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "longbow",
@@ -2252,8 +2365,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 200,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "recurve",
@@ -2301,8 +2414,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "explosive_arrow",
@@ -2350,8 +2463,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 200,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "frost_arrow",
@@ -2399,8 +2512,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "poison_arrow",
@@ -2448,8 +2561,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "triple_shot",
@@ -2497,8 +2610,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "piercing_shot",
@@ -2546,8 +2659,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 90,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "homing_bow",
@@ -2595,8 +2708,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "fire_staff",
@@ -2644,8 +2757,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "frost_staff",
@@ -2693,8 +2806,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "thunder_staff",
@@ -2742,8 +2855,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "energy_staff",
@@ -2791,8 +2904,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "magic_orb",
@@ -2840,8 +2953,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "poison_staff",
@@ -2889,8 +3002,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "void_staff",
@@ -2938,8 +3051,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "lightning_staff",
@@ -2987,8 +3100,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "fire_wand",
@@ -3036,8 +3149,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 50,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "arcane_orb",
@@ -3085,8 +3198,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "flame_spray",
@@ -3134,8 +3247,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "poison_spray",
@@ -3183,8 +3296,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "cold_spray",
@@ -3232,8 +3345,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "heal_gun",
@@ -3281,8 +3394,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 50,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "shield",
@@ -3330,8 +3443,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "holy_staff",
@@ -3379,8 +3492,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "life_wand",
@@ -3428,8 +3541,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 50,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "blessing",
@@ -3477,8 +3590,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "pike",
@@ -3526,8 +3639,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "cavalry_lance",
@@ -3575,8 +3688,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 50,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   },
   {
     "id": "trident",
@@ -3624,8 +3737,8 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 35,
     "magSize": 0,
     "reloadTime": 0,
-    "damageReductionAura": 0,
-    "killHeal": 0
+    "damageReductionAura": null,
+    "killHeal": null
   }
 ];
 
@@ -5493,6 +5606,25 @@ __DATA_BUNDLE__['passives'] = [
       "melee"
     ],
     "cooldown": 0
+  },
+  {
+    "id": "engineer_turret_master",
+    "name": "工程精通",
+    "desc": "工程+3 炮塔伤害+30%",
+    "icon": "🔧",
+    "triggerType": "Passive",
+    "condition": null,
+    "chance": 1,
+    "effect": {
+      "type": "statMod",
+      "engineering": 3,
+      "turretDamage": 0.3
+    },
+    "target": "player",
+    "tags": [
+      "tech"
+    ],
+    "cooldown": 0
   }
 ];
 
@@ -6472,7 +6604,7 @@ __DATA_BUNDLE__['levelUpCards'] = [
     "icon": "⚔️",
     "tier": "II",
     "statField": "",
-    "statValue": 0,
+    "statValue": null,
     "tags": [],
     "unlockLevel": 3,
     "actionType": "weaponLevelUp",
@@ -6485,7 +6617,7 @@ __DATA_BUNDLE__['levelUpCards'] = [
     "icon": "✨",
     "tier": "III",
     "statField": "",
-    "statValue": 0,
+    "statValue": null,
     "tags": [],
     "unlockLevel": 6,
     "actionType": "weaponQualityUp",
@@ -6498,7 +6630,7 @@ __DATA_BUNDLE__['levelUpCards'] = [
     "icon": "📦",
     "tier": "IV",
     "statField": "",
-    "statValue": 0,
+    "statValue": null,
     "tags": [],
     "unlockLevel": 25,
     "actionType": "addWeaponSlot",
@@ -7682,6 +7814,12 @@ __DATA_BUNDLE__['classes'] = [
     "中文名": "基础",
     "英文名": "Primitive",
     "描述": "原始原始的粗粝武器"
+  },
+  {
+    "id": "Tool",
+    "中文名": "工具",
+    "英文名": "Tool",
+    "描述": "以工程学为核心的科技武器"
   }
 ];
 
@@ -8957,5 +9095,283 @@ __DATA_BUNDLE__['system'] = [
     "valueType": "number",
     "desc": "Boss基础速度",
     "group": "playerDefaults"
+  }
+];
+
+__DATA_BUNDLE__['bulletTypes'] = [
+  {
+    "behavior": "bullet",
+    "tag": "gun",
+    "shape": "arrow",
+    "color": "#ffffff",
+    "size": 4,
+    "glowColor": "#ffffff",
+    "glowSize": 12,
+    "trail": "line",
+    "image": "bullet_gun"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "bow",
+    "shape": "arrow",
+    "color": "#ffffff",
+    "size": 4,
+    "glowColor": "#ffffff",
+    "glowSize": 12,
+    "trail": "line",
+    "image": "bullet_bow"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "magic",
+    "shape": "circle",
+    "color": "#ffffaa",
+    "size": 5,
+    "glowColor": "#ffffaa",
+    "glowSize": 14,
+    "trail": "line",
+    "image": "bullet_magic"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "medic",
+    "shape": "circle",
+    "color": "#aaffaa",
+    "size": 5,
+    "glowColor": "#aaffaa",
+    "glowSize": 14,
+    "trail": "line",
+    "image": "bullet_medic"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "lance",
+    "shape": "circle",
+    "color": "#ffdd44",
+    "size": 4,
+    "glowColor": "#ffdd44",
+    "glowSize": 12,
+    "trail": "line",
+    "image": "bullet_lance"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "melee",
+    "shape": "circle",
+    "color": "#ffdd44",
+    "size": 4,
+    "glowColor": "#ffdd44",
+    "glowSize": 12,
+    "trail": "line",
+    "image": "bullet_melee"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "*",
+    "shape": "circle",
+    "color": "#ffff44",
+    "size": 4,
+    "glowColor": "#ffff44",
+    "glowSize": 12,
+    "trail": "line",
+    "image": "bullet_default"
+  },
+  {
+    "behavior": "spread",
+    "tag": "gun",
+    "shape": "arrow",
+    "color": "#ffffff",
+    "size": 3,
+    "glowColor": "#ffffff",
+    "glowSize": 10,
+    "trail": "line",
+    "image": "spread_gun"
+  },
+  {
+    "behavior": "spread",
+    "tag": "bow",
+    "shape": "arrow",
+    "color": "#ffffff",
+    "size": 3,
+    "glowColor": "#ffffff",
+    "glowSize": 10,
+    "trail": "line",
+    "image": "spread_bow"
+  },
+  {
+    "behavior": "spread",
+    "tag": "magic",
+    "shape": "circle",
+    "color": "#ffffaa",
+    "size": 4,
+    "glowColor": "#ffffaa",
+    "glowSize": 12,
+    "trail": "line",
+    "image": "spread_magic"
+  },
+  {
+    "behavior": "spread",
+    "tag": "*",
+    "shape": "circle",
+    "color": "#ffff44",
+    "size": 3,
+    "glowColor": "#ffff44",
+    "glowSize": 10,
+    "trail": "line",
+    "image": "spread_default"
+  },
+  {
+    "behavior": "explode",
+    "tag": "*",
+    "shape": "beam",
+    "color": "#ff4444",
+    "size": 8,
+    "glowColor": "#ff6600",
+    "glowSize": 18,
+    "trail": "spark",
+    "image": "explode"
+  },
+  {
+    "behavior": "frost",
+    "tag": "bow",
+    "shape": "arrow",
+    "color": "#88ddff",
+    "size": 4,
+    "glowColor": "#88ddff",
+    "glowSize": 14,
+    "trail": "spark",
+    "image": "frost_bow"
+  },
+  {
+    "behavior": "frost",
+    "tag": "magic",
+    "shape": "beam",
+    "color": "#88ddff",
+    "size": 6,
+    "glowColor": "#aaffff",
+    "glowSize": 16,
+    "trail": "spark",
+    "image": "frost_magic"
+  },
+  {
+    "behavior": "frost",
+    "tag": "*",
+    "shape": "beam",
+    "color": "#88ddff",
+    "size": 5,
+    "glowColor": "#88ddff",
+    "glowSize": 14,
+    "trail": "spark",
+    "image": "frost_default"
+  },
+  {
+    "behavior": "homing",
+    "tag": "bow",
+    "shape": "arrow",
+    "color": "#ffff44",
+    "size": 4,
+    "glowColor": "#ffff44",
+    "glowSize": 14,
+    "trail": "line",
+    "image": "homing_bow"
+  },
+  {
+    "behavior": "homing",
+    "tag": "magic",
+    "shape": "circle",
+    "color": "#ffff44",
+    "size": 5,
+    "glowColor": "#ffffaa",
+    "glowSize": 16,
+    "trail": "line",
+    "image": "homing_magic"
+  },
+  {
+    "behavior": "homing",
+    "tag": "*",
+    "shape": "circle",
+    "color": "#ffff44",
+    "size": 4,
+    "glowColor": "#ffff44",
+    "glowSize": 14,
+    "trail": "line",
+    "image": "homing_default"
+  },
+  {
+    "behavior": "shock",
+    "tag": "*",
+    "shape": "bolt",
+    "color": "#ffaa44",
+    "size": 3,
+    "glowColor": "#ffaa44",
+    "glowSize": 20,
+    "trail": "spark",
+    "image": "shock"
+  },
+  {
+    "behavior": "spray",
+    "tag": "*",
+    "shape": "cone",
+    "color": "#ffffff",
+    "size": 3,
+    "glowColor": "#ffffff",
+    "glowSize": 12,
+    "trail": "none",
+    "image": "spray"
+  },
+  {
+    "behavior": "heal_bullet",
+    "tag": "medic",
+    "shape": "circle",
+    "color": "#00ff88",
+    "size": 5,
+    "glowColor": "#00ff88",
+    "glowSize": 16,
+    "trail": "line",
+    "image": "heal_bullet"
+  },
+  {
+    "behavior": "heal_bullet",
+    "tag": "*",
+    "shape": "circle",
+    "color": "#00ff88",
+    "size": 4,
+    "glowColor": "#00ff88",
+    "glowSize": 14,
+    "trail": "line",
+    "image": "heal_bullet"
+  },
+  {
+    "behavior": "melee_sweep",
+    "tag": "*",
+    "shape": "none",
+    "color": "",
+    "size": 0,
+    "glowColor": "",
+    "glowSize": 0,
+    "trail": "none",
+    "image": ""
+  },
+  {
+    "behavior": "melee_thrust",
+    "tag": "*",
+    "shape": "none",
+    "color": "",
+    "size": 0,
+    "glowColor": "",
+    "glowSize": 0,
+    "trail": "none",
+    "image": ""
+  },
+  {
+    "behavior": "shield_aura",
+    "tag": "*",
+    "shape": "none",
+    "color": "",
+    "size": 0,
+    "glowColor": "",
+    "glowSize": 0,
+    "trail": "none",
+    "image": ""
   }
 ];
