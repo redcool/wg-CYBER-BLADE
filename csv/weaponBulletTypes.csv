@@ -1,36 +1,50 @@
 # 武器弹道视觉类型配置
 # behavior: 武器行为标识 (bullet/spread/explode/frost/homing/shock/spray/heal_bullet/melee_sweep/melee_thrust/shield_aura)
-# tag: 武器标签 (gun/bow/magic/medic/lance/melee/*), * 通配全标签
+# tag: 新 3 标签 (ranged/magic/melee/*), * 通配全标签
+# class_2: 武器子类细分 (手枪/左轮/狙击/弓/弩等), 空=该 tag 默认
 # shape: 弹道形状 circle(圆) / arrow(箭/弹头) / bolt(闪电线) / beam(光束) / cone(扇形) / none(无弹道)
 # color: 默认主色 hex
-# size: 基础半径 px
+# size: 实际弹道像素宽 (16=16px 宽)
 # glowColor: 发光色 hex (空=同主色)
 # glowSize: 发光模糊半径 px
 # trail: 拖尾类型 line(短线) / spark(火花) / none(无)
 # image: 图片文件名（assets/bulletTypes/{imageName}.png）, 空=使用程序绘制
-behavior,tag,shape,color,size,glowColor,glowSize,trail,image
-bullet,gun,arrow,#ffffff,4,#ffffff,12,line,bullet_gun
-bullet,bow,arrow,#ffffff,4,#ffffff,12,line,bullet_bow
-bullet,magic,circle,#ffffaa,5,#ffffaa,14,line,bullet_magic
-bullet,medic,circle,#aaffaa,5,#aaffaa,14,line,bullet_medic
-bullet,lance,circle,#ffdd44,4,#ffdd44,12,line,bullet_lance
-bullet,melee,circle,#ffdd44,4,#ffdd44,12,line,bullet_melee
-bullet,*,circle,#ffff44,4,#ffff44,12,line,bullet_default
-spread,gun,arrow,#ffffff,3,#ffffff,10,line,spread_gun
-spread,bow,arrow,#ffffff,3,#ffffff,10,line,spread_bow
-spread,magic,circle,#ffffaa,4,#ffffaa,12,line,spread_magic
-spread,*,circle,#ffff44,3,#ffff44,10,line,spread_default
-explode,*,beam,#ff4444,8,#ff6600,18,spark,explode
-frost,bow,arrow,#88ddff,4,#88ddff,14,spark,frost_bow
-frost,magic,beam,#88ddff,6,#aaffff,16,spark,frost_magic
-frost,*,beam,#88ddff,5,#88ddff,14,spark,frost_default
-homing,bow,arrow,#ffff44,4,#ffff44,14,line,homing_bow
-homing,magic,circle,#ffff44,5,#ffffaa,16,line,homing_magic
-homing,*,circle,#ffff44,4,#ffff44,14,line,homing_default
-shock,*,bolt,#ffaa44,3,#ffaa44,20,spark,shock
-spray,*,cone,#ffffff,3,#ffffff,12,none,spray
-heal_bullet,medic,circle,#00ff88,5,#00ff88,16,line,heal_bullet
-heal_bullet,*,circle,#00ff88,4,#00ff88,14,line,heal_bullet
-melee_sweep,*,none,,0,,0,none,
-melee_thrust,*,none,,0,,0,none,
-shield_aura,*,none,,0,,0,none,
+behavior,tag,class_2,shape,color,size,glowColor,glowSize,trail,image
+bullet,ranged,,arrow,#ffffff,16,#ffffff,22,line,bullet_gun
+bullet,magic,,circle,#ffffaa,20,#ffffaa,25,line,bullet_magic
+bullet,melee,,circle,#ffdd44,16,#ffdd44,22,line,bullet_melee
+bullet,*,,circle,#ffff44,16,#ffff44,22,line,bullet_default
+spread,ranged,,arrow,#ffffff,12,#ffffff,18,line,spread_gun
+spread,magic,,circle,#ffffaa,16,#ffffaa,22,line,spread_magic
+spread,*,,circle,#ffff44,12,#ffff44,18,line,spread_default
+explode,*,,beam,#ff4444,32,#ff6600,32,spark,explode
+frost,ranged,,arrow,#88ddff,16,#88ddff,25,spark,frost_bow
+frost,magic,,beam,#88ddff,24,#aaffff,29,spark,frost_magic
+frost,*,,beam,#88ddff,20,#88ddff,25,spark,frost_default
+homing,ranged,,arrow,#ffff44,16,#ffff44,25,line,homing_bow
+homing,magic,,circle,#ffff44,20,#ffffaa,29,line,homing_magic
+homing,*,,circle,#ffff44,16,#ffff44,25,line,homing_default
+shock,*,,bolt,#ffaa44,12,#ffaa44,36,spark,shock
+spray,*,,cone,#ffffff,12,#ffffff,22,none,spray
+heal_bullet,magic,,circle,#00ff88,20,#00ff88,29,line,heal_bullet
+heal_bullet,*,,circle,#00ff88,16,#00ff88,25,line,heal_bullet
+melee_sweep,*,,none,,0,,0,none,
+melee_thrust,*,,none,,0,,0,none,
+shield_aura,*,,none,,0,,0,none,
+# ===== class_2 细分弹道 =====
+bullet,ranged,revolver,arrow,#ffffff,24,#ffddaa,29,line,bullet_gun
+bullet,ranged,sniper,arrow,#ffffff,12,#aaddff,36,line,bullet_gun
+bullet,ranged,longbow,arrow,#ccbb99,20,#ccbb99,25,spark,bullet_bow
+bullet,ranged,recurve,arrow,#ddbb77,16,#ddbb77,23,line,bullet_bow
+bullet,ranged,handcrossbow,arrow,#aaaadd,20,#aaaadd,23,line,bullet_bow
+bullet,ranged,heavycrossbow,arrow,#8888ff,24,#8888ff,29,line,bullet_bow
+bullet,magic,fire,circle,#ff6644,20,#ff4400,29,spark,bullet_magic
+bullet,magic,force,circle,#cc88ff,20,#aa44ff,29,line,bullet_magic
+bullet,magic,shadow,circle,#8844aa,20,#662299,25,line,bullet_magic
+bullet,magic,heal,circle,#44ff88,16,#00ff66,25,line,bullet_medic
+spread,ranged,shotgun,circle,#ffffff,20,#ffffff,18,line,spread_gun
+spread,ranged,smg,arrow,#ffffff,8,#ffffff,14,line,spread_gun
+spread,ranged,lmg,arrow,#ffddaa,12,#ffddaa,18,line,spread_gun
+spread,ranged,hmg,arrow,#ffddaa,12,#ffddaa,18,line,spread_gun
+homing,ranged,longbow,arrow,#ccbb99,20,#ccbb99,25,spark,homing_bow
+homing,magic,force,circle,#aa66ff,20,#8844ee,32,line,homing_magic

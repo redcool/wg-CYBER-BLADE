@@ -1,97 +1,46 @@
 // ============================================================
-// assets.js - 资源图标系统（从ComfyUI生成的PNG文件加载）
-// 武器大图标(large)、道具小暗图标(small/dim)、角色头像(round)
-// ============================================================
-
-// ============================================================
-// 资源文件名映射：游戏逻辑 ID → 磁盘上实际的 PNG 文件 slug
-// 解决代码 ID 与 ComfyUI 生成的 PNG 文件名不一致的问题
+// assets.js — 资源图标系统
+// 委托 ResourceLoader 按约定加载 assets/{dir}/{id}.png
+// 每个 CSV 对应一个 assets/ 子目录
 // ============================================================
 
 // 敌人 sprite 帧文件夹名映射（仅缺失的 ID 需要映射）
-// 磁盘上存在的帧文件夹: basic, boss, elite, fast, ranged, tank
-// 缺失的: exploder, healer, mortar, blinker —— 退回到视觉接近的敌人类型
 const ENEMY_SPRITE_SLUG = {
-    exploder: 'basic',   // 爆炸怪 → 用基础怪 sprite
-    healer:   'elite',   // 治疗怪 → 用精英怪 sprite（视觉接近）
-    mortar:   'ranged',  // 迫击炮 → 用远程怪 sprite
-    blinker:  'fast',    // 闪烁怪 → 用快速怪 sprite
+    exploder: 'basic',
+    healer:   'elite',
+    mortar:   'ranged',
+    blinker:  'fast',
 };
-
-// 道具图标文件名 slug 映射
-// 磁盘上实际存在的文件（23 个）：
-//   snake_case: blood_pact, burn_spreader, element_amp, energy_shield,
-//               ice_core, lifesteal, magnet, piggy, regen, replicator,
-//               scope, stim, thorn, critDmg
-//   camelCase:  armorUp, critUp, dodgeUp, harvestUp, hpUp, luckUp,
-//               pickupUp, rangeUp, speedUp
-const ITEM_FILE_SLUG = {
-    // snake_case → camelCase
-    hp_up: 'hpUp',
-    armor_up: 'armorUp',
-    speed_up: 'speedUp',
-    luck_up: 'luckUp',
-    harvest_up: 'harvestUp',
-    pickup_up: 'pickupUp',
-    range_up: 'rangeUp',
-    crit_up: 'critUp',
-    dodge_up: 'dodgeUp',
-    // snake_case → snake_case
-    life_steal: 'lifesteal',
-    // 以下道具在磁盘上不存在，使用替代品
-    melee_dmg: 'critDmg',          // 近战伤害 → 暴击伤害（同为伤害类）
-    ranged_dmg: 'critDmg',         // 远程伤害 → 暴击伤害
-    heavy_bullets: 'magnet',       // 重弹 → 磁铁（占位）
-    penetrator: 'magnet',
-    medkit: 'regen',
-    war_helm: 'armorUp',
-    adrenaline: 'speedUp',
-    thieves_blade: 'critUp',
-    elemental_ring: 'element_amp',
-    xp_boost: 'harvestUp',
-    hunting_trophy: 'luckUp',
-    coupon: 'piggy',
-    glass_cannon: 'critDmg',
-    reactive_armor: 'armorUp',
-    life_stealer: 'lifesteal',
-    iron_will: 'armorUp',
-    berserker: 'critDmg',
-    tardigrade: 'regen',
-    ricochet: 'magnet',
-    titan_heart: 'hpUp',
-    ghost_cloak: 'dodgeUp',
-    kings_crown: 'luckUp',
-    baby_eagle: 'critUp',
-    bloody_hand: 'lifesteal',
-    lightning_core: 'element_amp',
-    anvil: 'critDmg',
-};
-
-// 角色头像文件名 slug 映射 (已废弃, 改用 charIconHTML emoji 兜底)
-// 留空对象以保持向后兼容, 新代码请直接用 id 加载
-const CHAR_FILE_SLUG = {};
 
 const AssetSystem = {
-    // 图标缓存: { id: HTMLImageElement }
+    /** @type {ResourceLoader} */
+    weaponLoader: null,
+    /** @type {ResourceLoader} */
+    itemLoader: null,
+    /** @type {ResourceLoader} */
+    charLoader: null,
+    /** @type {ResourceLoader} */
+    enemyLoader: null,
+
+    // 向后兼容缓存引用（renderer 通过 AssetSystem.weaponIcons[id] 直接访问）
     weaponIcons: {},
     itemIcons: {},
     characterIcons: {},
     enemyIcons: {},
-    // 角色头像加载失败的 ID 集合 (用于 charIconHTML 退到 emoji 兜底)
+
+    // 角色头像加载失败 ID（用于 charIconHTML emoji 兜底）
     _charFailedIds: new Set(),
-    // Sprite 帧序列缓存: { entityId: [HTMLImageElement, ...] }
+
+    // 敌人 sprite 帧（不受 ResourceLoader 管理，结构特殊：frames + 方向）
     enemySpriteFrames: {},
-    // 方向帧缓存: { entityId: { down: [img,img,img,img], left: [...], right: [...], up: [...] } }
     enemyWalkFrames: {},
 
     _loaded: false,
-    _loadQueue: [],
     _onReady: null,
 
     init() {
         if (this._loaded) return Promise.resolve();
         return (async () => {
-            // 资产依赖 csv 数据(武器 id / 怪 id / 角色 id), 必须先等 DataLoader 预热
             if (typeof DataLoader !== 'undefined' && DataLoader.preloadAll) {
                 await DataLoader.preloadAll();
             }
@@ -102,38 +51,41 @@ const AssetSystem = {
         })();
     },
 
-    /**
-     * 把游戏逻辑 ID 转换为磁盘上实际的资源 slug
-     * @param {string} kind - 'sprite' | 'item' | 'char'
-     * @param {string} id - 游戏 ID
-     * @returns {string} 磁盘文件名 slug
-     */
-    _slug(kind, id) {
-        if (kind === 'sprite') return ENEMY_SPRITE_SLUG[id] || id;
-        if (kind === 'item') return ITEM_FILE_SLUG[id] || id;
-        if (kind === 'char') return CHAR_FILE_SLUG[id] || id;
-        return id;
-    },
-
     _preloadAll() {
-        // 武器 ID 动态从 csv 派生(避免硬编码白名单遗漏新武器如 cold_spray/flame_spray/poison_spray 等)
-        let weaponIds = [];
-        if (typeof ShopSystem !== 'undefined' && Array.isArray(ShopSystem.allWeapons) && ShopSystem.allWeapons.length > 0) {
-            weaponIds = ShopSystem.allWeapons.map(w => w.id).filter(Boolean);
-        } else if (typeof DataLoader !== 'undefined' && DataLoader._cache && Array.isArray(DataLoader._cache.weapons)) {
-            weaponIds = DataLoader._cache.weapons.map(w => w.id).filter(Boolean);
-        }
-        const ids = {
-            weapon: weaponIds,
-            item: ['hp_up','regen','armor_up','speed_up','luck_up','harvest_up','pickup_up','range_up','crit_up','life_steal','melee_dmg','ranged_dmg',
-            'stim','heavy_bullets','penetrator','medkit','war_helm','adrenaline','thieves_blade','elemental_ring','xp_boost','hunting_trophy','coupon','magnet',
-            'glass_cannon','energy_shield','blood_pact','replicator','scope','reactive_armor','life_stealer','iron_will','berserker','ice_core','burn_spreader','element_amp',
-            'tardigrade','ricochet','titan_heart','ghost_cloak','kings_crown','baby_eagle','bloody_hand','lightning_core','anvil'],
-            char: ['swordsman','gunslinger','fire_mage','archer','mech','assassin','medic','paladin','magic_gunner','berserker','dragon_knight','crossbowman','boxer','axeman','lancer','blade_wielder','ninja','ji_master','teng_pai_guard'],
-            enemy: ['basic','fast','exploder','tank','healer','ranged','mortar','blinker','elite','boss'],
-        };
+        // 创建 ResourceLoader 实例，共享外部 cache 以便保持引用透明
+        this.weaponLoader = new ResourceLoader({
+            csvName: 'weapons',
+            assetDir: 'weapons',
+            fallbackText: 'W',
+            skipCleanup: false,
+        });
+        this.itemLoader = new ResourceLoader({
+            csvName: 'items',
+            assetDir: 'items',
+            fallbackText: 'I',
+            skipCleanup: false,
+        });
+        this.charLoader = new ResourceLoader({
+            csvName: 'characters',
+            assetDir: 'chars',
+            fallbackText: '👤',
+            skipCleanup: false,
+        });
+        this.enemyLoader = new ResourceLoader({
+            csvName: 'enemies',
+            assetDir: 'enemies',
+            fallbackText: 'E',
+            skipCleanup: false,
+        });
 
-        const spriteFrameCount = 4;
+        // 共享 cache 引用 → renderer 通过 AssetSystem.weaponIcons[id] 仍可访问
+        this.weaponIcons = this.weaponLoader.cache;
+        this.itemIcons = this.itemLoader.cache;
+        this.characterIcons = this.charLoader.cache;
+        this.enemyIcons = this.enemyLoader.cache;
+        this._charFailedIds = this.charLoader.failedIds;
+
+        // 并行加载所有资源类型
         const _v = Date.now();
         let total = 0;
         let loaded = 0;
@@ -145,9 +97,66 @@ const AssetSystem = {
             }
         };
 
-        // 预加载敌人待机 sprite 帧（用 slug 映射）
-        for (const id of ids.enemy) {
-            const slug = this._slug('sprite', id);
+        // ---------- 武器 ----------
+        let weaponIds = [];
+        if (typeof ShopSystem !== 'undefined' && Array.isArray(ShopSystem.allWeapons) && ShopSystem.allWeapons.length > 0) {
+            weaponIds = ShopSystem.allWeapons.map(w => w.id).filter(Boolean);
+        } else if (typeof DataLoader !== 'undefined' && DataLoader._cache && Array.isArray(DataLoader._cache.weapons)) {
+            weaponIds = DataLoader._cache.weapons.map(w => w.id).filter(Boolean);
+        }
+        for (const id of weaponIds) {
+            total++;
+            this._loadImage(`assets/weapons/${id}.png?v=${_v}`, (img) => {
+                this.weaponLoader.cache[id] = img;
+                onLoad();
+            });
+        }
+
+        // ---------- 道具（图片缺失是正常的，只缓存存在的 PNG，不缓存 fallback） ----------
+        const itemIds = (typeof DataLoader !== 'undefined' && DataLoader._cache && Array.isArray(DataLoader._cache.items))
+            ? DataLoader._cache.items.map(i => i.id).filter(Boolean) : [];
+        for (const id of itemIds) {
+            total++;
+            this._loadImage(`assets/items/${id}.png?v=${_v}`, (img) => {
+                this.itemLoader.cache[id] = img;
+                onLoad();
+            }, false, () => {
+                // 不缓存 fallback → itemIconHTML 显示 'I' 文本兜底
+                onLoad();
+            });
+        }
+
+        // ---------- 角色 ----------
+        const charIds = (typeof DataLoader !== 'undefined' && DataLoader._cache && Array.isArray(DataLoader._cache.characters))
+            ? DataLoader._cache.characters.map(c => c.id).filter(Boolean) : [];
+        for (const id of charIds) {
+            total++;
+            this._loadImage(`assets/chars/${id}.png?v=${_v}`, (img) => {
+                this.charLoader.cache[id] = img;
+                onLoad();
+            }, false, () => {
+                // 图片缺失 → charIconHTML 显示 emoji 兜底
+                this.charLoader.failedIds.add(id);
+                onLoad();
+            });
+        }
+
+        // ---------- 敌人 ----------
+        const enemyIds = (typeof DataLoader !== 'undefined' && DataLoader._cache && Array.isArray(DataLoader._cache.enemies))
+            ? DataLoader._cache.enemies.map(e => e.id).filter(Boolean) : [];
+        for (const id of enemyIds) {
+            total++;
+            this._loadImage(`assets/enemies/${id}.png?v=${_v}`, (img) => {
+                this.enemyLoader.cache[id] = img;
+                onLoad();
+            });
+        }
+
+        // ---------- 敌人 sprite 帧（结构特殊，不走 ResourceLoader） ----------
+        const allEnemyIds = enemyIds;
+        const spriteFrameCount = 4;
+        for (const id of allEnemyIds) {
+            const slug = ENEMY_SPRITE_SLUG[id] || id;
             this.enemySpriteFrames[id] = [];
             for (let f = 1; f <= spriteFrameCount; f++) {
                 total++;
@@ -160,10 +169,9 @@ const AssetSystem = {
             }
         }
 
-        // 预加载敌人方向行走帧（用 slug 映射）
         const walkDirs = ['down', 'left', 'right', 'up'];
-        for (const id of ids.enemy) {
-            const slug = this._slug('sprite', id);
+        for (const id of allEnemyIds) {
+            const slug = ENEMY_SPRITE_SLUG[id] || id;
             this.enemyWalkFrames[id] = {};
             for (const dir of walkDirs) {
                 this.enemyWalkFrames[id][dir] = [];
@@ -177,46 +185,6 @@ const AssetSystem = {
                     }, true);
                 }
             }
-        }
-
-        for (const id of ids.weapon) {
-            total++;
-            this._loadImage(`assets/weapons/cb_weapon_${id}_00001_.png?v=${_v}`, (img) => {
-                this.weaponIcons[id] = img;
-                onLoad();
-            });
-        }
-        for (const id of ids.item) {
-            const slug = this._slug('item', id);
-            total++;
-            this._loadImage(`assets/items/cb_item_${slug}_00001_.png?v=${_v}`, (img) => {
-                this.itemIcons[id] = img;
-                onLoad();
-            });
-        }
-        for (const id of ids.char) {
-            total++;
-            // v1.2 双路径兜底: 优先 <id>.png (新约定), 失败回退 cb_char_<id>_00001_.png (旧约定)
-            this._loadImage(`assets/chars/${id}.png?v=${_v}`, (img) => {
-                this.characterIcons[id] = img;
-                onLoad();
-            }, false, () => {
-                // 新路径 404, 尝试旧约定 (10 个旧角色 cb_char_*_00001_.png)
-                this._loadImage(`assets/chars/cb_char_${id}_00001_.png?v=${_v}`, (img) => {
-                    this.characterIcons[id] = img;
-                    onLoad();
-                }, false, () => {
-                    // 两条路径都失败, 标记为 failed, charIconHTML 退到 emoji 兜底
-                    this._charFailedIds.add(id);
-                });
-            });
-        }
-        for (const id of ids.enemy) {
-            total++;
-            this._loadImage(`assets/enemies/cb_enemy_${id}_00001_.png?v=${_v}`, (img) => {
-                this.enemyIcons[id] = img;
-                onLoad();
-            });
         }
 
         if (total === 0) {
@@ -233,8 +201,6 @@ const AssetSystem = {
             } else {
                 const cleaned = this._removeBlackBg(img);
                 if (cleaned && cleaned.toDataURL) {
-                    // 把清理后的 Canvas 转成 data URL，再包装成 Image，
-                    // 这样 img.src 是有效字符串（不再返回 Canvas，导致 src="undefined"）
                     const cleanedImg = new Image();
                     cleanedImg.onload = () => callback(cleanedImg);
                     cleanedImg.onerror = () => callback(cleanedImg);
@@ -245,11 +211,16 @@ const AssetSystem = {
             }
         };
         img.onerror = () => {
-            console.warn(`[AssetSystem] Failed to load: ${src}`);
-            if (onError) onError();
-            const fallback = this._createFallback();
-            fallback.onload = () => callback(fallback);
-            fallback.onerror = () => callback(fallback);
+            // 静默降级: 文件不存在是正常情况（只有部分资源有 PNG）
+            // iconHTML 会被类型特定的兜底文本（I / W / C / E / emoji）
+            if (onError) {
+                onError();
+            } else if (callback) {
+                // 无 onError 时仍需通过 callback 确保计数推进
+                const fallback = this._createFallback();
+                fallback.onload = () => callback(fallback);
+                fallback.onerror = () => callback(fallback);
+            }
         };
         img.src = src;
     },
@@ -272,12 +243,10 @@ const AssetSystem = {
                 { r: data[(c.height - 1) * c.width * 4 + (c.width - 1) * 4], g: data[(c.height - 1) * c.width * 4 + (c.width - 1) * 4 + 1], b: data[(c.height - 1) * c.width * 4 + (c.width - 1) * 4 + 2] },
             ];
             const avgBrightness = corners.reduce((sum, p) => sum + p.r + p.g + p.b, 0) / 12;
-
             const threshold = 60;
 
             for (let i = 0; i < data.length; i += 4) {
                 const r = data[i], g = data[i+1], b = data[i+2];
-
                 if (avgBrightness > 128) {
                     if (r > 255 - threshold && g > 255 - threshold && b > 255 - threshold) {
                         data[i+3] = 0;
@@ -291,7 +260,7 @@ const AssetSystem = {
             ctx.putImageData(imageData, 0, 0);
             return c;
         } catch (e) {
-            console.warn('[AssetSystem] _removeBlackBg failed:', e);
+            console.warn('[AssetSystem] _removeBlackBg 失败:', e);
             return null;
         }
     },
@@ -313,24 +282,26 @@ const AssetSystem = {
         return fallback;
     },
 
+    // ===== HTML 生成器（委托 ResourceLoader，加类型特定兜底逻辑） =====
+
     weaponIconHTML(id, size) {
-        const img = this.weaponIcons[id];
         const s = size || 48;
+        const img = this.weaponIcons[id];
         if (!img) return `<div class="icon-fallback weapon-fallback" style="width:${s}px;height:${s}px">W</div>`;
         return `<img class="asset-icon weapon-icon" src="${img.src}" alt="${id}" width="${s}" height="${s}" style="object-fit:contain;" >`;
     },
 
     itemIconHTML(id, size) {
-        const img = this.itemIcons[id];
         const s = size || 28;
+        const img = this.itemIcons[id];
         if (!img) return `<div class="icon-fallback item-fallback" style="width:${s}px;height:${s}px">I</div>`;
         return `<img class="asset-icon item-icon" src="${img.src}" alt="${id}" width="${s}" height="${s}" style="object-fit:contain;" >`;
     },
 
     charIconHTML(id, size) {
         const s = size || 64;
-        // v1.1 资源兜底策略: 如果头像资源加载失败, 显示角色 emoji 图标
-        if (this._charFailedIds && this._charFailedIds.has(id)) {
+        // 角色特有：加载失败时显示 CSV 中的 emoji
+        if (this._charFailedIds.has(id)) {
             const charData = (typeof DataLoader !== 'undefined' && DataLoader._cache && DataLoader._cache.characters)
                 ? DataLoader._cache.characters.find(c => c.id === id)
                 : null;
@@ -343,8 +314,8 @@ const AssetSystem = {
     },
 
     enemyIconHTML(id, size) {
-        const img = this.enemyIcons[id];
         const s = size || 48;
+        const img = this.enemyIcons[id];
         if (!img) return `<div class="icon-fallback enemy-fallback" style="width:${s}px;height:${s}px">E</div>`;
         return `<img class="asset-icon enemy-icon" src="${img.src}" alt="${id}" width="${s}" height="${s}" style="object-fit:contain;" >`;
     },

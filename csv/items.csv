@@ -1,65 +1,98 @@
-﻿# 道具数值表
+# 道具数值表
 # 格式: CSV (逗号分隔), 以 # 开头的行为注释行
 # 可在 Excel / Google Sheets 中直接编辑
 #
-# ====== 列说明 (11列) ======
+# ====== 列说明 (12列) ======
 # id:        道具唯一标识 (英文, 程序内部使用)
 # name:      道具名 (中文)
 # desc:      道具描述 (显示在游戏中的文字)
 # cost:      基础购买价 (材料)
 # icon:      道具图标 (emoji)
-# qualifies: 生效条件表达式 (空=无条件, 格式如 "weapons_count>=2")
-# itemClass: 道具类型 (预留, 目前空)
+# unique:    是否唯一 (true=只能买一次)
+# qualifies: 生效条件表达式 (空=无条件, 如 "weapons_count>=2" 或武器标签)
 # rarity:    稀有度 (common|uncommon|rare|epic|legendary)
+# triggers:  触发器类型 (onKill|onHit|onFire|revive等, 用 | 分隔)
 # tags:      流派标签 (melee|ranged|fire|explosive|crit|tech|economy, 用 | 分隔)
-# effects:   特殊效果JSON (如 {"burnDps":3,"burnMaxStacks":1})
-# statMods:  属性修正JSON (如 {"maxHp":4, "hpRegen":0.3}, 叠加到角色面板)
+# effects:   特殊效果JSON (如 [{"burnDps":3,"burnMaxStacks":1}])
+# statMods:  属性修正JSON (如 {"maxHp":4, "hpRegen":0.3})
 #
 # 注: cost 为基础价, 商店实际售价受关卡数加成
-hp_up,生命强化,+15 最大生命,20,❤️,,,common,,,{"maxHp":4}
-hp_regen,治疗宝珠,+1 生命回复/秒,15,💚,,,common,,,{"hpRegen":0.3}
-speed_up,运动鞋,+10 移速,20,👟,,,common,,,{"speed":3}
-armor_up,护甲片,+2 护甲,25,🛡️,,,common,,,{"armor":1}
-dodge_up,轻羽披风,+3% 闪避,25,🌬️,,,common,,,"{""dodge"":0.03}"
-dmg_up,锐利尖刺,+10% 伤害,25,⚡,,,common,,,"{""damagePercent"":0.1}"
-attack_speed,速攻手套,+8% 攻速,25,💨,,,common,,,"{""attackSpeed"":0.08}"
-crit_up,锋利刀刃,+3%暴击 -2%伤害,25,💥,,,common,,,"{""critChance"":0.03,""damagePercent"":-0.02}"
-life_steal,吸血牙,+3%偷取 -2生命,25,🩸,,,common,,,"{""lifeSteal"":0.03,""maxHp"":-1}"
-melee_dmg,力量手套,+3近战 -1远程,20,⚔️,melee,,common,,,"{""meleeDamage"":1,""rangedDamage"":-1}"
-ranged_dmg,精准手套,+3远程 -1近战,20,🏹,gun|bow,,common,,,"{""rangedDamage"":1,""meleeDamage"":-1}"
-pickup_up,磁力手套,+12 拾取范围,15,🧲,,,common,,,{"pickupRange":3}
-range_up,瞄准镜,+30 射程 -3%攻速,20,🎯,,,common,,,"{""attackRange"":8,""attackSpeed"":-0.03}"
-bigger_hp,巨人药剂,+30 最大生命 -5%速度,30,🧪,,,uncommon,,,"{""maxHp"":8,""speed"":-1}"
-rapid_fire,速射核心,+15%攻速 -2护甲,35,🔥,,,uncommon,,,"{""attackSpeed"":0.15,""armor"":-1}"
-pierce_shot,穿甲弹,+2穿透 -5%伤害,30,💀,gun|bow,,uncommon,,,"{""projectilePierce"":2,""damagePercent"":-0.05}"
-thorns_item,荆棘甲,反弹 5 伤害,25,🌵,,,uncommon,reflective,"[{""type"":""reflect"",""value"":5}]",{}
-elemental_dmg,元素水晶,+3 元素伤害,30,🔮,,,uncommon,,,{"elementalDamage":1}
-regen_belt,生命腰带,+2生命回复 +20生命,30,💚,,,uncommon,,,"{""hpRegen"":0.5,""maxHp"":5}"
-lucky_coin,幸运币,+3%暴击 +15%经验,30,🪙,,,uncommon,,,"{""critChance"":0.03,""xpGain"":0.15}"
-evasion_cloak,幻影斗篷,+5%闪避 +20生命,35,🌀,,,uncommon,,,"{""dodge"":0.05,""maxHp"":5}"
-warrior_ring,战士之戒,+15%伤害 -3%攻速,35,💍,,,uncommon,,,"{""damagePercent"":0.15,""attackSpeed"":-0.03}"
-steel_boots,铁靴,+3护甲 +20生命 -5%移速,30,👢,,,uncommon,,,"{""armor"":1,""maxHp"":5,""speed"":-1}"
-fury_blade,狂暴之刃,+10%攻速 击杀+2%攻速(5秒),35,🗡️,,,uncommon,onKill,"[{""type"":""buffAttackSpeed"",""value"":0.02,""duration"":5}]","{""attackSpeed"":0.1}"
-sniper_scope,狙击镜,+45射程 -5%伤害,30,🔭,gun|bow,,uncommon,,,"{""attackRange"":11,""damagePercent"":-0.05}"
-repair_kit,维修包,+3生命回复 -2%闪避,30,🔧,,,uncommon,,,"{""hpRegen"":0.8,""dodge"":-0.02}"
-giant_heart,泰坦之心,+50 最大生命,50,❤️‍🔥,,,rare,,,{"maxHp":13}
-berserker_axe,狂战士斧,+25%伤害 -5护甲,60,🪓,,,rare,,,"{""damagePercent"":0.25,""armor"":-1}"
-vampire_cape,吸血鬼披风,+5%偷取 -15生命,55,🧛,,,rare,,,"{""lifeSteal"":0.05,""maxHp"":-4}"
-phoenix_wing,凤凰羽翼,+8%攻速 +5%伤害,55,🪶,,,rare,,,"{""attackSpeed"":0.08,""damagePercent"":0.05}"
-stone_armor,岩石铠甲,+8护甲 -15移速,50,🪨,,,rare,,,"{""armor"":2,""speed"":-4}"
-shadow_blade,暗影之刃,+8%暴击 -2生命回复,55,🗡️,,,rare,,,"{""critChance"":0.08,""hpRegen"":-1}"
-energy_shield,能量护盾,受到伤害回蓝 30%,50,🛡️,,,rare,onHit,"[{""type"":""restoreMana"",""chance"":0.3,""value"":5}]",{}
-replicator,复制器,20%概率双倍子弹,60,🔄,gun|bow,,rare,onFire,"[{""type"":""duplicateBullet"",""chance"":0.2}]",{}
-magnet_item,超强磁铁,拾取范围×2,40,🧲,,,rare,,,{"pickupRange":250}
-coupon_item,打折券,商店8折,30,🎫,,,rare,shopDiscount,,{"shopDiscount":0.8}
-explosive_rounds,爆破弹,"击中爆炸(120范围,50%伤害)",60,💥,gun|bow,,rare,onHit,"[{""type"":""explosion"",""radius"":120,""damagePercent"":0.5}]",{}
-scroll_knowledge,知识卷轴,+25%经验 +5%伤害,45,📜,,,rare,,,"{""xpGain"":0.25,""damagePercent"":0.05}"
-tardigrade,水熊虫基因,致命伤免死一次,80,🧬,,,legendary,revive,"[{""type"":""revive"",""value"":1}]",{"maxHp":8}
-ricochet_item,弹射核心,子弹弹射+2,90,🎱,gun|bow,,legendary,ricochet,"[{""type"":""ricochet"",""count"":2}]",{}
-atomic_core,原子核心,+50%伤害 +10%暴击,100,☢️,,,legendary,,,"{""damagePercent"":0.5,""critChance"":0.1}"
-blood_orb,血之宝珠,+8%偷取 +10%伤害 -20生命,80,🔴,,,legendary,,,"{""lifeSteal"":0.08,""damagePercent"":0.1,""maxHp"":-5}"
-divine_armor,神圣铠甲,+12护甲 +50生命,100,✨,,,legendary,,,"{""armor"":3,""maxHp"":13}"
-ninja_tabi,忍者足袋,+30移速 +10%闪避,90,👟,,,legendary,,,"{""speed"":8,""dodge"":0.1}"
-anvil,神之铁砧,物品+1升级,120,🔨,,,legendary,upgrade,"[{""type"":""upgradeItems"",""count"":1}]",{}
-healing_spring,生命之泉,+5生命回复 +50生命,80,🌊,,,legendary,,,"{""hpRegen"":1.3,""maxHp"":13}"
-celestial_wings,天使之翼,+20%闪避 +15%攻速 -50生命,100,👼,,,legendary,,,"{""dodge"":0.2,""attackSpeed"":0.15,""maxHp"":-12}"
+id,name,desc,cost,icon,unique,qualifies,rarity,triggers,tags,effects,statMods
+hp_up,生命强化,+15 最大生命,20,❤️,false,,common,,,,{maxHp:4}
+hp_regen,治疗宝珠,+1 生命回复/秒,15,💚,false,,common,,,,{hpRegen:0.3}
+speed_up,运动鞋,+10 移速,20,👟,false,,common,,,,{speed:3}
+armor_up,护甲片,+2 护甲,25,🛡️,false,,common,,,,{armor:1}
+dodge_up,轻羽披风,+3% 闪避,25,🌬️,false,,common,,,,"{""dodge"":0.03}"
+dmg_up,锐利尖刺,+10% 伤害,25,⚡,false,,common,,,,"{""damagePercent"":0.1}"
+attack_speed,速攻手套,+8% 攻速,25,💨,false,,common,,,,"{""attackSpeed"":0.08}"
+crit_up,锋利刀刃,+3%暴击 -2%伤害,25,💥,false,,common,,,,"{""critChance"":0.03,""damagePercent"":-0.02}"
+life_steal,吸血牙,+3%偷取 -2生命,25,🩸,false,,common,,,,"{""lifeSteal"":0.03,""maxHp"":-1}"
+melee_dmg,力量手套,+3近战 -1远程,20,⚔️,false,melee,common,,melee,,"{""meleeDamage"":1,""rangedDamage"":-1}"
+ranged_dmg,精准手套,+3远程 -1近战,20,🏹,false,ranged,common,,ranged,,"{""rangedDamage"":1,""meleeDamage"":-1}"
+pickup_up,磁力手套,+12 拾取范围,15,🧲,false,,common,,,,{pickupRange:3}
+range_up,瞄准镜,+30 射程 -3%攻速,20,🎯,false,,common,,,,"{""attackRange"":8,""attackSpeed"":-0.03}"
+bigger_hp,巨人药剂,+30 最大生命 -5%速度,30,🧪,false,,uncommon,,,,"{""maxHp"":8,""speed"":-1}"
+rapid_fire,速射核心,+15%攻速 -2护甲,35,🔥,false,,uncommon,,,,"{""attackSpeed"":0.15,""armor"":-1}"
+pierce_shot,穿甲弹,+2穿透 -5%伤害,30,💀,false,ranged,uncommon,,ranged,,"{""projectilePierce"":2,""damagePercent"":-0.05}"
+thorns_item,荆棘甲,反弹 5 伤害,25,🌵,false,,uncommon,onDamageTaken,,"[{""type"":""reflect"",""value"":5}]",{}
+elemental_dmg,元素水晶,+3元素伤害 -1近战,30,🔮,false,,uncommon,,fire,,"{""elementalDamage"":3,""meleeDamage"":-1}"
+regen_belt,生命腰带,+2生命回复 +20生命,30,💚,false,,uncommon,,,,"{""hpRegen"":0.5,""maxHp"":5}"
+lucky_coin,幸运币,+3%暴击 +15%经验,30,🪙,false,,uncommon,,,,"{""critChance"":0.03,""xpGain"":0.15}"
+evasion_cloak,幻影斗篷,+5%闪避 +20生命,35,🌀,false,,uncommon,,,,"{""dodge"":0.05,""maxHp"":5}"
+warrior_ring,战士之戒,+15%伤害 -3%攻速,35,💍,false,,uncommon,,,,"{""damagePercent"":0.15,""attackSpeed"":-0.03}"
+steel_boots,铁靴,+3护甲 +20生命 -5%移速,30,👢,false,,uncommon,,,,"{""armor"":1,""maxHp"":5,""speed"":-1}"
+fury_blade,狂暴之刃,+10%攻速 击杀+2%攻速(5秒),35,🗡️,false,,uncommon,onKill,,"[{""type"":""buffAttackSpeed"",""value"":0.02,""duration"":5}]","{""attackSpeed"":0.1}"
+sniper_scope,狙击镜,+45射程 -5%伤害,30,🔭,false,ranged,uncommon,,ranged,,"{""attackRange"":11,""damagePercent"":-0.05}"
+repair_kit,维修包,+3生命回复 -2%闪避,30,🔧,false,,uncommon,,,,"{""hpRegen"":0.8,""dodge"":-0.02}"
+giant_heart,泰坦之心,+50 最大生命,50,❤️‍🔥,false,,rare,,,,{maxHp:13}
+berserker_axe,狂战士斧,+25%伤害 -5护甲,60,🪓,false,,rare,,,,"{""damagePercent"":0.25,""armor"":-1}"
+vampire_cape,吸血鬼披风,+5%偷取 -15生命,55,🧛,false,,rare,,,,"{""lifeSteal"":0.05,""maxHp"":-4}"
+phoenix_wing,凤凰羽翼,+8%攻速 +5%伤害,55,🪶,false,,rare,,,,"{""attackSpeed"":0.08,""damagePercent"":0.05}"
+stone_armor,岩石铠甲,+8护甲 -15移速,50,🪨,false,,rare,,,,"{""armor"":2,""speed"":-4}"
+shadow_blade,暗影之刃,+8%暴击 -2生命回复,55,🗡️,false,,rare,,,,"{""critChance"":0.08,""hpRegen"":-1}"
+energy_shield,能量护盾,受到伤害回蓝 30%,50,🛡️,false,,rare,onHit,,"[{""type"":""restoreMana"",""chance"":0.3,""value"":5}]",{}
+replicator,复制器,20%概率双倍子弹,60,🔄,false,ranged,rare,onFire,ranged,"[{""type"":""duplicateBullet"",""chance"":0.2}]",{}
+magnet_item,超强磁铁,拾取范围×2,40,🧲,false,,rare,,,,{pickupRange:250}
+coupon_item,打折券,商店8折,30,🎫,false,,rare,,,,{shopDiscount:0.8}
+explosive_rounds,爆破弹,"击中爆炸(120范围,50%伤害)",60,💥,false,ranged,rare,onHit,ranged,"[{""type"":""explosion"",""radius"":120,""damagePercent"":0.5}]",{}
+scroll_knowledge,知识卷轴,+25%经验 +5%伤害,45,📜,false,,rare,,,,"{""xpGain"":0.25,""damagePercent"":0.05}"
+tardigrade,水熊虫基因,致命伤免死一次,80,🧬,true,,legendary,revive,,"[{""type"":""revive"",""value"":1}]",{maxHp:8}
+ricochet_item,弹射核心,子弹弹射+2,90,🎱,false,ranged,legendary,onHit,ranged,"[{""type"":""ricochet"",""count"":2}]",{}
+atomic_core,原子核心,+50%伤害 +10%暴击,100,☢️,false,,legendary,,,,"{""damagePercent"":0.5,""critChance"":0.1}"
+blood_orb,血之宝珠,+8%偷取 +10%伤害 -20生命,80,🔴,false,,legendary,,,,"{""lifeSteal"":0.08,""damagePercent"":0.1,""maxHp"":-5}"
+divine_armor,神圣铠甲,+12护甲 +50生命,100,✨,false,,legendary,,,,"{""armor"":3,""maxHp"":13}"
+ninja_tabi,忍者足袋,+30移速 +10%闪避,90,👟,false,,legendary,,,,"{""speed"":8,""dodge"":0.1}"
+anvil,神之铁砧,物品+1升级,120,🔨,true,,legendary,onBuy,,"[{""type"":""upgradeItems"",""count"":1}]",{}
+healing_spring,生命之泉,+5生命回复 +50生命,80,🌊,false,,legendary,,,,"{""hpRegen"":1.3,""maxHp"":13}"
+celestial_wings,天使之翼,+20%闪避 +15%攻速 -50生命,100,👼,false,,legendary,,,,"{""dodge"":0.2,""attackSpeed"":0.15,""maxHp"":-12}"
+# ====== 新增流派标签道具（2026-06 基于 Brotato 规则调整）======
+# 规则: 通用性越强越需要负面效果; 专业属性可纯正面; 标签影响商店偏向
+# ====== magic/fire 系 ======
+magic_wand,魔法短杖,+1元素伤害 -1近战伤害,20,🪄,false,,common,,fire,,"{""elementalDamage"":1,""meleeDamage"":-1}"
+mana_ring,魔力戒指,+3元素伤害 -3%攻速,35,💍,false,,uncommon,,fire,,"{""elementalDamage"":3,""attackSpeed"":-0.03}"
+fire_rune,火焰符文,+15%伤害 -1护甲,40,🔴,false,magic,uncommon,,fire,,"{""damagePercent"":0.15,""armor"":-1}"
+void_crystal,虚空水晶,+5元素伤害 +3%暴击 -1生命回复,60,🔮,false,,rare,,fire,,"{""elementalDamage"":5,""critChance"":0.03,""hpRegen"":-0.3}"
+phoenix_core,凤凰核心,+8元素伤害 +15%攻速 -30最大生命,100,🪶,false,,legendary,,fire,,"{""elementalDamage"":8,""attackSpeed"":0.15,""maxHp"":-8}"
+# ====== crit 暴击系 ======
+lucky_ring,幸运戒指,+5%暴击 -2最大生命,30,💍,false,,uncommon,,crit,,"{""critChance"":0.05,""maxHp"":-1}"
+razor_shard,锋锐碎片,+8%暴击 +30%暴伤 -1护甲,55,🗡️,false,,rare,,crit,,"{""critChance"":0.08,""critDamage"":0.3,""armor"":-1}"
+perfection_eye,完美之眼,+15%暴击 +50%暴伤 -30最大生命,100,👁️,false,,legendary,,crit,,"{""critChance"":0.15,""critDamage"":0.5,""maxHp"":-8}"
+# ====== tech 工程系 ======
+circuit_board,电路板,+1工程值,15,🔌,false,,common,,tech,,{engineering:1}
+mech_arm,机械臂,+3工程值 -1近战伤害,35,🦾,false,,uncommon,,tech,,"{""engineering"":3,""meleeDamage"":-1}"
+turret_module,炮台核心,+6工程值 -2%闪避,60,🎯,false,,rare,,tech,,"{""engineering"":6,""dodge"":-0.02}"
+factory_heart,工厂之心,+10工程值 -8移速,100,⚙️,false,,legendary,,tech,,"{""engineering"":10,""speed"":-2}"
+# ====== explosive 爆炸系 ======
+gunpowder_bag,火药袋,+15%伤害 -1护甲,35,💥,false,ranged,uncommon,,explosive,,"{""damagePercent"":0.15,""armor"":-1}"
+explosive_charge,爆破炸药,+30%伤害 -3%攻速,60,🧨,false,ranged,rare,,explosive,,"{""damagePercent"":0.3,""attackSpeed"":-0.03}"
+atomic_warhead,原子弹头,+50%伤害 -20最大生命,100,☢️,false,,legendary,,explosive,,"{""damagePercent"":0.5,""maxHp"":-5}"
+# ====== economy 经济系 ======
+coin_purse,钱袋,+20%采集 -3%攻速,30,💰,false,,uncommon,,economy,,"{""harvesting"":0.2,""attackSpeed"":-0.03}"
+golden_statue,金像,+30%采集 -1生命回复,55,🗿,false,,rare,,economy,,"{""harvesting"":0.3,""hpRegen"":-0.3}"
+# ====== melee 近战补强 ======
+warrior_belt,战士腰带,+2近战伤害 -1远程伤害,20,🦵,false,melee,common,,melee,,"{""meleeDamage"":2,""rangedDamage"":-1}"
+heavy_gauntlet,重型铁拳,+4近战伤害 -3%攻速,35,🥊,false,melee,uncommon,,melee,,"{""meleeDamage"":4,""attackSpeed"":-0.03}"
+berserker_helm,狂战头盔,+6近战伤害 +5%暴击 -1护甲,60,⛑️,false,melee,rare,,melee,,"{""meleeDamage"":6,""critChance"":0.05,""armor"":-1}"
+# ====== ranged 远程补强 ======
+quick_shot,速射手套,+3远程伤害 -2近战 +5%攻速,35,🧤,false,ranged,uncommon,,ranged,,"{""rangedDamage"":3,""meleeDamage"":-2,""attackSpeed"":0.05}"
+long_barrel,长枪管,+5远程伤害 +30射程 -3%攻速,60,🔫,false,ranged,rare,,ranged,,"{""rangedDamage"":5,""attackRange"":8,""attackSpeed"":-0.03}"

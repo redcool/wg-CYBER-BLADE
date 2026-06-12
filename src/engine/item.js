@@ -49,6 +49,10 @@ const ItemSystem = {
      * 解析 JSON 中的 triggers + effects → 内部触发器格式
      * items.json 的 triggers 是 string[]（触发器类型列表），
      * effects 是 JSON 数组（效果列表），两者需合并。
+     *
+     * 注意：CSV 触发器多为 camelCase（如 onKill），而运行时事件
+     * 分发用 PascalCase（如 OnKill），这里做自动归一化。
+     *
      * @param {string[]} triggerTypes
      * @param {Object[]} effectArray
      * @returns {Object[]}
@@ -57,11 +61,28 @@ const ItemSystem = {
         if (!triggerTypes || triggerTypes.length === 0) return [];
         if (!effectArray || !Array.isArray(effectArray)) return [];
 
-        return triggerTypes.map((type, i) => ({
-            type,
-            chance: 1.0,
-            effect: effectArray[i] || effectArray[0] || null,
-        })).filter(t => t.effect !== null);
+        return triggerTypes.map((type, i) => {
+            const eff = effectArray[i] || effectArray[0] || null;
+            return {
+                type: this._normalizeTriggerType(type),
+                // 从 effect 中读取 chance（如 energy_shield 的 30% 概率），避免在 handler 中重复实现
+                chance: (eff && eff.chance !== undefined) ? eff.chance : 1.0,
+                effect: eff,
+            };
+        }).filter(t => t.effect !== null);
+    },
+
+    /**
+     * 归一化触发器类型：camelCase → PascalCase
+     * 如 onKill → OnKill, onHit → OnHit
+     * 非标准类型（如 reflective/ricochet）保持原样
+     */
+    _normalizeTriggerType(type) {
+        if (!type) return type;
+        // 已 PascalCase 的不动
+        if (/^[A-Z]/.test(type)) return type;
+        // camelCase → PascalCase: abcDef → AbcDef
+        return type.charAt(0).toUpperCase() + type.slice(1);
     },
 
     // -------------------------------------------------------
@@ -110,6 +131,15 @@ const ItemSystem = {
 
         // 加入持有列表
         this.ownedItems.push(itemId);
+
+        // 触发 OnBuy 类型的触发器（如 anvil 升级道具效果）
+        if (item.triggers) {
+            for (const trigger of item.triggers) {
+                if (trigger.type === 'OnBuy') {
+                    this._executeEffect(trigger.effect, player, {});
+                }
+            }
+        }
 
         return true;
     },

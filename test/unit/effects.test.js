@@ -122,6 +122,50 @@ describe('EffectEngine - statMod', () => {
     });
 });
 
+describe('EffectEngine - restoreMana', () => {
+    it('E17: 回复魔力', () => {
+        const p = { mana: 30, maxMana: 100 };
+        EffectEngine.execute({ type: 'restoreMana', value: 25 }, p, {});
+        expect(p.mana).toBe(55);
+    });
+
+    it('E18: 不超过 maxMana', () => {
+        const p = { mana: 90, maxMana: 100 };
+        EffectEngine.execute({ type: 'restoreMana', value: 25 }, p, {});
+        expect(p.mana).toBe(100);
+    });
+});
+
+describe('EffectEngine - revive', () => {
+    it('E19: 设置复活计数', () => {
+        const p = {};
+        EffectEngine.execute({ type: 'revive', value: 1 }, p, {});
+        expect(p._revivePending).toBe(1);
+    });
+
+    it('E20: 多次叠加', () => {
+        const p = {};
+        EffectEngine.execute({ type: 'revive', value: 1 }, p, {});
+        EffectEngine.execute({ type: 'revive', value: 2 }, p, {});
+        expect(p._revivePending).toBe(3);
+    });
+});
+
+describe('EffectEngine - ricochet', () => {
+    it('E21: 设置弹射标记', () => {
+        const target = {};
+        EffectEngine.execute({ type: 'ricochet', count: 2 }, {}, { target });
+        expect(target._ricochetExtra).toBe(2);
+    });
+});
+
+describe('EffectEngine - upgradeItems', () => {
+    it('E22: 不报错（依赖 ShopSystem 的存在）', () => {
+        EffectEngine.execute({ type: 'upgradeItems', count: 1 }, {}, {});
+        // Should not throw even without ShopSystem
+    });
+});
+
 describe('EffectEngine - 未知类型', () => {
     it('E15: 不存在的类型不报错', () => {
         EffectEngine.execute({ type: 'nonexistent' }, {}, {});

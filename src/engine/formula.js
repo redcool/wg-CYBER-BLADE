@@ -3,14 +3,11 @@
 // 所有公式集中存放, 便于调整平衡
 // ============================================================
 
-/** Weapon Tag → Flat Stat 映射表 */
+/** Weapon Tag → Flat Stat 映射表 (新 3 标签) */
 const TAG_TO_FLAT_STAT = {
     melee:     'meleeDamage',
-    gun:       'rangedDamage',
-    bow:       'rangedDamage',
+    ranged:    'rangedDamage',
     magic:     'elementalDamage',
-    medic:     null,
-    lance:     'meleeDamage',
     support:   null,
     Primitive: null,
 };
@@ -85,7 +82,7 @@ const FormulaSystem = {
     /**
      * 判断武器 tag 是否在角色擅长标签中
      * @param {Object} player - 玩家对象 (含 player.tags)
-     * @param {string} weaponTag - 武器 tag (melee|gun|bow|magic|medic|lance|support)
+     * @param {string} weaponTag - 武器 tag (melee|ranged|magic)
      * @returns {boolean}
      */
     _isTagMatched(player, weaponTag) {
@@ -103,7 +100,7 @@ const FormulaSystem = {
         // melee 特殊处理: 所有 melee 子类型 (melee_sweep/melee_thrust) 都归入 melee tag
         if (wTag === 'melee') {
             // 检查是否有任何近战相关的 tag
-            const meleeRelated = ['melee', 'lance'];
+            const meleeRelated = ['melee'];
             return meleeRelated.some(t => pTags.includes(t));
         }
         // support/Primitive 类: 不支持 melee 标签匹配, 始终按原始 tag 判定

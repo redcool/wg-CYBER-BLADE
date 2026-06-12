@@ -14,7 +14,8 @@
  * 效果类型列表:
  *   heal, applyBurn, applySlow, duplicateBullet, explosion,
  *   reflectDamage, spreadBurn, damagePercentBoost, speedBoost,
- *   statMod, conditionalStatMod
+ *   statMod, conditionalStatMod,
+ *   restoreMana, revive, ricochet, upgradeItems
  */
 const EFFECT_HANDLERS = {
     /** 回复 HP: { value } - 不超出 maxHp */
@@ -117,6 +118,34 @@ const EFFECT_HANDLERS = {
             } else {
                 player[stat] = val;
             }
+        }
+    },
+
+    /** 恢复魔力/能量: { value } — 供 energy_shield 使用 */
+    restoreMana: (effect, player, context) => {
+        if (!player) return;
+        if (player.mana !== undefined) {
+            const value = effect.value || 0;
+            player.mana = Math.min(player.maxMana || player.mana, player.mana + value);
+        }
+    },
+
+    /** 复活: { value } — 设置复活标记，死亡前检查 */
+    revive: (effect, player, context) => {
+        if (!player) return;
+        player._revivePending = (player._revivePending || 0) + (effect.value || 1);
+    },
+
+    /** 弹射: { count } — 标记目标敌人需要额外弹射（由 combat 系统处理） */
+    ricochet: (effect, player, context) => {
+        if (!context || !context.target) return;
+        context.target._ricochetExtra = (context.target._ricochetExtra || 0) + (effect.count || 0);
+    },
+
+    /** 升级道具: { count } — 在购买时立即触发，由 ShopSystem 升级随机道具 */
+    upgradeItems: (effect, player, context) => {
+        if (typeof ShopSystem !== 'undefined' && ShopSystem.upgradeRandomItem) {
+            ShopSystem.upgradeRandomItem(effect.count || 1);
         }
     },
 

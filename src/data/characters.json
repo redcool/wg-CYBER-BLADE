@@ -8,7 +8,7 @@
     "maxWeapons": 6,
     "maxHp": 30,
     "hpRegen": 0.1,
-    "speed": 120,
+    "speed": 156,
     "damagePercent": 0,
     "attackSpeed": 1.2,
     "attackRange": 0,
@@ -26,8 +26,7 @@
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "melee",
-      "lance"
+      "melee"
     ],
     "unlockType": "",
     "unlockValue": null,
@@ -42,10 +41,9 @@
     ],
     "preferredClasses_2": [
       "katana",
-      "longsword",
+      "sword",
       "rapier",
-      "lance",
-      "halberd"
+      "pike"
     ]
   },
   {
@@ -57,7 +55,7 @@
     "maxWeapons": 6,
     "maxHp": 23,
     "hpRegen": 0.1,
-    "speed": 110,
+    "speed": 143,
     "damagePercent": 0,
     "attackSpeed": 1.3,
     "attackRange": 0,
@@ -75,7 +73,7 @@
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "gun"
+      "ranged"
     ],
     "unlockType": "",
     "unlockValue": null,
@@ -102,7 +100,7 @@
     "maxWeapons": 6,
     "maxHp": 20,
     "hpRegen": 0.1,
-    "speed": 100,
+    "speed": 130,
     "damagePercent": 0,
     "attackSpeed": 0.9,
     "attackRange": 0,
@@ -147,7 +145,7 @@
     "maxWeapons": 6,
     "maxHp": 24,
     "hpRegen": 0.1,
-    "speed": 115,
+    "speed": 150,
     "damagePercent": 0,
     "attackSpeed": 1.1,
     "attackRange": 0,
@@ -165,7 +163,7 @@
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "bow"
+      "ranged"
     ],
     "unlockType": "",
     "unlockValue": null,
@@ -193,7 +191,7 @@
     "maxWeapons": 5,
     "maxHp": 45,
     "hpRegen": 0.1,
-    "speed": 70,
+    "speed": 91,
     "damagePercent": 0,
     "attackSpeed": 0.8,
     "attackRange": 0,
@@ -211,9 +209,8 @@
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "gun",
       "melee",
-      "lance"
+      "ranged"
     ],
     "unlockType": "maxLevel",
     "unlockValue": 5,
@@ -230,7 +227,7 @@
       "greataxe",
       "lmg",
       "hmg",
-      "lance"
+      "pike"
     ]
   },
   {
@@ -242,7 +239,7 @@
     "maxWeapons": 4,
     "maxHp": 18,
     "hpRegen": 0.2,
-    "speed": 140,
+    "speed": 182,
     "damagePercent": 0,
     "attackSpeed": 1.5,
     "attackRange": 0,
@@ -261,8 +258,7 @@
     "engineering": 0,
     "tags": [
       "melee",
-      "bow",
-      "lance"
+      "ranged"
     ],
     "unlockType": "totalKills",
     "unlockValue": 100,
@@ -291,7 +287,7 @@
     "maxWeapons": 6,
     "maxHp": 25,
     "hpRegen": 1,
-    "speed": 100,
+    "speed": 130,
     "damagePercent": 0,
     "attackSpeed": 1,
     "attackRange": 0,
@@ -309,7 +305,7 @@
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "medic"
+      "magic"
     ],
     "unlockType": "totalKills",
     "unlockValue": 80,
@@ -323,8 +319,6 @@
     ],
     "preferredClasses_2": [
       "heal",
-      "regen",
-      "holy",
       "force"
     ]
   },
@@ -337,7 +331,7 @@
     "maxWeapons": 6,
     "maxHp": 35,
     "hpRegen": 0,
-    "speed": 90,
+    "speed": 117,
     "damagePercent": 0,
     "attackSpeed": 0.9,
     "attackRange": 0,
@@ -356,8 +350,7 @@
     "engineering": 0,
     "tags": [
       "melee",
-      "medic",
-      "lance"
+      "magic"
     ],
     "unlockType": "maxLevel",
     "unlockValue": 10,
@@ -371,11 +364,9 @@
       "Heavy"
     ],
     "preferredClasses_2": [
-      "longsword",
-      "holy",
+      "sword",
       "heal",
-      "lance",
-      "halberd"
+      "pike"
     ]
   },
   {
@@ -387,7 +378,7 @@
     "maxWeapons": 6,
     "maxHp": 23,
     "hpRegen": 0.1,
-    "speed": 105,
+    "speed": 137,
     "damagePercent": 0,
     "attackSpeed": 1.1,
     "attackRange": 0,
@@ -405,7 +396,7 @@
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "gun",
+      "ranged",
       "magic"
     ],
     "unlockType": "totalKills",
@@ -437,7 +428,7 @@
     "maxWeapons": 6,
     "maxHp": 28,
     "hpRegen": 0.1,
-    "speed": 100,
+    "speed": 130,
     "damagePercent": 0,
     "attackSpeed": 1,
     "attackRange": 0,
@@ -482,7 +473,7 @@
     "maxWeapons": 5,
     "maxHp": 15,
     "hpRegen": 0.1,
-    "speed": 130,
+    "speed": 169,
     "damagePercent": 0,
     "attackSpeed": 1.6,
     "attackRange": 0,
@@ -501,11 +492,8 @@
     "engineering": 0,
     "tags": [
       "melee",
-      "gun",
-      "bow",
-      "magic",
-      "medic",
-      "lance"
+      "ranged",
+      "magic"
     ],
     "unlockType": "maxLevel",
     "unlockValue": 15,
@@ -525,65 +513,63 @@
       "Elemental",
       "Medical",
       "Support",
-      "Primitive"
+      "Primitive",
+      "Tool"
     ],
     "preferredClasses_2": [
-      "longsword",
+      "sword",
+      "dagger",
       "katana",
       "saber",
       "scimitar",
-      "dagger",
       "rapier",
       "machete",
-      "mace",
-      "hammer",
-      "club",
-      "staff",
-      "flail",
-      "war_staff",
-      "greataxe",
-      "warhammer",
-      "halberd",
-      "pike",
-      "lance",
-      "trident",
-      "greataxe",
+      "claws",
       "kris",
       "stiletto",
+      "hammer",
+      "club",
+      "flail",
+      "staff",
+      "tonfa",
+      "greataxe",
+      "warhammer",
+      "war_staff",
+      "pike",
+      "Axe",
+      "pistol",
+      "revolver",
+      "smg",
+      "rifle",
+      "shotgun",
+      "sniper",
+      "lmg",
+      "hmg",
+      "grenadeLauncher",
+      "laserGun",
       "longbow",
       "recurve",
       "composite",
       "handcrossbow",
       "heavycrossbow",
       "repeating",
-      "pistol",
-      "revolver",
-      "smg",
-      "rifle",
-      "sniper",
-      "shotgun",
-      "lmg",
-      "hmg",
-      "grenade",
-      "rocket",
-      "mine",
-      "bomb",
       "fire",
       "ice",
       "lightning",
-      "wind",
       "force",
       "shadow",
+      "wind",
       "earth",
-      "holy",
       "chaos",
       "heal",
-      "regen",
-      "buff",
-      "cleanse",
-      "shield",
-      "aegis",
-      "barrier",
+      "wrench",
+      "mine",
+      "shuriken",
+      "knife",
+      "drill",
+      "grenade",
+      "rocket",
+      "fist",
       "stone",
       "bone",
       "wood"
@@ -598,7 +584,7 @@
     "maxWeapons": 5,
     "maxHp": 38,
     "hpRegen": 0.1,
-    "speed": 120,
+    "speed": 156,
     "damagePercent": 0,
     "attackSpeed": 1,
     "attackRange": 0,
@@ -616,7 +602,7 @@
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "lance"
+      "melee"
     ],
     "unlockType": "totalKills",
     "unlockValue": 300,
@@ -628,9 +614,7 @@
       "Heavy"
     ],
     "preferredClasses_2": [
-      "lance",
-      "pike",
-      "trident"
+      "pike"
     ]
   },
   {
@@ -642,7 +626,7 @@
     "maxWeapons": 6,
     "maxHp": 25,
     "hpRegen": 0.1,
-    "speed": 100,
+    "speed": 130,
     "damagePercent": 0,
     "attackSpeed": 0.9,
     "attackRange": 0,
@@ -660,7 +644,7 @@
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "bow"
+      "ranged"
     ],
     "unlockType": "totalKills",
     "unlockValue": 60,
@@ -688,7 +672,7 @@
     "maxWeapons": 4,
     "maxHp": 22,
     "hpRegen": 0.15,
-    "speed": 130,
+    "speed": 169,
     "damagePercent": 0,
     "attackSpeed": 1.4,
     "attackRange": 0,
@@ -716,12 +700,12 @@
     ],
     "startingWeapons": [],
     "preferredClasses": [
+      "Blunt",
       "Heavy",
-      "Blunt"
+      "Support"
     ],
     "preferredClasses_2": [
       "fist",
-      "gauntlet",
       "tonfa",
       "flail",
       "war_staff"
@@ -736,7 +720,7 @@
     "maxWeapons": 5,
     "maxHp": 32,
     "hpRegen": 0.05,
-    "speed": 95,
+    "speed": 124,
     "damagePercent": 0,
     "attackSpeed": 0.85,
     "attackRange": 0,
@@ -767,8 +751,7 @@
     ],
     "preferredClasses_2": [
       "greataxe",
-      "battleaxe",
-      "halberd",
+      "Axe",
       "warhammer"
     ]
   },
@@ -781,7 +764,7 @@
     "maxWeapons": 5,
     "maxHp": 28,
     "hpRegen": 0.08,
-    "speed": 110,
+    "speed": 143,
     "damagePercent": 0,
     "attackSpeed": 1,
     "attackRange": 0,
@@ -799,8 +782,7 @@
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "melee",
-      "lance"
+      "melee"
     ],
     "unlockType": "maxLevel",
     "unlockValue": 3,
@@ -812,10 +794,7 @@
       "Heavy"
     ],
     "preferredClasses_2": [
-      "lance",
-      "pike",
-      "halberd",
-      "trident"
+      "pike"
     ]
   },
   {
@@ -827,7 +806,7 @@
     "maxWeapons": 4,
     "maxHp": 20,
     "hpRegen": 0.12,
-    "speed": 125,
+    "speed": 163,
     "damagePercent": 0,
     "attackSpeed": 1.3,
     "attackRange": 0,
@@ -860,7 +839,7 @@
     ],
     "preferredClasses_2": [
       "katana",
-      "longsword",
+      "sword",
       "rapier",
       "saber",
       "scimitar"
@@ -875,7 +854,7 @@
     "maxWeapons": 5,
     "maxHp": 16,
     "hpRegen": 0.15,
-    "speed": 150,
+    "speed": 195,
     "damagePercent": 0,
     "attackSpeed": 1.5,
     "attackRange": 0,
@@ -894,8 +873,7 @@
     "engineering": 0,
     "tags": [
       "melee",
-      "bow",
-      "crit"
+      "ranged"
     ],
     "unlockType": "totalKills",
     "unlockValue": 150,
@@ -925,7 +903,7 @@
     "maxWeapons": 6,
     "maxHp": 22,
     "hpRegen": 0.3,
-    "speed": 105,
+    "speed": 137,
     "damagePercent": 0,
     "attackSpeed": 1,
     "attackRange": 0,
@@ -958,9 +936,7 @@
     "preferredClasses_2": [
       "force",
       "wind",
-      "holy",
-      "heal",
-      "regen"
+      "heal"
     ]
   },
   {
@@ -972,7 +948,7 @@
     "maxWeapons": 6,
     "maxHp": 36,
     "hpRegen": 0.2,
-    "speed": 95,
+    "speed": 124,
     "damagePercent": 0,
     "attackSpeed": 0.95,
     "attackRange": 0,
@@ -991,8 +967,7 @@
     "engineering": 0,
     "tags": [
       "melee",
-      "medic",
-      "lance"
+      "magic"
     ],
     "unlockType": "totalKills",
     "unlockValue": 120,
@@ -1001,12 +976,14 @@
     ],
     "startingWeapons": [],
     "preferredClasses": [
-      "Medical"
+      "Medical",
+      "Blade",
+      "Heavy"
     ],
     "preferredClasses_2": [
-      "shield",
-      "regen",
-      "holy"
+      "heal",
+      "sword",
+      "pike"
     ]
   }
 ]

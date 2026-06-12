@@ -12,9 +12,12 @@
 # 用途:
 #   medic_kit     — 可击破医疗箱 (容器), 掉落血包
 #   health_pickup — 血包拾取物
-#   turret        — 炮塔 (1级, 需要道具"炮塔建造器")
+#   turret1~4     — 炮塔 1~4 级，每级对应不同贴图
 #
 id,name,image,width,height
 medic_kit,医疗箱,medic_kit.png,36,36
 health_pickup,血包,health_pickup.png,20,20
-turret,炮塔,turret.png,32,32
+turret1,炮塔L1,turret1.png,64,64
+turret2,炮塔L2,turret2.png,64,64
+turret3,炮塔L3,turret3.png,64,64
+turret4,炮塔L4,turret4.png,64,64

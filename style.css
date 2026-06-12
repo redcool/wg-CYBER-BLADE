@@ -557,6 +557,34 @@ body {
 }
 
 /* --- 底部武器图标网格（10列） --- */
+.weapon-filter-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 8px 0 4px;
+}
+.weapon-filter-tab {
+    font-size: 0.75em;
+    padding: 3px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+.weapon-filter-tab:hover {
+    border-color: rgba(255, 136, 68, 0.4);
+    color: rgba(255, 255, 255, 0.85);
+}
+.weapon-filter-tab.active {
+    border-color: #ff8833;
+    background: rgba(255, 136, 68, 0.2);
+    color: #ff8833;
+    font-weight: 600;
+}
 .weapon-select-grid {
     display: grid;
     grid-template-columns: repeat(10, 1fr);

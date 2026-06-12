@@ -14,10 +14,31 @@
     "height": 20
   },
   {
-    "id": "turret",
-    "name": "炮塔",
-    "image": "turret.png",
-    "width": 32,
-    "height": 32
+    "id": "turret1",
+    "name": "炮塔L1",
+    "image": "turret1.png",
+    "width": 128,
+    "height": 128
+  },
+  {
+    "id": "turret2",
+    "name": "炮塔L2",
+    "image": "turret2.png",
+    "width": 128,
+    "height": 128
+  },
+  {
+    "id": "turret3",
+    "name": "炮塔L3",
+    "image": "turret3.png",
+    "width": 128,
+    "height": 128
+  },
+  {
+    "id": "turret4",
+    "name": "炮塔L4",
+    "image": "turret4.png",
+    "width": 128,
+    "height": 128
   }
 ]

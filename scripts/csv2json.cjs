@@ -214,6 +214,7 @@ const CSV2JSON = {
             { name: 'system',csv: 'csv/system.csv',json: 'src/data/system.json',schema: systemSchema },
             { name: 'synergies',csv: 'csv/synergies.csv',json: 'src/data/synergies.json',schema: synergySchema },
             { name: 'passives',csv: 'csv/passives.csv',json: 'src/data/passives.json',schema: passivesSchema },
+            { name: 'sceneItems',csv: 'csv/sceneItems.csv',json: 'src/data/sceneItems.json',schema: sceneItemsSchema },
             { name: 'bulletTypes',csv: 'csv/weaponBulletTypes.csv',json: 'src/data/bulletTypes.json',schema: bulletTypeSchema },
         ];
 
@@ -307,7 +308,8 @@ const characterLevelSchema = {
  *     burnDps,burnMaxStacks,chainCount,splashRadius,homingStrength,
  *     slowAmount,slowDuration,healOnHit,auraHeal,auraRadius,
  *     sprayCone,
- *     behavior,class,class_2,knockback,magSize,reloadTime
+ *     behavior,class,class_2,knockback,magSize,reloadTime,
+ *     unlockType,unlockValue,isBasic
  * 注: v1.1 移除 slots 字段 (武器槽位=1), 新增 class_2 二级分类 (在 class 后面)
  *     damageReductionAura / killHeal 尚未在 CSV 中, 解析时默认填 0
  * v1.3 移除 attackRangeMult 字段 (死字段, 引擎不用, 角色 attackRange 已归 0)
@@ -358,6 +360,9 @@ const weaponSchema = {
     knockback: 'number',
     magSize: 'number',
     reloadTime: 'number',
+    unlockType: 'string',
+    unlockValue: 'number',
+    isBasic: 'boolean',
     damageReductionAura: 'number',
     killHeal: 'number',
 };
@@ -373,6 +378,7 @@ const itemSchema = {
     cost: 'number',
     icon: 'string',
     unique: 'boolean',
+    qualifies: 'string?',
     rarity: 'string',
     tags: 'array',
     triggers: 'array',
@@ -562,13 +568,16 @@ const audioSchema = {
 
 /**
  * classes.csv Schema
- * 列: id,中文名,英文名,描述
+ * 列: id,中文名,英文名,parent_id,描述
  * 武器类别（Class）定义表，前端 UI 通过 id 查找对应的显示名和描述
+ * parent_id 空=顶级大类, 非空=细类(所属大类id)
  */
 const classSchema = {
     id: 'string',
     '中文名': 'string',
     '英文名': 'string',
+    parent_id: 'string?',
+    tag: 'string?',
     '描述': 'string',
 };
 
@@ -591,6 +600,7 @@ const synergySchema = {
 const bulletTypeSchema = {
     behavior: 'string',
     tag: 'string',
+    class_2: 'string',
     shape: 'string',
     color: 'string',
     size: 'number',
@@ -632,6 +642,19 @@ const passivesSchema = {
 };
 
 /**
+ * sceneItems.csv Schema
+ * 列: id,name,image,width,height
+ * 场景物品配置表：医疗箱、血包、炮塔等
+ */
+const sceneItemsSchema = {
+    id: 'string',
+    name: 'string',
+    image: 'string',
+    width: 'number',
+    height: 'number',
+};
+
+/**
  * system.csv Schema
  * 列: key,value,valueType,desc,group
  *  - key: 参数唯一标识 (英文)
@@ -656,7 +679,7 @@ if (require.main === module) {
     process.exit(ok ? 0 : 1);
 }
 
-module.exports = { CSV2JSON, characterSchema, characterLevelSchema, weaponSchema, itemSchema, enemySchema, bossSchema, waveSchema, weaponStatSchema, charStatSchema, difficultySchema, debugSchema, levelUpCardsSchema, rarityColorsSchema, audioSchema, classSchema, levelDurationSchema, passivesSchema, synergySchema, bulletTypeSchema };
+module.exports = { CSV2JSON, characterSchema, characterLevelSchema, weaponSchema, itemSchema, enemySchema, bossSchema, waveSchema, weaponStatSchema, charStatSchema, difficultySchema, debugSchema, levelUpCardsSchema, rarityColorsSchema, audioSchema, classSchema, levelDurationSchema, passivesSchema, synergySchema, sceneItemsSchema, bulletTypeSchema };
 
 /**
  * level_duration.csv Schema

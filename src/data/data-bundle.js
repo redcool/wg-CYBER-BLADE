@@ -16,7 +16,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 6,
     "maxHp": 30,
     "hpRegen": 0.1,
-    "speed": 120,
+    "speed": 156,
     "damagePercent": 0,
     "attackSpeed": 1.2,
     "attackRange": 0,
@@ -34,8 +34,7 @@ __DATA_BUNDLE__['characters'] = [
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "melee",
-      "lance"
+      "melee"
     ],
     "unlockType": "",
     "unlockValue": null,
@@ -50,10 +49,9 @@ __DATA_BUNDLE__['characters'] = [
     ],
     "preferredClasses_2": [
       "katana",
-      "longsword",
+      "sword",
       "rapier",
-      "lance",
-      "halberd"
+      "pike"
     ]
   },
   {
@@ -65,7 +63,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 6,
     "maxHp": 23,
     "hpRegen": 0.1,
-    "speed": 110,
+    "speed": 143,
     "damagePercent": 0,
     "attackSpeed": 1.3,
     "attackRange": 0,
@@ -83,7 +81,7 @@ __DATA_BUNDLE__['characters'] = [
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "gun"
+      "ranged"
     ],
     "unlockType": "",
     "unlockValue": null,
@@ -110,7 +108,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 6,
     "maxHp": 20,
     "hpRegen": 0.1,
-    "speed": 100,
+    "speed": 130,
     "damagePercent": 0,
     "attackSpeed": 0.9,
     "attackRange": 0,
@@ -155,7 +153,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 6,
     "maxHp": 24,
     "hpRegen": 0.1,
-    "speed": 115,
+    "speed": 150,
     "damagePercent": 0,
     "attackSpeed": 1.1,
     "attackRange": 0,
@@ -173,7 +171,7 @@ __DATA_BUNDLE__['characters'] = [
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "bow"
+      "ranged"
     ],
     "unlockType": "",
     "unlockValue": null,
@@ -201,7 +199,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 5,
     "maxHp": 45,
     "hpRegen": 0.1,
-    "speed": 70,
+    "speed": 91,
     "damagePercent": 0,
     "attackSpeed": 0.8,
     "attackRange": 0,
@@ -219,9 +217,8 @@ __DATA_BUNDLE__['characters'] = [
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "gun",
       "melee",
-      "lance"
+      "ranged"
     ],
     "unlockType": "maxLevel",
     "unlockValue": 5,
@@ -238,7 +235,7 @@ __DATA_BUNDLE__['characters'] = [
       "greataxe",
       "lmg",
       "hmg",
-      "lance"
+      "pike"
     ]
   },
   {
@@ -250,7 +247,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 4,
     "maxHp": 18,
     "hpRegen": 0.2,
-    "speed": 140,
+    "speed": 182,
     "damagePercent": 0,
     "attackSpeed": 1.5,
     "attackRange": 0,
@@ -269,8 +266,7 @@ __DATA_BUNDLE__['characters'] = [
     "engineering": 0,
     "tags": [
       "melee",
-      "bow",
-      "lance"
+      "ranged"
     ],
     "unlockType": "totalKills",
     "unlockValue": 100,
@@ -299,7 +295,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 6,
     "maxHp": 25,
     "hpRegen": 1,
-    "speed": 100,
+    "speed": 130,
     "damagePercent": 0,
     "attackSpeed": 1,
     "attackRange": 0,
@@ -317,7 +313,7 @@ __DATA_BUNDLE__['characters'] = [
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "medic"
+      "magic"
     ],
     "unlockType": "totalKills",
     "unlockValue": 80,
@@ -331,8 +327,6 @@ __DATA_BUNDLE__['characters'] = [
     ],
     "preferredClasses_2": [
       "heal",
-      "regen",
-      "holy",
       "force"
     ]
   },
@@ -345,7 +339,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 6,
     "maxHp": 35,
     "hpRegen": 0,
-    "speed": 90,
+    "speed": 117,
     "damagePercent": 0,
     "attackSpeed": 0.9,
     "attackRange": 0,
@@ -364,8 +358,7 @@ __DATA_BUNDLE__['characters'] = [
     "engineering": 0,
     "tags": [
       "melee",
-      "medic",
-      "lance"
+      "magic"
     ],
     "unlockType": "maxLevel",
     "unlockValue": 10,
@@ -379,11 +372,9 @@ __DATA_BUNDLE__['characters'] = [
       "Heavy"
     ],
     "preferredClasses_2": [
-      "longsword",
-      "holy",
+      "sword",
       "heal",
-      "lance",
-      "halberd"
+      "pike"
     ]
   },
   {
@@ -395,7 +386,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 6,
     "maxHp": 23,
     "hpRegen": 0.1,
-    "speed": 105,
+    "speed": 137,
     "damagePercent": 0,
     "attackSpeed": 1.1,
     "attackRange": 0,
@@ -413,7 +404,7 @@ __DATA_BUNDLE__['characters'] = [
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "gun",
+      "ranged",
       "magic"
     ],
     "unlockType": "totalKills",
@@ -445,7 +436,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 6,
     "maxHp": 28,
     "hpRegen": 0.1,
-    "speed": 100,
+    "speed": 130,
     "damagePercent": 0,
     "attackSpeed": 1,
     "attackRange": 0,
@@ -490,7 +481,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 5,
     "maxHp": 15,
     "hpRegen": 0.1,
-    "speed": 130,
+    "speed": 169,
     "damagePercent": 0,
     "attackSpeed": 1.6,
     "attackRange": 0,
@@ -509,11 +500,8 @@ __DATA_BUNDLE__['characters'] = [
     "engineering": 0,
     "tags": [
       "melee",
-      "gun",
-      "bow",
-      "magic",
-      "medic",
-      "lance"
+      "ranged",
+      "magic"
     ],
     "unlockType": "maxLevel",
     "unlockValue": 15,
@@ -533,65 +521,63 @@ __DATA_BUNDLE__['characters'] = [
       "Elemental",
       "Medical",
       "Support",
-      "Primitive"
+      "Primitive",
+      "Tool"
     ],
     "preferredClasses_2": [
-      "longsword",
+      "sword",
+      "dagger",
       "katana",
       "saber",
       "scimitar",
-      "dagger",
       "rapier",
       "machete",
-      "mace",
-      "hammer",
-      "club",
-      "staff",
-      "flail",
-      "war_staff",
-      "greataxe",
-      "warhammer",
-      "halberd",
-      "pike",
-      "lance",
-      "trident",
-      "greataxe",
+      "claws",
       "kris",
       "stiletto",
+      "hammer",
+      "club",
+      "flail",
+      "staff",
+      "tonfa",
+      "greataxe",
+      "warhammer",
+      "war_staff",
+      "pike",
+      "Axe",
+      "pistol",
+      "revolver",
+      "smg",
+      "rifle",
+      "shotgun",
+      "sniper",
+      "lmg",
+      "hmg",
+      "grenadeLauncher",
+      "laserGun",
       "longbow",
       "recurve",
       "composite",
       "handcrossbow",
       "heavycrossbow",
       "repeating",
-      "pistol",
-      "revolver",
-      "smg",
-      "rifle",
-      "sniper",
-      "shotgun",
-      "lmg",
-      "hmg",
-      "grenade",
-      "rocket",
-      "mine",
-      "bomb",
       "fire",
       "ice",
       "lightning",
-      "wind",
       "force",
       "shadow",
+      "wind",
       "earth",
-      "holy",
       "chaos",
       "heal",
-      "regen",
-      "buff",
-      "cleanse",
-      "shield",
-      "aegis",
-      "barrier",
+      "wrench",
+      "mine",
+      "shuriken",
+      "knife",
+      "drill",
+      "grenade",
+      "rocket",
+      "fist",
       "stone",
       "bone",
       "wood"
@@ -606,7 +592,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 5,
     "maxHp": 38,
     "hpRegen": 0.1,
-    "speed": 120,
+    "speed": 156,
     "damagePercent": 0,
     "attackSpeed": 1,
     "attackRange": 0,
@@ -624,7 +610,7 @@ __DATA_BUNDLE__['characters'] = [
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "lance"
+      "melee"
     ],
     "unlockType": "totalKills",
     "unlockValue": 300,
@@ -636,9 +622,7 @@ __DATA_BUNDLE__['characters'] = [
       "Heavy"
     ],
     "preferredClasses_2": [
-      "lance",
-      "pike",
-      "trident"
+      "pike"
     ]
   },
   {
@@ -650,7 +634,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 6,
     "maxHp": 25,
     "hpRegen": 0.1,
-    "speed": 100,
+    "speed": 130,
     "damagePercent": 0,
     "attackSpeed": 0.9,
     "attackRange": 0,
@@ -668,7 +652,7 @@ __DATA_BUNDLE__['characters'] = [
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "bow"
+      "ranged"
     ],
     "unlockType": "totalKills",
     "unlockValue": 60,
@@ -696,7 +680,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 4,
     "maxHp": 22,
     "hpRegen": 0.15,
-    "speed": 130,
+    "speed": 169,
     "damagePercent": 0,
     "attackSpeed": 1.4,
     "attackRange": 0,
@@ -724,12 +708,12 @@ __DATA_BUNDLE__['characters'] = [
     ],
     "startingWeapons": [],
     "preferredClasses": [
+      "Blunt",
       "Heavy",
-      "Blunt"
+      "Support"
     ],
     "preferredClasses_2": [
       "fist",
-      "gauntlet",
       "tonfa",
       "flail",
       "war_staff"
@@ -744,7 +728,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 5,
     "maxHp": 32,
     "hpRegen": 0.05,
-    "speed": 95,
+    "speed": 124,
     "damagePercent": 0,
     "attackSpeed": 0.85,
     "attackRange": 0,
@@ -775,8 +759,7 @@ __DATA_BUNDLE__['characters'] = [
     ],
     "preferredClasses_2": [
       "greataxe",
-      "battleaxe",
-      "halberd",
+      "Axe",
       "warhammer"
     ]
   },
@@ -789,7 +772,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 5,
     "maxHp": 28,
     "hpRegen": 0.08,
-    "speed": 110,
+    "speed": 143,
     "damagePercent": 0,
     "attackSpeed": 1,
     "attackRange": 0,
@@ -807,8 +790,7 @@ __DATA_BUNDLE__['characters'] = [
     "elementalDamage": 0,
     "engineering": 0,
     "tags": [
-      "melee",
-      "lance"
+      "melee"
     ],
     "unlockType": "maxLevel",
     "unlockValue": 3,
@@ -820,10 +802,7 @@ __DATA_BUNDLE__['characters'] = [
       "Heavy"
     ],
     "preferredClasses_2": [
-      "lance",
-      "pike",
-      "halberd",
-      "trident"
+      "pike"
     ]
   },
   {
@@ -835,7 +814,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 4,
     "maxHp": 20,
     "hpRegen": 0.12,
-    "speed": 125,
+    "speed": 163,
     "damagePercent": 0,
     "attackSpeed": 1.3,
     "attackRange": 0,
@@ -868,7 +847,7 @@ __DATA_BUNDLE__['characters'] = [
     ],
     "preferredClasses_2": [
       "katana",
-      "longsword",
+      "sword",
       "rapier",
       "saber",
       "scimitar"
@@ -883,7 +862,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 5,
     "maxHp": 16,
     "hpRegen": 0.15,
-    "speed": 150,
+    "speed": 195,
     "damagePercent": 0,
     "attackSpeed": 1.5,
     "attackRange": 0,
@@ -902,8 +881,7 @@ __DATA_BUNDLE__['characters'] = [
     "engineering": 0,
     "tags": [
       "melee",
-      "bow",
-      "crit"
+      "ranged"
     ],
     "unlockType": "totalKills",
     "unlockValue": 150,
@@ -933,7 +911,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 6,
     "maxHp": 22,
     "hpRegen": 0.3,
-    "speed": 105,
+    "speed": 137,
     "damagePercent": 0,
     "attackSpeed": 1,
     "attackRange": 0,
@@ -966,9 +944,7 @@ __DATA_BUNDLE__['characters'] = [
     "preferredClasses_2": [
       "force",
       "wind",
-      "holy",
-      "heal",
-      "regen"
+      "heal"
     ]
   },
   {
@@ -980,7 +956,7 @@ __DATA_BUNDLE__['characters'] = [
     "maxWeapons": 6,
     "maxHp": 36,
     "hpRegen": 0.2,
-    "speed": 95,
+    "speed": 124,
     "damagePercent": 0,
     "attackSpeed": 0.95,
     "attackRange": 0,
@@ -999,8 +975,7 @@ __DATA_BUNDLE__['characters'] = [
     "engineering": 0,
     "tags": [
       "melee",
-      "medic",
-      "lance"
+      "magic"
     ],
     "unlockType": "totalKills",
     "unlockValue": 120,
@@ -1009,12 +984,14 @@ __DATA_BUNDLE__['characters'] = [
     ],
     "startingWeapons": [],
     "preferredClasses": [
-      "Medical"
+      "Medical",
+      "Blade",
+      "Heavy"
     ],
     "preferredClasses_2": [
-      "shield",
-      "regen",
-      "holy"
+      "heal",
+      "sword",
+      "pike"
     ]
   }
 ];
@@ -1185,10 +1162,13 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_sweep",
     "class": "Blade",
-    "class_2": "longsword",
+    "class_2": "sword",
     "knockback": 300,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 1,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1238,6 +1218,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 500,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 20,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1287,6 +1270,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 200,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 2,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1331,11 +1317,14 @@ __DATA_BUNDLE__['weapons'] = [
     "auraRadius": 0,
     "sprayCone": 0,
     "behavior": "melee_sweep",
-    "class": "Heavy",
-    "class_2": "greataxe",
+    "class": "Blade",
+    "class_2": "sword",
     "knockback": 400,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 50,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1381,10 +1370,13 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_thrust",
     "class": "Blade",
-    "class_2": "longsword",
+    "class_2": "sword",
     "knockback": 250,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 3,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1434,6 +1426,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 250,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 100,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1483,6 +1478,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 600,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 5,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1532,6 +1530,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 300,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 4,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1581,6 +1582,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 150,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 30,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1630,6 +1634,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 200,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 80,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1679,6 +1686,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 20,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "",
+    "unlockValue": 0,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1688,7 +1698,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "平衡型标准武器",
     "icon": "🔫",
     "cost": 0,
-    "tag": "gun",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 10,
     "damage_lv2": 20,
@@ -1728,6 +1738,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "",
+    "unlockValue": 0,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1737,7 +1750,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "极快射速 -25%伤害 +5%移速",
     "icon": "🔫",
     "cost": 12,
-    "tag": "gun",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 5,
     "damage_lv2": 10,
@@ -1777,6 +1790,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 2,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1786,7 +1802,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "4发散弹 -20%伤害 -25%攻速",
     "icon": "💥",
     "cost": 10,
-    "tag": "gun",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 5,
     "damage_lv2": 10,
@@ -1826,6 +1842,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 3,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1835,7 +1854,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "穿透+2 +150%伤害 -40%攻速",
     "icon": "🎯",
     "cost": 12,
-    "tag": "gun",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 30,
     "damage_lv2": 50,
@@ -1875,6 +1894,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 6,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1884,7 +1906,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "2发 +100%攻速 -30%伤害 -10%移速",
     "icon": "⚡",
     "cost": 14,
-    "tag": "gun",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 5,
     "damage_lv2": 10,
@@ -1924,6 +1946,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 50,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1933,7 +1958,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "6发弹匣 +10%暴率",
     "icon": "🔫",
     "cost": 9,
-    "tag": "gun",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 20,
     "damage_lv2": 30,
@@ -1973,6 +1998,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 6,
     "reloadTime": 2,
+    "unlockType": "totalLevels",
+    "unlockValue": 2,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -1982,7 +2010,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "3发连射 +5%伤害",
     "icon": "🔫",
     "cost": 13,
-    "tag": "gun",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 15,
     "damage_lv2": 25,
@@ -2022,6 +2050,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 4,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2031,7 +2062,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "2发连射 +30%伤害 穿透+1",
     "icon": "🔫",
     "cost": 15,
-    "tag": "gun",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 20,
     "damage_lv2": 30,
@@ -2071,6 +2102,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 120,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2080,7 +2114,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "8发散弹 -30%攻速",
     "icon": "💥",
     "cost": 16,
-    "tag": "gun",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 20,
     "damage_lv2": 30,
@@ -2120,6 +2154,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 25,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 120,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2129,7 +2166,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "穿透+3 +50%伤害 -50%攻速",
     "icon": "🔫",
     "cost": 18,
-    "tag": "gun",
+    "tag": "ranged",
     "minLevel": 2,
     "damage_lv1": 0,
     "damage_lv2": 65,
@@ -2169,6 +2206,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 25,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 200,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2178,7 +2218,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "3发极速 -30%伤害 -5%移速",
     "icon": "⚡",
     "cost": 20,
-    "tag": "gun",
+    "tag": "ranged",
     "minLevel": 2,
     "damage_lv1": 0,
     "damage_lv2": 5,
@@ -2218,6 +2258,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 12,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2227,7 +2270,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "标准射击 +5%暴率",
     "icon": "🏹",
     "cost": 8,
-    "tag": "bow",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 15,
     "damage_lv2": 25,
@@ -2267,6 +2310,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 1,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2276,7 +2322,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "穿透+1 +30%暴伤",
     "icon": "🏹",
     "cost": 12,
-    "tag": "bow",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 20,
     "damage_lv2": 35,
@@ -2316,6 +2362,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 90,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 40,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2325,7 +2374,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "穿透+2 +20%伤害 -20%攻速",
     "icon": "🏹",
     "cost": 14,
-    "tag": "bow",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 30,
     "damage_lv2": 50,
@@ -2365,6 +2414,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 200,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 5,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2374,7 +2426,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "攻速较快 +15%攻速",
     "icon": "🏹",
     "cost": 10,
-    "tag": "bow",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 15,
     "damage_lv2": 25,
@@ -2414,6 +2466,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 3,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2423,7 +2478,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "爆炸40px +20%伤害",
     "icon": "💣",
     "cost": 16,
-    "tag": "bow",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 20,
     "damage_lv2": 30,
@@ -2458,11 +2513,14 @@ __DATA_BUNDLE__['weapons'] = [
     "auraRadius": 0,
     "sprayCone": 0,
     "behavior": "explode",
-    "class": "Bow",
-    "class_2": "grenade",
+    "class": "Bow | Elemental",
+    "class_2": "grenade | fire",
     "knockback": 200,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 100,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2472,7 +2530,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "减速50% 2s -15%伤害",
     "icon": "❄️",
     "cost": 12,
-    "tag": "bow",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 10,
     "damage_lv2": 20,
@@ -2507,11 +2565,14 @@ __DATA_BUNDLE__['weapons'] = [
     "auraRadius": 0,
     "sprayCone": 0,
     "behavior": "frost",
-    "class": "Bow",
+    "class": "Bow | Elemental",
     "class_2": "ice",
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 8,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2521,7 +2582,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "中毒8/s×3s -10%伤害",
     "icon": "☠️",
     "cost": 10,
-    "tag": "bow",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 5,
     "damage_lv2": 10,
@@ -2556,11 +2617,14 @@ __DATA_BUNDLE__['weapons'] = [
     "auraRadius": 0,
     "sprayCone": 0,
     "behavior": "bullet",
-    "class": "Bow",
+    "class": "Bow | Elemental",
     "class_2": "shadow",
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 60,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2570,7 +2634,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "3发散弹 -10%伤害",
     "icon": "🏹",
     "cost": 14,
-    "tag": "bow",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 10,
     "damage_lv2": 20,
@@ -2605,11 +2669,14 @@ __DATA_BUNDLE__['weapons'] = [
     "auraRadius": 0,
     "sprayCone": 0,
     "behavior": "spread",
-    "class": "Crossbow",
-    "class_2": "repeating",
+    "class": "Bow",
+    "class_2": "recurve",
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 150,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2619,7 +2686,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "穿透+4 +15%伤害 -15%攻速",
     "icon": "🎯",
     "cost": 15,
-    "tag": "bow",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 25,
     "damage_lv2": 40,
@@ -2659,6 +2726,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 90,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 10,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2668,7 +2738,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "自动追踪 -10%伤害",
     "icon": "🎯",
     "cost": 16,
-    "tag": "bow",
+    "tag": "ranged",
     "minLevel": 1,
     "damage_lv1": 15,
     "damage_lv2": 25,
@@ -2708,6 +2778,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 250,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2757,6 +2830,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 2,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2806,6 +2882,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 5,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2855,6 +2934,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 80,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2904,6 +2986,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 8,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -2953,6 +3038,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 1,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3002,6 +3090,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 120,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3051,6 +3142,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 12,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3100,6 +3194,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 180,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3149,6 +3246,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 50,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 4,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3198,6 +3298,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 15,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3247,6 +3350,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "",
+    "unlockValue": 0,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3296,6 +3402,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "",
+    "unlockValue": 0,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3345,6 +3454,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "",
+    "unlockValue": 0,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3354,7 +3466,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "攻击回血+3 -20%伤害 +2回复",
     "icon": "💉",
     "cost": 10,
-    "tag": "medic",
+    "tag": "magic",
     "minLevel": 1,
     "damage_lv1": 5,
     "damage_lv2": 10,
@@ -3394,6 +3506,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 50,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 3,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3403,7 +3518,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "治疗光环5/s r100 -50%伤害 +3护甲",
     "icon": "✨",
     "cost": 16,
-    "tag": "medic",
+    "tag": "magic",
     "minLevel": 1,
     "damage_lv1": 5,
     "damage_lv2": 5,
@@ -3439,10 +3554,13 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 100,
     "behavior": "shield_aura",
     "class": "Medical",
-    "class_2": "regen",
+    "class_2": "heal",
     "knockback": 100,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 8,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3452,7 +3570,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "20%回血+5 -10%伤害 +1回复",
     "icon": "✨",
     "cost": 14,
-    "tag": "medic",
+    "tag": "magic",
     "minLevel": 1,
     "damage_lv1": 10,
     "damage_lv2": 20,
@@ -3488,10 +3606,13 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "bullet",
     "class": "Medical",
-    "class_2": "holy",
+    "class_2": "heal",
     "knockback": 60,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 60,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3501,7 +3622,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "击杀回血+8 -15%伤害 +5HP",
     "icon": "💚",
     "cost": 9,
-    "tag": "medic",
+    "tag": "magic",
     "minLevel": 1,
     "damage_lv1": 5,
     "damage_lv2": 10,
@@ -3541,6 +3662,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 50,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 5,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3550,7 +3674,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "减伤光环 -30%伤害 +2护甲",
     "icon": "🛡️",
     "cost": 15,
-    "tag": "medic",
+    "tag": "magic",
     "minLevel": 1,
     "damage_lv1": 5,
     "damage_lv2": 10,
@@ -3586,10 +3710,13 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 80,
     "behavior": "shield_aura",
     "class": "Medical",
-    "class_2": "regen",
+    "class_2": "heal",
     "knockback": 80,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 10,
+    "isBasic": false,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3599,7 +3726,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "超长距突刺 穿透+4",
     "icon": "🔱",
     "cost": 12,
-    "tag": "lance",
+    "tag": "melee",
     "minLevel": 2,
     "damage_lv1": 0,
     "damage_lv2": 35,
@@ -3639,6 +3766,9 @@ __DATA_BUNDLE__['weapons'] = [
     "knockback": 40,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 7,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3648,7 +3778,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "超长距突刺 穿透+5 +30%伤害 -25%攻速",
     "icon": "🔱",
     "cost": 16,
-    "tag": "lance",
+    "tag": "melee",
     "minLevel": 3,
     "damage_lv1": 0,
     "damage_lv2": 0,
@@ -3684,10 +3814,13 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_thrust",
     "class": "Heavy",
-    "class_2": "lance",
+    "class_2": "pike",
     "knockback": 50,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalKills",
+    "unlockValue": 150,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   },
@@ -3697,7 +3830,7 @@ __DATA_BUNDLE__['weapons'] = [
     "desc": "三叉突刺 穿透+6 -10%伤害 +15%射程",
     "icon": "🔱",
     "cost": 14,
-    "tag": "lance",
+    "tag": "melee",
     "minLevel": 1,
     "damage_lv1": 20,
     "damage_lv2": 30,
@@ -3733,10 +3866,13 @@ __DATA_BUNDLE__['weapons'] = [
     "sprayCone": 0,
     "behavior": "melee_thrust",
     "class": "Heavy",
-    "class_2": "trident",
+    "class_2": "pike",
     "knockback": 35,
     "magSize": 0,
     "reloadTime": 0,
+    "unlockType": "totalLevels",
+    "unlockValue": 10,
+    "isBasic": true,
     "damageReductionAura": null,
     "killHeal": null
   }
@@ -3750,10 +3886,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 20,
     "icon": "❤️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -3767,10 +3902,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 15,
     "icon": "💚",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -3784,10 +3918,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 20,
     "icon": "👟",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -3801,10 +3934,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 25,
     "icon": "🛡️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -3818,10 +3950,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 25,
     "icon": "🌬️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -3835,10 +3966,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 25,
     "icon": "⚡",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -3852,10 +3982,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 25,
     "icon": "💨",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -3869,10 +3998,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 25,
     "icon": "💥",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -3887,10 +4015,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 25,
     "icon": "🩸",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -3905,9 +4032,10 @@ __DATA_BUNDLE__['items'] = [
     "cost": 20,
     "icon": "⚔️",
     "unique": false,
-    "rarity": "",
+    "qualifies": "melee",
+    "rarity": "common",
     "tags": [
-      "common"
+      "melee"
     ],
     "triggers": [],
     "effects": null,
@@ -3923,9 +4051,10 @@ __DATA_BUNDLE__['items'] = [
     "cost": 20,
     "icon": "🏹",
     "unique": false,
-    "rarity": "",
+    "qualifies": "ranged",
+    "rarity": "common",
     "tags": [
-      "common"
+      "ranged"
     ],
     "triggers": [],
     "effects": null,
@@ -3941,10 +4070,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 15,
     "icon": "🧲",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -3958,10 +4086,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 20,
     "icon": "🎯",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -3976,10 +4103,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 30,
     "icon": "🧪",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -3994,10 +4120,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 35,
     "icon": "🔥",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4012,9 +4137,10 @@ __DATA_BUNDLE__['items'] = [
     "cost": 30,
     "icon": "💀",
     "unique": false,
-    "rarity": "",
+    "qualifies": "ranged",
+    "rarity": "uncommon",
     "tags": [
-      "uncommon"
+      "ranged"
     ],
     "triggers": [],
     "effects": null,
@@ -4030,12 +4156,11 @@ __DATA_BUNDLE__['items'] = [
     "cost": 25,
     "icon": "🌵",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [
-      "reflective"
+      "onDamageTaken"
     ],
     "effects": [
       {
@@ -4048,18 +4173,20 @@ __DATA_BUNDLE__['items'] = [
   {
     "id": "elemental_dmg",
     "name": "元素水晶",
-    "desc": "+3 元素伤害",
+    "desc": "+3元素伤害 -1近战",
     "cost": 30,
     "icon": "🔮",
     "unique": false,
-    "rarity": "",
+    "qualifies": "",
+    "rarity": "uncommon",
     "tags": [
-      "uncommon"
+      "fire"
     ],
     "triggers": [],
     "effects": null,
     "statMods": {
-      "elementalDamage": 1
+      "elementalDamage": 3,
+      "meleeDamage": -1
     }
   },
   {
@@ -4069,10 +4196,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 30,
     "icon": "💚",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4087,10 +4213,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 30,
     "icon": "🪙",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4105,10 +4230,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 35,
     "icon": "🌀",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4123,10 +4247,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 35,
     "icon": "💍",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4141,10 +4264,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 30,
     "icon": "👢",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4160,10 +4282,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 35,
     "icon": "🗡️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [
       "onKill"
     ],
@@ -4185,9 +4306,10 @@ __DATA_BUNDLE__['items'] = [
     "cost": 30,
     "icon": "🔭",
     "unique": false,
-    "rarity": "",
+    "qualifies": "ranged",
+    "rarity": "uncommon",
     "tags": [
-      "uncommon"
+      "ranged"
     ],
     "triggers": [],
     "effects": null,
@@ -4203,10 +4325,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 30,
     "icon": "🔧",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4221,10 +4342,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 50,
     "icon": "❤️‍🔥",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4238,10 +4358,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 60,
     "icon": "🪓",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4256,10 +4375,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 55,
     "icon": "🧛",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4274,10 +4392,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 55,
     "icon": "🪶",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4292,10 +4409,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 50,
     "icon": "🪨",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4310,10 +4426,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 55,
     "icon": "🗡️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4328,10 +4443,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 50,
     "icon": "🛡️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [
       "onHit"
     ],
@@ -4351,9 +4465,10 @@ __DATA_BUNDLE__['items'] = [
     "cost": 60,
     "icon": "🔄",
     "unique": false,
-    "rarity": "",
+    "qualifies": "ranged",
+    "rarity": "rare",
     "tags": [
-      "rare"
+      "ranged"
     ],
     "triggers": [
       "onFire"
@@ -4373,10 +4488,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 40,
     "icon": "🧲",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4390,13 +4504,10 @@ __DATA_BUNDLE__['items'] = [
     "cost": 30,
     "icon": "🎫",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
-    "triggers": [
-      "shopDiscount"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
+    "triggers": [],
     "effects": null,
     "statMods": {
       "shopDiscount": 0.8
@@ -4409,9 +4520,10 @@ __DATA_BUNDLE__['items'] = [
     "cost": 60,
     "icon": "💥",
     "unique": false,
-    "rarity": "",
+    "qualifies": "ranged",
+    "rarity": "rare",
     "tags": [
-      "rare"
+      "ranged"
     ],
     "triggers": [
       "onHit"
@@ -4432,10 +4544,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 45,
     "icon": "📜",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4449,11 +4560,10 @@ __DATA_BUNDLE__['items'] = [
     "desc": "致命伤免死一次",
     "cost": 80,
     "icon": "🧬",
-    "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "unique": true,
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [
       "revive"
     ],
@@ -4474,12 +4584,13 @@ __DATA_BUNDLE__['items'] = [
     "cost": 90,
     "icon": "🎱",
     "unique": false,
-    "rarity": "",
+    "qualifies": "ranged",
+    "rarity": "legendary",
     "tags": [
-      "legendary"
+      "ranged"
     ],
     "triggers": [
-      "ricochet"
+      "onHit"
     ],
     "effects": [
       {
@@ -4496,10 +4607,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 100,
     "icon": "☢️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4514,10 +4624,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 80,
     "icon": "🔴",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4533,10 +4642,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 100,
     "icon": "✨",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4551,10 +4659,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 90,
     "icon": "👟",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4568,13 +4675,12 @@ __DATA_BUNDLE__['items'] = [
     "desc": "物品+1升级",
     "cost": 120,
     "icon": "🔨",
-    "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "unique": true,
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [
-      "upgrade"
+      "onBuy"
     ],
     "effects": [
       {
@@ -4591,10 +4697,9 @@ __DATA_BUNDLE__['items'] = [
     "cost": 80,
     "icon": "🌊",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -4609,16 +4714,439 @@ __DATA_BUNDLE__['items'] = [
     "cost": 100,
     "icon": "👼",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
       "dodge": 0.2,
       "attackSpeed": 0.15,
       "maxHp": -12
+    }
+  },
+  {
+    "id": "magic_wand",
+    "name": "魔法短杖",
+    "desc": "+1元素伤害 -1近战伤害",
+    "cost": 20,
+    "icon": "🪄",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [
+      "fire"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "elementalDamage": 1,
+      "meleeDamage": -1
+    }
+  },
+  {
+    "id": "mana_ring",
+    "name": "魔力戒指",
+    "desc": "+3元素伤害 -3%攻速",
+    "cost": 35,
+    "icon": "💍",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [
+      "fire"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "elementalDamage": 3,
+      "attackSpeed": -0.03
+    }
+  },
+  {
+    "id": "fire_rune",
+    "name": "火焰符文",
+    "desc": "+15%伤害 -1护甲",
+    "cost": 40,
+    "icon": "🔴",
+    "unique": false,
+    "qualifies": "magic",
+    "rarity": "uncommon",
+    "tags": [
+      "fire"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "damagePercent": 0.15,
+      "armor": -1
+    }
+  },
+  {
+    "id": "void_crystal",
+    "name": "虚空水晶",
+    "desc": "+5元素伤害 +3%暴击 -1生命回复",
+    "cost": 60,
+    "icon": "🔮",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [
+      "fire"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "elementalDamage": 5,
+      "critChance": 0.03,
+      "hpRegen": -0.3
+    }
+  },
+  {
+    "id": "phoenix_core",
+    "name": "凤凰核心",
+    "desc": "+8元素伤害 +15%攻速 -30最大生命",
+    "cost": 100,
+    "icon": "🪶",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [
+      "fire"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "elementalDamage": 8,
+      "attackSpeed": 0.15,
+      "maxHp": -8
+    }
+  },
+  {
+    "id": "lucky_ring",
+    "name": "幸运戒指",
+    "desc": "+5%暴击 -2最大生命",
+    "cost": 30,
+    "icon": "💍",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [
+      "crit"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "critChance": 0.05,
+      "maxHp": -1
+    }
+  },
+  {
+    "id": "razor_shard",
+    "name": "锋锐碎片",
+    "desc": "+8%暴击 +30%暴伤 -1护甲",
+    "cost": 55,
+    "icon": "🗡️",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [
+      "crit"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "critChance": 0.08,
+      "critDamage": 0.3,
+      "armor": -1
+    }
+  },
+  {
+    "id": "perfection_eye",
+    "name": "完美之眼",
+    "desc": "+15%暴击 +50%暴伤 -30最大生命",
+    "cost": 100,
+    "icon": "👁️",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [
+      "crit"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "critChance": 0.15,
+      "critDamage": 0.5,
+      "maxHp": -8
+    }
+  },
+  {
+    "id": "circuit_board",
+    "name": "电路板",
+    "desc": "+1工程值",
+    "cost": 15,
+    "icon": "🔌",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [
+      "tech"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "engineering": 1
+    }
+  },
+  {
+    "id": "mech_arm",
+    "name": "机械臂",
+    "desc": "+3工程值 -1近战伤害",
+    "cost": 35,
+    "icon": "🦾",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [
+      "tech"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "engineering": 3,
+      "meleeDamage": -1
+    }
+  },
+  {
+    "id": "turret_module",
+    "name": "炮台核心",
+    "desc": "+6工程值 -2%闪避",
+    "cost": 60,
+    "icon": "🎯",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [
+      "tech"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "engineering": 6,
+      "dodge": -0.02
+    }
+  },
+  {
+    "id": "factory_heart",
+    "name": "工厂之心",
+    "desc": "+10工程值 -8移速",
+    "cost": 100,
+    "icon": "⚙️",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [
+      "tech"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "engineering": 10,
+      "speed": -2
+    }
+  },
+  {
+    "id": "gunpowder_bag",
+    "name": "火药袋",
+    "desc": "+15%伤害 -1护甲",
+    "cost": 35,
+    "icon": "💥",
+    "unique": false,
+    "qualifies": "ranged",
+    "rarity": "uncommon",
+    "tags": [
+      "explosive"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "damagePercent": 0.15,
+      "armor": -1
+    }
+  },
+  {
+    "id": "explosive_charge",
+    "name": "爆破炸药",
+    "desc": "+30%伤害 -3%攻速",
+    "cost": 60,
+    "icon": "🧨",
+    "unique": false,
+    "qualifies": "ranged",
+    "rarity": "rare",
+    "tags": [
+      "explosive"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "damagePercent": 0.3,
+      "attackSpeed": -0.03
+    }
+  },
+  {
+    "id": "atomic_warhead",
+    "name": "原子弹头",
+    "desc": "+50%伤害 -20最大生命",
+    "cost": 100,
+    "icon": "☢️",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [
+      "explosive"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "damagePercent": 0.5,
+      "maxHp": -5
+    }
+  },
+  {
+    "id": "coin_purse",
+    "name": "钱袋",
+    "desc": "+20%采集 -3%攻速",
+    "cost": 30,
+    "icon": "💰",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [
+      "economy"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "harvesting": 0.2,
+      "attackSpeed": -0.03
+    }
+  },
+  {
+    "id": "golden_statue",
+    "name": "金像",
+    "desc": "+30%采集 -1生命回复",
+    "cost": 55,
+    "icon": "🗿",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [
+      "economy"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "harvesting": 0.3,
+      "hpRegen": -0.3
+    }
+  },
+  {
+    "id": "warrior_belt",
+    "name": "战士腰带",
+    "desc": "+2近战伤害 -1远程伤害",
+    "cost": 20,
+    "icon": "🦵",
+    "unique": false,
+    "qualifies": "melee",
+    "rarity": "common",
+    "tags": [
+      "melee"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "meleeDamage": 2,
+      "rangedDamage": -1
+    }
+  },
+  {
+    "id": "heavy_gauntlet",
+    "name": "重型铁拳",
+    "desc": "+4近战伤害 -3%攻速",
+    "cost": 35,
+    "icon": "🥊",
+    "unique": false,
+    "qualifies": "melee",
+    "rarity": "uncommon",
+    "tags": [
+      "melee"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "meleeDamage": 4,
+      "attackSpeed": -0.03
+    }
+  },
+  {
+    "id": "berserker_helm",
+    "name": "狂战头盔",
+    "desc": "+6近战伤害 +5%暴击 -1护甲",
+    "cost": 60,
+    "icon": "⛑️",
+    "unique": false,
+    "qualifies": "melee",
+    "rarity": "rare",
+    "tags": [
+      "melee"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "meleeDamage": 6,
+      "critChance": 0.05,
+      "armor": -1
+    }
+  },
+  {
+    "id": "quick_shot",
+    "name": "速射手套",
+    "desc": "+3远程伤害 -2近战 +5%攻速",
+    "cost": 35,
+    "icon": "🧤",
+    "unique": false,
+    "qualifies": "ranged",
+    "rarity": "uncommon",
+    "tags": [
+      "ranged"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "rangedDamage": 3,
+      "meleeDamage": -2,
+      "attackSpeed": 0.05
+    }
+  },
+  {
+    "id": "long_barrel",
+    "name": "长枪管",
+    "desc": "+5远程伤害 +30射程 -3%攻速",
+    "cost": 60,
+    "icon": "🔫",
+    "unique": false,
+    "qualifies": "ranged",
+    "rarity": "rare",
+    "tags": [
+      "ranged"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "rangedDamage": 5,
+      "attackRange": 8,
+      "attackSpeed": -0.03
     }
   }
 ];
@@ -7771,55 +8299,553 @@ __DATA_BUNDLE__['classes'] = [
     "id": "Blade",
     "中文名": "利刃",
     "英文名": "Blade",
+    "parent_id": "",
+    "tag": "melee",
     "描述": "锋利而迅捷的近战斩击武器"
+  },
+  {
+    "id": "sword",
+    "中文名": "剑类",
+    "英文名": "Sword",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "标准平衡之剑"
+  },
+  {
+    "id": "dagger",
+    "中文名": "匕首",
+    "英文名": "Dagger",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "快速轻巧的短刃"
+  },
+  {
+    "id": "katana",
+    "中文名": "武士刀",
+    "英文名": "Katana",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "锋利的东洋刀"
+  },
+  {
+    "id": "saber",
+    "中文名": "军刀",
+    "英文名": "Saber",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "弧形单刃刀"
+  },
+  {
+    "id": "scimitar",
+    "中文名": "弯刀",
+    "英文名": "Scimitar",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "弧形弯刀"
+  },
+  {
+    "id": "rapier",
+    "中文名": "刺剑",
+    "英文名": "Rapier",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "轻巧精准的刺击剑"
+  },
+  {
+    "id": "machete",
+    "中文名": "砍刀",
+    "英文名": "Machete",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "厚重劈砍刀"
+  },
+  {
+    "id": "claws",
+    "中文名": "利爪",
+    "英文名": "Claws",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "锋利爪刃"
+  },
+  {
+    "id": "kris",
+    "中文名": "蛇形剑",
+    "英文名": "Kris",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "波浪形短剑"
+  },
+  {
+    "id": "stiletto",
+    "中文名": "短剑",
+    "英文名": "Stiletto",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "轻巧穿刺短剑"
   },
   {
     "id": "Blunt",
     "中文名": "钝器",
     "英文名": "Blunt",
+    "parent_id": "",
+    "tag": "melee",
     "描述": "势大力沉的钝击系武器"
   },
   {
-    "id": "Precise",
-    "中文名": "精准",
-    "英文名": "Precise",
-    "描述": "追求一击致命的精密武器"
+    "id": "hammer",
+    "中文名": "重锤",
+    "英文名": "Hammer",
+    "parent_id": "Blunt",
+    "tag": "melee",
+    "描述": "金属类钝器击碎"
   },
   {
-    "id": "Elemental",
-    "中文名": "元素",
-    "英文名": "Elemental",
-    "描述": "蕴含元素之力的能量武器"
+    "id": "club",
+    "中文名": "棍棒",
+    "英文名": "Club",
+    "parent_id": "Blunt",
+    "tag": "melee",
+    "描述": "各类原始钝器"
+  },
+  {
+    "id": "flail",
+    "中文名": "连枷类",
+    "英文名": "Flail",
+    "parent_id": "Blunt",
+    "tag": "melee",
+    "描述": "多段攻击的链锤双节棍等"
+  },
+  {
+    "id": "staff",
+    "中文名": "杖",
+    "英文名": "Staff",
+    "parent_id": "Blunt",
+    "tag": "melee",
+    "描述": "长棍钝器和权杖"
+  },
+  {
+    "id": "tonfa",
+    "中文名": "拐",
+    "英文名": "Tonfa",
+    "parent_id": "Blunt",
+    "tag": "melee",
+    "描述": "防御格挡武器"
   },
   {
     "id": "Heavy",
     "中文名": "重武",
     "英文名": "Heavy",
+    "parent_id": "",
+    "tag": "melee",
     "描述": "威力绝伦的巨型武器"
+  },
+  {
+    "id": "greataxe",
+    "中文名": "巨斧",
+    "英文名": "Greataxe",
+    "parent_id": "Heavy",
+    "tag": "melee",
+    "描述": "双手巨斧"
+  },
+  {
+    "id": "warhammer",
+    "中文名": "战锤",
+    "英文名": "Warhammer",
+    "parent_id": "Heavy",
+    "tag": "melee",
+    "描述": "双手重锤"
+  },
+  {
+    "id": "war_staff",
+    "中文名": "战棍",
+    "英文名": "War Staff",
+    "parent_id": "Heavy",
+    "tag": "melee",
+    "描述": "重型长棍"
+  },
+  {
+    "id": "pike",
+    "中文名": "长枪",
+    "英文名": "Pike",
+    "parent_id": "Heavy",
+    "tag": "melee",
+    "描述": "长矛类极长距穿刺"
+  },
+  {
+    "id": "Axe",
+    "中文名": "战斧",
+    "英文名": "Axe",
+    "parent_id": "Heavy",
+    "tag": "melee",
+    "描述": "各类斧子战斧"
+  },
+  {
+    "id": "Gun",
+    "中文名": "枪械",
+    "英文名": "Gun",
+    "parent_id": "",
+    "tag": "ranged",
+    "描述": "以火药推进的远程武器"
+  },
+  {
+    "id": "pistol",
+    "中文名": "手枪",
+    "英文名": "Pistol",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "单手手枪"
+  },
+  {
+    "id": "revolver",
+    "中文名": "左轮",
+    "英文名": "Revolver",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "六发左轮"
+  },
+  {
+    "id": "smg",
+    "中文名": "冲锋枪",
+    "英文名": "SMG",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "高速冲锋枪"
+  },
+  {
+    "id": "rifle",
+    "中文名": "步枪",
+    "英文名": "Rifle",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "连射步枪"
+  },
+  {
+    "id": "shotgun",
+    "中文名": "霰弹枪",
+    "英文名": "Shotgun",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "扇形散射"
+  },
+  {
+    "id": "sniper",
+    "中文名": "狙击枪",
+    "英文名": "Sniper",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "远程精准"
+  },
+  {
+    "id": "lmg",
+    "中文名": "轻机枪",
+    "英文名": "LMG",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "轻量机枪"
+  },
+  {
+    "id": "hmg",
+    "中文名": "重机枪",
+    "英文名": "HMG",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "重型机枪加特林等"
+  },
+  {
+    "id": "grenadeLauncher",
+    "中文名": "榴弹枪",
+    "英文名": "GrenadeLauncher",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "发射爆炸榴弹"
+  },
+  {
+    "id": "laserGun",
+    "中文名": "激光枪",
+    "英文名": "LaserGun",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "发射能量束的高科技武器"
+  },
+  {
+    "id": "Bow",
+    "中文名": "弓箭",
+    "英文名": "Bow",
+    "parent_id": "",
+    "tag": "ranged",
+    "描述": "以弹射力驱动的远程武器"
+  },
+  {
+    "id": "longbow",
+    "中文名": "长弓",
+    "英文名": "Longbow",
+    "parent_id": "Bow",
+    "tag": "ranged",
+    "描述": "标准长弓"
+  },
+  {
+    "id": "recurve",
+    "中文名": "反曲弓",
+    "英文名": "Recurve",
+    "parent_id": "Bow",
+    "tag": "ranged",
+    "描述": "高速反曲弓"
+  },
+  {
+    "id": "composite",
+    "中文名": "复合弓",
+    "英文名": "Composite",
+    "parent_id": "Bow",
+    "tag": "ranged",
+    "描述": "现代化强力复合弓"
+  },
+  {
+    "id": "Crossbow",
+    "中文名": "弩",
+    "英文名": "Crossbow",
+    "parent_id": "",
+    "tag": "ranged",
+    "描述": "机械蓄力的远程武器"
+  },
+  {
+    "id": "handcrossbow",
+    "中文名": "手弩",
+    "英文名": "Hand Crossbow",
+    "parent_id": "Crossbow",
+    "tag": "ranged",
+    "描述": "单手弩"
+  },
+  {
+    "id": "heavycrossbow",
+    "中文名": "重弩",
+    "英文名": "Heavy Crossbow",
+    "parent_id": "Crossbow",
+    "tag": "ranged",
+    "描述": "重型穿刺弩"
+  },
+  {
+    "id": "repeating",
+    "中文名": "连弩",
+    "英文名": "Repeating Crossbow",
+    "parent_id": "Crossbow",
+    "tag": "ranged",
+    "描述": "多段连发弩"
+  },
+  {
+    "id": "Elemental",
+    "中文名": "元素",
+    "英文名": "Elemental",
+    "parent_id": "",
+    "tag": "magic",
+    "描述": "蕴含元素之力的能量武器"
+  },
+  {
+    "id": "fire",
+    "中文名": "火焰",
+    "英文名": "Fire",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "烈焰灼烧"
+  },
+  {
+    "id": "ice",
+    "中文名": "冰霜",
+    "英文名": "Ice",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "极寒冰封"
+  },
+  {
+    "id": "lightning",
+    "中文名": "闪电",
+    "英文名": "Lightning",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "电击连锁"
+  },
+  {
+    "id": "force",
+    "中文名": "能量",
+    "英文名": "Force",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "纯粹能量"
+  },
+  {
+    "id": "shadow",
+    "中文名": "暗影",
+    "英文名": "Shadow",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "暗影侵蚀"
+  },
+  {
+    "id": "wind",
+    "中文名": "风",
+    "英文名": "Wind",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "疾风席卷"
+  },
+  {
+    "id": "earth",
+    "中文名": "大地",
+    "英文名": "Earth",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "大地崩裂"
+  },
+  {
+    "id": "chaos",
+    "中文名": "混沌",
+    "英文名": "Chaos",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "混沌混乱"
   },
   {
     "id": "Medical",
     "中文名": "医疗",
     "英文名": "Medical",
+    "parent_id": "",
+    "tag": "magic",
     "描述": "以治疗守护为核心的武器"
   },
   {
-    "id": "Support",
-    "中文名": "支援",
-    "英文名": "Support",
-    "描述": "提供各类辅助效果的武器"
-  },
-  {
-    "id": "Primitive",
-    "中文名": "基础",
-    "英文名": "Primitive",
-    "描述": "原始原始的粗粝武器"
+    "id": "heal",
+    "中文名": "治愈",
+    "英文名": "Heal",
+    "parent_id": "Medical",
+    "tag": "magic",
+    "描述": "攻击敌人治疗自己"
   },
   {
     "id": "Tool",
     "中文名": "工具",
     "英文名": "Tool",
+    "parent_id": "",
+    "tag": "melee",
     "描述": "以工程学为核心的科技武器"
+  },
+  {
+    "id": "wrench",
+    "中文名": "扳手",
+    "英文名": "Wrench",
+    "parent_id": "Tool",
+    "tag": "melee",
+    "描述": "工程师标准工具创建炮塔"
+  },
+  {
+    "id": "mine",
+    "中文名": "地雷",
+    "英文名": "Mine",
+    "parent_id": "Tool",
+    "tag": "melee",
+    "描述": "部署爆炸装置"
+  },
+  {
+    "id": "Precise",
+    "中文名": "精准",
+    "英文名": "Precise",
+    "parent_id": "",
+    "tag": "melee",
+    "描述": "追求一击致命的精密武器"
+  },
+  {
+    "id": "shuriken",
+    "中文名": "手里剑",
+    "英文名": "Shuriken",
+    "parent_id": "Precise",
+    "tag": "melee",
+    "描述": "忍者投掷武器"
+  },
+  {
+    "id": "knife",
+    "中文名": "小刀",
+    "英文名": "Knife",
+    "parent_id": "Precise",
+    "tag": "melee",
+    "描述": "轻便的近战刺击武器"
+  },
+  {
+    "id": "drill",
+    "中文名": "钻头",
+    "英文名": "Drill",
+    "parent_id": "Precise",
+    "tag": "melee",
+    "描述": "高速旋转的钻头武器"
+  },
+  {
+    "id": "Explosive",
+    "中文名": "爆炸",
+    "英文名": "Explosive",
+    "parent_id": "",
+    "tag": "ranged",
+    "描述": "以爆炸杀伤为手段的武器"
+  },
+  {
+    "id": "grenade",
+    "中文名": "手雷",
+    "英文名": "Grenade",
+    "parent_id": "Explosive",
+    "tag": "ranged",
+    "描述": "投掷爆炸物"
+  },
+  {
+    "id": "rocket",
+    "中文名": "火箭炮",
+    "英文名": "Rocket",
+    "parent_id": "Explosive",
+    "tag": "ranged",
+    "描述": "火箭推进爆炸"
+  },
+  {
+    "id": "Support",
+    "中文名": "支援",
+    "英文名": "Support",
+    "parent_id": "",
+    "tag": "melee",
+    "描述": "提供各类辅助效果的武器"
+  },
+  {
+    "id": "fist",
+    "中文名": "拳套",
+    "英文名": "Fist",
+    "parent_id": "Support",
+    "tag": "melee",
+    "描述": "拳拳到肉的格斗武器各类拳套"
+  },
+  {
+    "id": "Primitive",
+    "中文名": "原始",
+    "英文名": "Primitive",
+    "parent_id": "",
+    "tag": "melee",
+    "描述": "粗犷原始的武器"
+  },
+  {
+    "id": "stone",
+    "中文名": "石",
+    "英文名": "Stone",
+    "parent_id": "Primitive",
+    "tag": "melee",
+    "描述": "原始石质武器"
+  },
+  {
+    "id": "bone",
+    "中文名": "骨",
+    "英文名": "Bone",
+    "parent_id": "Primitive",
+    "tag": "melee",
+    "描述": "骨质武器"
+  },
+  {
+    "id": "wood",
+    "中文名": "木",
+    "英文名": "Wood",
+    "parent_id": "Primitive",
+    "tag": "melee",
+    "描述": "木质武器"
   }
 ];
 
@@ -9098,252 +10124,404 @@ __DATA_BUNDLE__['system'] = [
   }
 ];
 
+__DATA_BUNDLE__['synergies'] = [
+  {
+    "tag": "melee",
+    "threshold": 2,
+    "bonuses": {
+      "damagePercent": 0.1,
+      "lifeSteal": 0.03
+    }
+  },
+  {
+    "tag": "melee",
+    "threshold": 4,
+    "bonuses": {
+      "damagePercent": 0.25,
+      "lifeSteal": 0.06,
+      "armor": 2
+    }
+  },
+  {
+    "tag": "melee",
+    "threshold": 6,
+    "bonuses": {
+      "damagePercent": 0.4,
+      "lifeSteal": 0.1,
+      "armor": 5,
+      "knockback": 150
+    }
+  },
+  {
+    "tag": "ranged",
+    "threshold": 2,
+    "bonuses": {
+      "attackRange": 0.15
+    }
+  },
+  {
+    "tag": "ranged",
+    "threshold": 4,
+    "bonuses": {
+      "attackRange": 0.3,
+      "bulletSpeed": 0.2
+    }
+  },
+  {
+    "tag": "ranged",
+    "threshold": 6,
+    "bonuses": {
+      "attackRange": 0.5,
+      "bulletSpeed": 0.35,
+      "bulletCount": 1
+    }
+  },
+  {
+    "tag": "fire",
+    "threshold": 2,
+    "bonuses": {
+      "elementalDamage": 0.15
+    }
+  },
+  {
+    "tag": "fire",
+    "threshold": 4,
+    "bonuses": {
+      "elementalDamage": 0.3,
+      "burnDps": 3
+    }
+  },
+  {
+    "tag": "fire",
+    "threshold": 6,
+    "bonuses": {
+      "elementalDamage": 0.5,
+      "burnDps": 6,
+      "burningSpread": true
+    }
+  },
+  {
+    "tag": "explosive",
+    "threshold": 2,
+    "bonuses": {
+      "explosionSize": 0.2
+    }
+  },
+  {
+    "tag": "explosive",
+    "threshold": 4,
+    "bonuses": {
+      "explosionSize": 0.4,
+      "explosionDamage": 0.3
+    }
+  },
+  {
+    "tag": "explosive",
+    "threshold": 6,
+    "bonuses": {
+      "explosionSize": 0.6,
+      "explosionDamage": 0.5,
+      "chainExplosion": true
+    }
+  },
+  {
+    "tag": "crit",
+    "threshold": 2,
+    "bonuses": {
+      "critChance": 0.05
+    }
+  },
+  {
+    "tag": "crit",
+    "threshold": 4,
+    "bonuses": {
+      "critChance": 0.1,
+      "critDamage": 0.5
+    }
+  },
+  {
+    "tag": "crit",
+    "threshold": 6,
+    "bonuses": {
+      "critChance": 0.15,
+      "critDamage": 1,
+      "onCritLightning": true
+    }
+  },
+  {
+    "tag": "tech",
+    "threshold": 2,
+    "bonuses": {
+      "engineering": 5
+    }
+  },
+  {
+    "tag": "tech",
+    "threshold": 4,
+    "bonuses": {
+      "engineering": 10,
+      "turretCount": 1
+    }
+  },
+  {
+    "tag": "tech",
+    "threshold": 6,
+    "bonuses": {
+      "engineering": 20,
+      "turretCount": 2,
+      "turretDamage": 0.3
+    }
+  },
+  {
+    "tag": "economy",
+    "threshold": 2,
+    "bonuses": {
+      "luck": 3,
+      "xpGain": 0.15
+    }
+  },
+  {
+    "tag": "economy",
+    "threshold": 4,
+    "bonuses": {
+      "luck": 6,
+      "xpGain": 0.3,
+      "materialGain": 0.25
+    }
+  },
+  {
+    "tag": "economy",
+    "threshold": 6,
+    "bonuses": {
+      "luck": 10,
+      "xpGain": 0.5,
+      "materialGain": 0.5,
+      "goldToDamage": true
+    }
+  }
+];
+
 __DATA_BUNDLE__['bulletTypes'] = [
   {
     "behavior": "bullet",
-    "tag": "gun",
+    "tag": "ranged",
+    "class_2": "",
     "shape": "arrow",
     "color": "#ffffff",
-    "size": 4,
+    "size": 16,
     "glowColor": "#ffffff",
-    "glowSize": 12,
+    "glowSize": 22,
     "trail": "line",
     "image": "bullet_gun"
   },
   {
     "behavior": "bullet",
-    "tag": "bow",
-    "shape": "arrow",
-    "color": "#ffffff",
-    "size": 4,
-    "glowColor": "#ffffff",
-    "glowSize": 12,
-    "trail": "line",
-    "image": "bullet_bow"
-  },
-  {
-    "behavior": "bullet",
     "tag": "magic",
+    "class_2": "",
     "shape": "circle",
     "color": "#ffffaa",
-    "size": 5,
+    "size": 20,
     "glowColor": "#ffffaa",
-    "glowSize": 14,
+    "glowSize": 25,
     "trail": "line",
     "image": "bullet_magic"
   },
   {
     "behavior": "bullet",
-    "tag": "medic",
-    "shape": "circle",
-    "color": "#aaffaa",
-    "size": 5,
-    "glowColor": "#aaffaa",
-    "glowSize": 14,
-    "trail": "line",
-    "image": "bullet_medic"
-  },
-  {
-    "behavior": "bullet",
-    "tag": "lance",
-    "shape": "circle",
-    "color": "#ffdd44",
-    "size": 4,
-    "glowColor": "#ffdd44",
-    "glowSize": 12,
-    "trail": "line",
-    "image": "bullet_lance"
-  },
-  {
-    "behavior": "bullet",
     "tag": "melee",
+    "class_2": "",
     "shape": "circle",
     "color": "#ffdd44",
-    "size": 4,
+    "size": 16,
     "glowColor": "#ffdd44",
-    "glowSize": 12,
+    "glowSize": 22,
     "trail": "line",
     "image": "bullet_melee"
   },
   {
     "behavior": "bullet",
     "tag": "*",
+    "class_2": "",
     "shape": "circle",
     "color": "#ffff44",
-    "size": 4,
+    "size": 16,
     "glowColor": "#ffff44",
-    "glowSize": 12,
+    "glowSize": 22,
     "trail": "line",
     "image": "bullet_default"
   },
   {
     "behavior": "spread",
-    "tag": "gun",
+    "tag": "ranged",
+    "class_2": "",
     "shape": "arrow",
     "color": "#ffffff",
-    "size": 3,
+    "size": 12,
     "glowColor": "#ffffff",
-    "glowSize": 10,
+    "glowSize": 18,
     "trail": "line",
     "image": "spread_gun"
   },
   {
     "behavior": "spread",
-    "tag": "bow",
-    "shape": "arrow",
-    "color": "#ffffff",
-    "size": 3,
-    "glowColor": "#ffffff",
-    "glowSize": 10,
-    "trail": "line",
-    "image": "spread_bow"
-  },
-  {
-    "behavior": "spread",
     "tag": "magic",
+    "class_2": "",
     "shape": "circle",
     "color": "#ffffaa",
-    "size": 4,
+    "size": 16,
     "glowColor": "#ffffaa",
-    "glowSize": 12,
+    "glowSize": 22,
     "trail": "line",
     "image": "spread_magic"
   },
   {
     "behavior": "spread",
     "tag": "*",
+    "class_2": "",
     "shape": "circle",
     "color": "#ffff44",
-    "size": 3,
+    "size": 12,
     "glowColor": "#ffff44",
-    "glowSize": 10,
+    "glowSize": 18,
     "trail": "line",
     "image": "spread_default"
   },
   {
     "behavior": "explode",
     "tag": "*",
+    "class_2": "",
     "shape": "beam",
     "color": "#ff4444",
-    "size": 8,
+    "size": 32,
     "glowColor": "#ff6600",
-    "glowSize": 18,
+    "glowSize": 32,
     "trail": "spark",
     "image": "explode"
   },
   {
     "behavior": "frost",
-    "tag": "bow",
+    "tag": "ranged",
+    "class_2": "",
     "shape": "arrow",
     "color": "#88ddff",
-    "size": 4,
+    "size": 16,
     "glowColor": "#88ddff",
-    "glowSize": 14,
+    "glowSize": 25,
     "trail": "spark",
     "image": "frost_bow"
   },
   {
     "behavior": "frost",
     "tag": "magic",
+    "class_2": "",
     "shape": "beam",
     "color": "#88ddff",
-    "size": 6,
+    "size": 24,
     "glowColor": "#aaffff",
-    "glowSize": 16,
+    "glowSize": 29,
     "trail": "spark",
     "image": "frost_magic"
   },
   {
     "behavior": "frost",
     "tag": "*",
+    "class_2": "",
     "shape": "beam",
     "color": "#88ddff",
-    "size": 5,
+    "size": 20,
     "glowColor": "#88ddff",
-    "glowSize": 14,
+    "glowSize": 25,
     "trail": "spark",
     "image": "frost_default"
   },
   {
     "behavior": "homing",
-    "tag": "bow",
+    "tag": "ranged",
+    "class_2": "",
     "shape": "arrow",
     "color": "#ffff44",
-    "size": 4,
+    "size": 16,
     "glowColor": "#ffff44",
-    "glowSize": 14,
+    "glowSize": 25,
     "trail": "line",
     "image": "homing_bow"
   },
   {
     "behavior": "homing",
     "tag": "magic",
+    "class_2": "",
     "shape": "circle",
     "color": "#ffff44",
-    "size": 5,
+    "size": 20,
     "glowColor": "#ffffaa",
-    "glowSize": 16,
+    "glowSize": 29,
     "trail": "line",
     "image": "homing_magic"
   },
   {
     "behavior": "homing",
     "tag": "*",
+    "class_2": "",
     "shape": "circle",
     "color": "#ffff44",
-    "size": 4,
+    "size": 16,
     "glowColor": "#ffff44",
-    "glowSize": 14,
+    "glowSize": 25,
     "trail": "line",
     "image": "homing_default"
   },
   {
     "behavior": "shock",
     "tag": "*",
+    "class_2": "",
     "shape": "bolt",
     "color": "#ffaa44",
-    "size": 3,
+    "size": 12,
     "glowColor": "#ffaa44",
-    "glowSize": 20,
+    "glowSize": 36,
     "trail": "spark",
     "image": "shock"
   },
   {
     "behavior": "spray",
     "tag": "*",
+    "class_2": "",
     "shape": "cone",
     "color": "#ffffff",
-    "size": 3,
+    "size": 12,
     "glowColor": "#ffffff",
-    "glowSize": 12,
+    "glowSize": 22,
     "trail": "none",
     "image": "spray"
   },
   {
     "behavior": "heal_bullet",
-    "tag": "medic",
+    "tag": "magic",
+    "class_2": "",
     "shape": "circle",
     "color": "#00ff88",
-    "size": 5,
+    "size": 20,
     "glowColor": "#00ff88",
-    "glowSize": 16,
+    "glowSize": 29,
     "trail": "line",
     "image": "heal_bullet"
   },
   {
     "behavior": "heal_bullet",
     "tag": "*",
+    "class_2": "",
     "shape": "circle",
     "color": "#00ff88",
-    "size": 4,
+    "size": 16,
     "glowColor": "#00ff88",
-    "glowSize": 14,
+    "glowSize": 25,
     "trail": "line",
     "image": "heal_bullet"
   },
   {
     "behavior": "melee_sweep",
     "tag": "*",
+    "class_2": "",
     "shape": "none",
     "color": "",
     "size": 0,
@@ -9355,6 +10533,7 @@ __DATA_BUNDLE__['bulletTypes'] = [
   {
     "behavior": "melee_thrust",
     "tag": "*",
+    "class_2": "",
     "shape": "none",
     "color": "",
     "size": 0,
@@ -9366,6 +10545,7 @@ __DATA_BUNDLE__['bulletTypes'] = [
   {
     "behavior": "shield_aura",
     "tag": "*",
+    "class_2": "",
     "shape": "none",
     "color": "",
     "size": 0,
@@ -9373,5 +10553,242 @@ __DATA_BUNDLE__['bulletTypes'] = [
     "glowSize": 0,
     "trail": "none",
     "image": ""
+  },
+  {
+    "behavior": "bullet",
+    "tag": "ranged",
+    "class_2": "revolver",
+    "shape": "arrow",
+    "color": "#ffffff",
+    "size": 24,
+    "glowColor": "#ffddaa",
+    "glowSize": 29,
+    "trail": "line",
+    "image": "bullet_gun"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "ranged",
+    "class_2": "sniper",
+    "shape": "arrow",
+    "color": "#ffffff",
+    "size": 12,
+    "glowColor": "#aaddff",
+    "glowSize": 36,
+    "trail": "line",
+    "image": "bullet_gun"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "ranged",
+    "class_2": "longbow",
+    "shape": "arrow",
+    "color": "#ccbb99",
+    "size": 20,
+    "glowColor": "#ccbb99",
+    "glowSize": 25,
+    "trail": "spark",
+    "image": "bullet_bow"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "ranged",
+    "class_2": "recurve",
+    "shape": "arrow",
+    "color": "#ddbb77",
+    "size": 16,
+    "glowColor": "#ddbb77",
+    "glowSize": 23,
+    "trail": "line",
+    "image": "bullet_bow"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "ranged",
+    "class_2": "handcrossbow",
+    "shape": "arrow",
+    "color": "#aaaadd",
+    "size": 20,
+    "glowColor": "#aaaadd",
+    "glowSize": 23,
+    "trail": "line",
+    "image": "bullet_bow"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "ranged",
+    "class_2": "heavycrossbow",
+    "shape": "arrow",
+    "color": "#8888ff",
+    "size": 24,
+    "glowColor": "#8888ff",
+    "glowSize": 29,
+    "trail": "line",
+    "image": "bullet_bow"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "magic",
+    "class_2": "fire",
+    "shape": "circle",
+    "color": "#ff6644",
+    "size": 20,
+    "glowColor": "#ff4400",
+    "glowSize": 29,
+    "trail": "spark",
+    "image": "bullet_magic"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "magic",
+    "class_2": "force",
+    "shape": "circle",
+    "color": "#cc88ff",
+    "size": 20,
+    "glowColor": "#aa44ff",
+    "glowSize": 29,
+    "trail": "line",
+    "image": "bullet_magic"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "magic",
+    "class_2": "shadow",
+    "shape": "circle",
+    "color": "#8844aa",
+    "size": 20,
+    "glowColor": "#662299",
+    "glowSize": 25,
+    "trail": "line",
+    "image": "bullet_magic"
+  },
+  {
+    "behavior": "bullet",
+    "tag": "magic",
+    "class_2": "heal",
+    "shape": "circle",
+    "color": "#44ff88",
+    "size": 16,
+    "glowColor": "#00ff66",
+    "glowSize": 25,
+    "trail": "line",
+    "image": "bullet_medic"
+  },
+  {
+    "behavior": "spread",
+    "tag": "ranged",
+    "class_2": "shotgun",
+    "shape": "circle",
+    "color": "#ffffff",
+    "size": 20,
+    "glowColor": "#ffffff",
+    "glowSize": 18,
+    "trail": "line",
+    "image": "spread_gun"
+  },
+  {
+    "behavior": "spread",
+    "tag": "ranged",
+    "class_2": "smg",
+    "shape": "arrow",
+    "color": "#ffffff",
+    "size": 8,
+    "glowColor": "#ffffff",
+    "glowSize": 14,
+    "trail": "line",
+    "image": "spread_gun"
+  },
+  {
+    "behavior": "spread",
+    "tag": "ranged",
+    "class_2": "lmg",
+    "shape": "arrow",
+    "color": "#ffddaa",
+    "size": 12,
+    "glowColor": "#ffddaa",
+    "glowSize": 18,
+    "trail": "line",
+    "image": "spread_gun"
+  },
+  {
+    "behavior": "spread",
+    "tag": "ranged",
+    "class_2": "hmg",
+    "shape": "arrow",
+    "color": "#ffddaa",
+    "size": 12,
+    "glowColor": "#ffddaa",
+    "glowSize": 18,
+    "trail": "line",
+    "image": "spread_gun"
+  },
+  {
+    "behavior": "homing",
+    "tag": "ranged",
+    "class_2": "longbow",
+    "shape": "arrow",
+    "color": "#ccbb99",
+    "size": 20,
+    "glowColor": "#ccbb99",
+    "glowSize": 25,
+    "trail": "spark",
+    "image": "homing_bow"
+  },
+  {
+    "behavior": "homing",
+    "tag": "magic",
+    "class_2": "force",
+    "shape": "circle",
+    "color": "#aa66ff",
+    "size": 20,
+    "glowColor": "#8844ee",
+    "glowSize": 32,
+    "trail": "line",
+    "image": "homing_magic"
+  }
+];
+
+__DATA_BUNDLE__['sceneItems'] = [
+  {
+    "id": "medic_kit",
+    "name": "医疗箱",
+    "image": "medic_kit.png",
+    "width": 36,
+    "height": 36
+  },
+  {
+    "id": "health_pickup",
+    "name": "血包",
+    "image": "health_pickup.png",
+    "width": 20,
+    "height": 20
+  },
+  {
+    "id": "turret1",
+    "name": "炮塔L1",
+    "image": "turret1.png",
+    "width": 64,
+    "height": 64
+  },
+  {
+    "id": "turret2",
+    "name": "炮塔L2",
+    "image": "turret2.png",
+    "width": 64,
+    "height": 64
+  },
+  {
+    "id": "turret3",
+    "name": "炮塔L3",
+    "image": "turret3.png",
+    "width": 64,
+    "height": 64
+  },
+  {
+    "id": "turret4",
+    "name": "炮塔L4",
+    "image": "turret4.png",
+    "width": 64,
+    "height": 64
   }
 ];

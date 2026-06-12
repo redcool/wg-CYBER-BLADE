@@ -1,19 +1,95 @@
 ﻿# ====== 武器类别（Class）定义 ======
 # 格式: CSV (逗号分隔)
-# 描述武器的品类特征，纯装饰性，无游戏性影响
+# 大类 + 细类两层结构，作为所有武器/角色分类的唯一数据源
+# 大类与细类,都可以有多个,中间以 | 类分割,比如 Blade | Heavy
 #
-# ====== 列说明 (4列) ======
-# id:     类别唯一标识 (英文, Blade|Blunt|Precise|Elemental|Heavy|Medical|Support|Primitive)
-# 中文名: 中文名称 (显示在武器详情/商店卡片上)
-# 英文名: 英文名称
-# 描述:   类别描述
-id,中文名,英文名,描述
-Blade,利刃,Blade,锋利而迅捷的近战斩击武器
-Blunt,钝器,Blunt,势大力沉的钝击系武器
-Precise,精准,Precise,追求一击致命的精密武器
-Elemental,元素,Elemental,蕴含元素之力的能量武器
-Heavy,重武,Heavy,威力绝伦的巨型武器
-Medical,医疗,Medical,以治疗守护为核心的武器
-Support,支援,Support,提供各类辅助效果的武器
-Primitive,基础,Primitive,原始原始的粗粝武器
-Tool,工具,Tool,以工程学为核心的科技武器
+# ====== 列说明 (6列) ======
+# id:         类别唯一标识 (英文)
+# 中文名:     中文名称
+# 英文名:     英文名称
+# parent_id:  父类ID (空=顶级大类, 非空=细类)
+# tag:        粗分类 (melee/ranged/magic, 用于快速计算和过滤)
+# 描述:       类别描述
+id,中文名,英文名,parent_id,tag,描述
+Blade,利刃,Blade,,melee,锋利而迅捷的近战斩击武器
+# 细类: sword 剑类, dagger 匕首, katana 武士刀, saber 军刀, scimitar 弯刀, rapier 刺剑, machete 砍刀, claws 利爪, kris 蛇形剑, stiletto 短剑
+sword,剑类,Sword,Blade,melee,标准平衡之剑
+dagger,匕首,Dagger,Blade,melee,快速轻巧的短刃
+katana,武士刀,Katana,Blade,melee,锋利的东洋刀
+saber,军刀,Saber,Blade,melee,弧形单刃刀
+scimitar,弯刀,Scimitar,Blade,melee,弧形弯刀
+rapier,刺剑,Rapier,Blade,melee,轻巧精准的刺击剑
+machete,砍刀,Machete,Blade,melee,厚重劈砍刀
+claws,利爪,Claws,Blade,melee,锋利爪刃
+kris,蛇形剑,Kris,Blade,melee,波浪形短剑
+stiletto,短剑,Stiletto,Blade,melee,轻巧穿刺短剑
+Blunt,钝器,Blunt,,melee,势大力沉的钝击系武器
+# 细类: hammer 重锤, mace 链枷, club 棍棒, flail 连枷, staff 杖, fist 拳套, gauntlet 铁拳, tonfa 拐
+hammer,重锤,Hammer,Blunt,melee,金属类钝器击碎
+club,棍棒,Club,Blunt,melee,各类原始钝器
+flail,连枷类,Flail,Blunt,melee,多段攻击的链锤双节棍等
+staff,杖,Staff,Blunt,melee,长棍钝器和权杖
+tonfa,拐,Tonfa,Blunt,melee,防御格挡武器
+Heavy,重武,Heavy,,melee,威力绝伦的巨型武器
+# 细类: greataxe 巨斧, warhammer 战锤, war_staff 战棍, pike 长枪, Axe 战斧
+greataxe,巨斧,Greataxe,Heavy,melee,双手巨斧
+warhammer,战锤,Warhammer,Heavy,melee,双手重锤
+war_staff,战棍,War Staff,Heavy,melee,重型长棍
+pike,长枪,Pike,Heavy,melee,长矛类极长距穿刺
+Axe,战斧,Axe,Heavy,melee,各类斧子战斧
+Gun,枪械,Gun,,ranged,以火药推进的远程武器
+# 细类: pistol 手枪, revolver 左轮, smg 冲锋枪, rifle 步枪, shotgun 霰弹枪, sniper 狙击枪, lmg 轻机枪, hmg 重机枪
+pistol,手枪,Pistol,Gun,ranged,单手手枪
+revolver,左轮,Revolver,Gun,ranged,六发左轮
+smg,冲锋枪,SMG,Gun,ranged,高速冲锋枪
+rifle,步枪,Rifle,Gun,ranged,连射步枪
+shotgun,霰弹枪,Shotgun,Gun,ranged,扇形散射
+sniper,狙击枪,Sniper,Gun,ranged,远程精准
+lmg,轻机枪,LMG,Gun,ranged,轻量机枪
+hmg,重机枪,HMG,Gun,ranged,重型机枪加特林等
+grenadeLauncher,榴弹枪,GrenadeLauncher,Gun,ranged,发射爆炸榴弹
+laserGun,激光枪,LaserGun,Gun,ranged,发射能量束的高科技武器
+Bow,弓箭,Bow,,ranged,以弹射力驱动的远程武器
+# 细类: longbow 长弓, recurve 反曲弓, composite 复合弓
+longbow,长弓,Longbow,Bow,ranged,标准长弓
+recurve,反曲弓,Recurve,Bow,ranged,高速反曲弓
+composite,复合弓,Composite,Bow,ranged,现代化强力复合弓
+Crossbow,弩,Crossbow,,ranged,机械蓄力的远程武器
+# 细类: handcrossbow 手弩, heavycrossbow 重弩, repeating 连弩
+handcrossbow,手弩,Hand Crossbow,Crossbow,ranged,单手弩
+heavycrossbow,重弩,Heavy Crossbow,Crossbow,ranged,重型穿刺弩
+repeating,连弩,Repeating Crossbow,Crossbow,ranged,多段连发弩
+Elemental,元素,Elemental,,magic,蕴含元素之力的能量武器
+# 细类: fire 火焰, ice 冰霜, lightning 闪电, force 能量, shadow 暗影, wind 风, earth 大地, chaos 混沌
+fire,火焰,Fire,Elemental,magic,烈焰灼烧
+ice,冰霜,Ice,Elemental,magic,极寒冰封
+lightning,闪电,Lightning,Elemental,magic,电击连锁
+force,能量,Force,Elemental,magic,纯粹能量
+shadow,暗影,Shadow,Elemental,magic,暗影侵蚀
+wind,风,Wind,Elemental,magic,疾风席卷
+earth,大地,Earth,Elemental,magic,大地崩裂
+chaos,混沌,Chaos,Elemental,magic,混沌混乱
+Medical,医疗,Medical,,magic,以治疗守护为核心的武器
+# 细类: heal 治愈
+heal,治愈,Heal,Medical,magic,攻击敌人治疗自己
+Tool,工具,Tool,,melee,以工程学为核心的科技武器
+# 细类: wrench 扳手, mine 地雷, bomb 炸弹
+wrench,扳手,Wrench,Tool,melee,工程师标准工具创建炮塔
+mine,地雷,Mine,Tool,melee,部署爆炸装置
+Precise,精准,Precise,,melee,追求一击致命的精密武器
+# 细类: shuriken 手里剑, knife 小刀, drill 钻头
+shuriken,手里剑,Shuriken,Precise,melee,忍者投掷武器
+knife,小刀,Knife,Precise,melee,轻便的近战刺击武器
+drill,钻头,Drill,Precise,melee,高速旋转的钻头武器
+Explosive,爆炸,Explosive,,ranged,以爆炸杀伤为手段的武器
+# 细类: grenade 手雷, rocket 火箭炮
+grenade,手雷,Grenade,Explosive,ranged,投掷爆炸物
+rocket,火箭炮,Rocket,Explosive,ranged,火箭推进爆炸
+Support,支援,Support,,melee,提供各类辅助效果的武器
+# 细类: fist 拳套
+fist,拳套,Fist,Support,melee,拳拳到肉的格斗武器各类拳套
+Primitive,原始,Primitive,,melee,粗犷原始的武器
+# 细类: stone 石, bone 骨, wood 木
+stone,石,Stone,Primitive,melee,原始石质武器
+bone,骨,Bone,Primitive,melee,骨质武器
+wood,木,Wood,Primitive,melee,木质武器

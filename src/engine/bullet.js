@@ -32,10 +32,12 @@ const BulletSystem = {
         if (isPlayer && weaponId && typeof ShopSystem !== 'undefined' && ShopSystem.getWeaponDef) {
             const def = ShopSystem.getWeaponDef(weaponId);
             b.weaponTag = def ? def.tag : null;
+            b.weaponClass2 = def ? (def.class_2 || null) : null;
             b.knockback = def ? (def.knockback || 0) : 0;
             b.behavior = def ? (def.behavior || 'bullet') : (extra.behavior || 'bullet');
         } else {
             b.weaponTag = null;
+            b.weaponClass2 = null;
             b.knockback = 0;
             b.behavior = extra.behavior || 'bullet';
         }

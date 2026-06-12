@@ -6,10 +6,9 @@
     "cost": 20,
     "icon": "❤️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -23,10 +22,9 @@
     "cost": 15,
     "icon": "💚",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -40,10 +38,9 @@
     "cost": 20,
     "icon": "👟",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -57,10 +54,9 @@
     "cost": 25,
     "icon": "🛡️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -74,10 +70,9 @@
     "cost": 25,
     "icon": "🌬️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -91,10 +86,9 @@
     "cost": 25,
     "icon": "⚡",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -108,10 +102,9 @@
     "cost": 25,
     "icon": "💨",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -125,10 +118,9 @@
     "cost": 25,
     "icon": "💥",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -143,10 +135,9 @@
     "cost": 25,
     "icon": "🩸",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -161,9 +152,10 @@
     "cost": 20,
     "icon": "⚔️",
     "unique": false,
-    "rarity": "",
+    "qualifies": "melee",
+    "rarity": "common",
     "tags": [
-      "common"
+      "melee"
     ],
     "triggers": [],
     "effects": null,
@@ -179,9 +171,10 @@
     "cost": 20,
     "icon": "🏹",
     "unique": false,
-    "rarity": "",
+    "qualifies": "ranged",
+    "rarity": "common",
     "tags": [
-      "common"
+      "ranged"
     ],
     "triggers": [],
     "effects": null,
@@ -197,10 +190,9 @@
     "cost": 15,
     "icon": "🧲",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -214,10 +206,9 @@
     "cost": 20,
     "icon": "🎯",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "common"
-    ],
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -232,10 +223,9 @@
     "cost": 30,
     "icon": "🧪",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -250,10 +240,9 @@
     "cost": 35,
     "icon": "🔥",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -268,9 +257,10 @@
     "cost": 30,
     "icon": "💀",
     "unique": false,
-    "rarity": "",
+    "qualifies": "ranged",
+    "rarity": "uncommon",
     "tags": [
-      "uncommon"
+      "ranged"
     ],
     "triggers": [],
     "effects": null,
@@ -286,12 +276,11 @@
     "cost": 25,
     "icon": "🌵",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [
-      "reflective"
+      "onDamageTaken"
     ],
     "effects": [
       {
@@ -304,18 +293,20 @@
   {
     "id": "elemental_dmg",
     "name": "元素水晶",
-    "desc": "+3 元素伤害",
+    "desc": "+3元素伤害 -1近战",
     "cost": 30,
     "icon": "🔮",
     "unique": false,
-    "rarity": "",
+    "qualifies": "",
+    "rarity": "uncommon",
     "tags": [
-      "uncommon"
+      "fire"
     ],
     "triggers": [],
     "effects": null,
     "statMods": {
-      "elementalDamage": 1
+      "elementalDamage": 3,
+      "meleeDamage": -1
     }
   },
   {
@@ -325,10 +316,9 @@
     "cost": 30,
     "icon": "💚",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -343,10 +333,9 @@
     "cost": 30,
     "icon": "🪙",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -361,10 +350,9 @@
     "cost": 35,
     "icon": "🌀",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -379,10 +367,9 @@
     "cost": 35,
     "icon": "💍",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -397,10 +384,9 @@
     "cost": 30,
     "icon": "👢",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -416,10 +402,9 @@
     "cost": 35,
     "icon": "🗡️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [
       "onKill"
     ],
@@ -441,9 +426,10 @@
     "cost": 30,
     "icon": "🔭",
     "unique": false,
-    "rarity": "",
+    "qualifies": "ranged",
+    "rarity": "uncommon",
     "tags": [
-      "uncommon"
+      "ranged"
     ],
     "triggers": [],
     "effects": null,
@@ -459,10 +445,9 @@
     "cost": 30,
     "icon": "🔧",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "uncommon"
-    ],
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -477,10 +462,9 @@
     "cost": 50,
     "icon": "❤️‍🔥",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -494,10 +478,9 @@
     "cost": 60,
     "icon": "🪓",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -512,10 +495,9 @@
     "cost": 55,
     "icon": "🧛",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -530,10 +512,9 @@
     "cost": 55,
     "icon": "🪶",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -548,10 +529,9 @@
     "cost": 50,
     "icon": "🪨",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -566,10 +546,9 @@
     "cost": 55,
     "icon": "🗡️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -584,10 +563,9 @@
     "cost": 50,
     "icon": "🛡️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [
       "onHit"
     ],
@@ -607,9 +585,10 @@
     "cost": 60,
     "icon": "🔄",
     "unique": false,
-    "rarity": "",
+    "qualifies": "ranged",
+    "rarity": "rare",
     "tags": [
-      "rare"
+      "ranged"
     ],
     "triggers": [
       "onFire"
@@ -629,10 +608,9 @@
     "cost": 40,
     "icon": "🧲",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -646,13 +624,10 @@
     "cost": 30,
     "icon": "🎫",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
-    "triggers": [
-      "shopDiscount"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
+    "triggers": [],
     "effects": null,
     "statMods": {
       "shopDiscount": 0.8
@@ -665,9 +640,10 @@
     "cost": 60,
     "icon": "💥",
     "unique": false,
-    "rarity": "",
+    "qualifies": "ranged",
+    "rarity": "rare",
     "tags": [
-      "rare"
+      "ranged"
     ],
     "triggers": [
       "onHit"
@@ -688,10 +664,9 @@
     "cost": 45,
     "icon": "📜",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "rare"
-    ],
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -705,11 +680,10 @@
     "desc": "致命伤免死一次",
     "cost": 80,
     "icon": "🧬",
-    "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "unique": true,
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [
       "revive"
     ],
@@ -730,12 +704,13 @@
     "cost": 90,
     "icon": "🎱",
     "unique": false,
-    "rarity": "",
+    "qualifies": "ranged",
+    "rarity": "legendary",
     "tags": [
-      "legendary"
+      "ranged"
     ],
     "triggers": [
-      "ricochet"
+      "onHit"
     ],
     "effects": [
       {
@@ -752,10 +727,9 @@
     "cost": 100,
     "icon": "☢️",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -770,10 +744,9 @@
     "cost": 80,
     "icon": "🔴",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -789,10 +762,9 @@
     "cost": 100,
     "icon": "✨",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -807,10 +779,9 @@
     "cost": 90,
     "icon": "👟",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -824,13 +795,12 @@
     "desc": "物品+1升级",
     "cost": 120,
     "icon": "🔨",
-    "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "unique": true,
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [
-      "upgrade"
+      "onBuy"
     ],
     "effects": [
       {
@@ -847,10 +817,9 @@
     "cost": 80,
     "icon": "🌊",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
@@ -865,16 +834,439 @@
     "cost": 100,
     "icon": "👼",
     "unique": false,
-    "rarity": "",
-    "tags": [
-      "legendary"
-    ],
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [],
     "triggers": [],
     "effects": null,
     "statMods": {
       "dodge": 0.2,
       "attackSpeed": 0.15,
       "maxHp": -12
+    }
+  },
+  {
+    "id": "magic_wand",
+    "name": "魔法短杖",
+    "desc": "+1元素伤害 -1近战伤害",
+    "cost": 20,
+    "icon": "🪄",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [
+      "fire"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "elementalDamage": 1,
+      "meleeDamage": -1
+    }
+  },
+  {
+    "id": "mana_ring",
+    "name": "魔力戒指",
+    "desc": "+3元素伤害 -3%攻速",
+    "cost": 35,
+    "icon": "💍",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [
+      "fire"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "elementalDamage": 3,
+      "attackSpeed": -0.03
+    }
+  },
+  {
+    "id": "fire_rune",
+    "name": "火焰符文",
+    "desc": "+15%伤害 -1护甲",
+    "cost": 40,
+    "icon": "🔴",
+    "unique": false,
+    "qualifies": "magic",
+    "rarity": "uncommon",
+    "tags": [
+      "fire"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "damagePercent": 0.15,
+      "armor": -1
+    }
+  },
+  {
+    "id": "void_crystal",
+    "name": "虚空水晶",
+    "desc": "+5元素伤害 +3%暴击 -1生命回复",
+    "cost": 60,
+    "icon": "🔮",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [
+      "fire"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "elementalDamage": 5,
+      "critChance": 0.03,
+      "hpRegen": -0.3
+    }
+  },
+  {
+    "id": "phoenix_core",
+    "name": "凤凰核心",
+    "desc": "+8元素伤害 +15%攻速 -30最大生命",
+    "cost": 100,
+    "icon": "🪶",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [
+      "fire"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "elementalDamage": 8,
+      "attackSpeed": 0.15,
+      "maxHp": -8
+    }
+  },
+  {
+    "id": "lucky_ring",
+    "name": "幸运戒指",
+    "desc": "+5%暴击 -2最大生命",
+    "cost": 30,
+    "icon": "💍",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [
+      "crit"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "critChance": 0.05,
+      "maxHp": -1
+    }
+  },
+  {
+    "id": "razor_shard",
+    "name": "锋锐碎片",
+    "desc": "+8%暴击 +30%暴伤 -1护甲",
+    "cost": 55,
+    "icon": "🗡️",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [
+      "crit"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "critChance": 0.08,
+      "critDamage": 0.3,
+      "armor": -1
+    }
+  },
+  {
+    "id": "perfection_eye",
+    "name": "完美之眼",
+    "desc": "+15%暴击 +50%暴伤 -30最大生命",
+    "cost": 100,
+    "icon": "👁️",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [
+      "crit"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "critChance": 0.15,
+      "critDamage": 0.5,
+      "maxHp": -8
+    }
+  },
+  {
+    "id": "circuit_board",
+    "name": "电路板",
+    "desc": "+1工程值",
+    "cost": 15,
+    "icon": "🔌",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "common",
+    "tags": [
+      "tech"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "engineering": 1
+    }
+  },
+  {
+    "id": "mech_arm",
+    "name": "机械臂",
+    "desc": "+3工程值 -1近战伤害",
+    "cost": 35,
+    "icon": "🦾",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [
+      "tech"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "engineering": 3,
+      "meleeDamage": -1
+    }
+  },
+  {
+    "id": "turret_module",
+    "name": "炮台核心",
+    "desc": "+6工程值 -2%闪避",
+    "cost": 60,
+    "icon": "🎯",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [
+      "tech"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "engineering": 6,
+      "dodge": -0.02
+    }
+  },
+  {
+    "id": "factory_heart",
+    "name": "工厂之心",
+    "desc": "+10工程值 -8移速",
+    "cost": 100,
+    "icon": "⚙️",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [
+      "tech"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "engineering": 10,
+      "speed": -2
+    }
+  },
+  {
+    "id": "gunpowder_bag",
+    "name": "火药袋",
+    "desc": "+15%伤害 -1护甲",
+    "cost": 35,
+    "icon": "💥",
+    "unique": false,
+    "qualifies": "ranged",
+    "rarity": "uncommon",
+    "tags": [
+      "explosive"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "damagePercent": 0.15,
+      "armor": -1
+    }
+  },
+  {
+    "id": "explosive_charge",
+    "name": "爆破炸药",
+    "desc": "+30%伤害 -3%攻速",
+    "cost": 60,
+    "icon": "🧨",
+    "unique": false,
+    "qualifies": "ranged",
+    "rarity": "rare",
+    "tags": [
+      "explosive"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "damagePercent": 0.3,
+      "attackSpeed": -0.03
+    }
+  },
+  {
+    "id": "atomic_warhead",
+    "name": "原子弹头",
+    "desc": "+50%伤害 -20最大生命",
+    "cost": 100,
+    "icon": "☢️",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "legendary",
+    "tags": [
+      "explosive"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "damagePercent": 0.5,
+      "maxHp": -5
+    }
+  },
+  {
+    "id": "coin_purse",
+    "name": "钱袋",
+    "desc": "+20%采集 -3%攻速",
+    "cost": 30,
+    "icon": "💰",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "uncommon",
+    "tags": [
+      "economy"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "harvesting": 0.2,
+      "attackSpeed": -0.03
+    }
+  },
+  {
+    "id": "golden_statue",
+    "name": "金像",
+    "desc": "+30%采集 -1生命回复",
+    "cost": 55,
+    "icon": "🗿",
+    "unique": false,
+    "qualifies": "",
+    "rarity": "rare",
+    "tags": [
+      "economy"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "harvesting": 0.3,
+      "hpRegen": -0.3
+    }
+  },
+  {
+    "id": "warrior_belt",
+    "name": "战士腰带",
+    "desc": "+2近战伤害 -1远程伤害",
+    "cost": 20,
+    "icon": "🦵",
+    "unique": false,
+    "qualifies": "melee",
+    "rarity": "common",
+    "tags": [
+      "melee"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "meleeDamage": 2,
+      "rangedDamage": -1
+    }
+  },
+  {
+    "id": "heavy_gauntlet",
+    "name": "重型铁拳",
+    "desc": "+4近战伤害 -3%攻速",
+    "cost": 35,
+    "icon": "🥊",
+    "unique": false,
+    "qualifies": "melee",
+    "rarity": "uncommon",
+    "tags": [
+      "melee"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "meleeDamage": 4,
+      "attackSpeed": -0.03
+    }
+  },
+  {
+    "id": "berserker_helm",
+    "name": "狂战头盔",
+    "desc": "+6近战伤害 +5%暴击 -1护甲",
+    "cost": 60,
+    "icon": "⛑️",
+    "unique": false,
+    "qualifies": "melee",
+    "rarity": "rare",
+    "tags": [
+      "melee"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "meleeDamage": 6,
+      "critChance": 0.05,
+      "armor": -1
+    }
+  },
+  {
+    "id": "quick_shot",
+    "name": "速射手套",
+    "desc": "+3远程伤害 -2近战 +5%攻速",
+    "cost": 35,
+    "icon": "🧤",
+    "unique": false,
+    "qualifies": "ranged",
+    "rarity": "uncommon",
+    "tags": [
+      "ranged"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "rangedDamage": 3,
+      "meleeDamage": -2,
+      "attackSpeed": 0.05
+    }
+  },
+  {
+    "id": "long_barrel",
+    "name": "长枪管",
+    "desc": "+5远程伤害 +30射程 -3%攻速",
+    "cost": 60,
+    "icon": "🔫",
+    "unique": false,
+    "qualifies": "ranged",
+    "rarity": "rare",
+    "tags": [
+      "ranged"
+    ],
+    "triggers": [],
+    "effects": null,
+    "statMods": {
+      "rangedDamage": 5,
+      "attackRange": 8,
+      "attackSpeed": -0.03
     }
   }
 ]

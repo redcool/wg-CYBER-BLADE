@@ -613,7 +613,7 @@ const PlayerSystem = {
                 const result = EnemySystem.takeDamage(e, dmg);
 
                 // 击退方向 (从 sprite 中心指向怪, 用 sprite→e 计算)
-                const kbStat = (wp.knockback ?? (wp._attackBehavior === 'melee_thrust' && wp.tag === 'lance' ? 45 : 30)) + (p.knockback ?? 0);
+                const kbStat = (wp.knockback ?? (wp._attackBehavior === 'melee_thrust' ? 45 : 30)) + (p.knockback ?? 0);
                 const kdx = e.x - sprite.x, kdy = e.y - sprite.y;
                 const kdist = Math.sqrt(kdx * kdx + kdy * kdy);
                 EnemySystem.applyKnockback(e, kdx, kdy, kdist, kbStat);
@@ -638,6 +638,23 @@ const PlayerSystem = {
                 // 击杀
                 if (result === -1 && typeof GameEngine !== 'undefined') {
                     GameEngine._handleEnemyKill(e, dmg);
+                }
+            }
+
+            // ---- 近战攻击医药箱（同一锥形判定） ----
+            if (typeof ContainerSystem !== 'undefined') {
+                const crateDmg = StatsSystem.calcDamage(wp._weaponDef, p, null, wp);
+                for (const crate of ContainerSystem.crates) {
+                    if (!crate.alive) continue;
+                    const cdx = crate.x - p.x, cdy = crate.y - p.y;
+                    const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
+                    if (cdist > weaponRange + (crate.radius ?? 18)) continue;
+                    const cang = Math.atan2(cdy, cdx);
+                    let cd = cang - aa;
+                    cd = ((cd + Math.PI) % (2 * Math.PI)) - Math.PI;
+                    if (Math.abs(cd) > cone) continue;
+                    ContainerSystem.takeDamage(crate, crateDmg);
+                    break; // 单次攻击最多打中一个医药箱
                 }
             }
         }
@@ -803,12 +820,8 @@ const PlayerSystem = {
             }
             actualBehavior = (nearCount >= 2) ? 'melee_sweep' : 'melee_thrust';
         } else if (actualBehavior === 'melee') {
-            const weaponDef = ShopSystem.allWeapons.find(d => d.id === weaponId);
-            if (weaponDef && weaponDef.tag === 'lance') {
-                actualBehavior = 'melee_thrust';
-            } else {
-                actualBehavior = (targetDist < meleeRange * 0.45) ? 'melee_sweep' : 'melee_thrust';
-            }
+            // lance 已合并到 melee，按距离选择
+            actualBehavior = (targetDist < meleeRange * 0.45) ? 'melee_sweep' : 'melee_thrust';
         }
         // melee_thrust: 保持原样
 
@@ -911,14 +924,14 @@ const PlayerSystem = {
             else if (actualBehavior === 'frost')  sound = 'ice';
             else if (actualBehavior === 'spray')  sound = 'fire';
             else if (actualBehavior === 'explode') {
-                // 枪械爆炸(cannon)用 cannon;魔法爆炸用 explosion
-                sound = tag === 'gun' ? 'cannon' : 'explosion';
+                // 远程爆炸(cannon)用 cannon;魔法爆炸用 explosion
+                sound = tag === 'ranged' ? 'cannon' : 'explosion';
             }
             // 2) 近战
             else if (actualBehavior === 'melee_sweep')  sound = 'melee_slash';
             else if (actualBehavior === 'melee_thrust') sound = 'melee_heavy';
             // 3) 远程:按 tag 区分
-            else if (tag === 'gun' || tag === 'bow') {
+            else if (tag === 'ranged') {
                 if (actualBehavior === 'spread' || actualBehavior === 'laser') sound = 'heavy_gun';
                 else sound = 'gunshot';  // 普通弹
             }
@@ -928,7 +941,6 @@ const PlayerSystem = {
                 else if (actualBehavior === 'spread') sound = 'magic';
                 else sound = 'magic';
             }
-            else if (tag === 'medic') sound = 'pistol';
             // 4) 兜底
             if (!sound) {
                 if (actualBehavior === 'bullet')       sound = tag === 'magic' ? 'magic' : 'pistol';
@@ -939,6 +951,14 @@ const PlayerSystem = {
                 else sound = 'pistol';
             }
             AudioSystem.play(sound);
+        }
+
+        // 触发 OnFire 事件（复制器：20%双倍子弹等）
+        if (p && typeof ItemSystem !== 'undefined') {
+            ItemSystem.onEvent('OnFire', p, { weaponId, params, target, behavior: actualBehavior });
+        }
+        if (p && typeof PassiveSystem !== 'undefined') {
+            PassiveSystem.onEvent('OnFire', p, { weaponId, params, target, behavior: actualBehavior });
         }
     },
 
@@ -1009,7 +1029,7 @@ const PlayerSystem = {
         let hits = 0;
 
         // 注: 突刺冲刺(前冲)效果已移除,玩家可随时 WASD 走位
-        const isLance = weaponDef && weaponDef.tag === 'lance';
+        const isLance = false; // 原 lance 标签已合并到 melee, 无武器使用 shock + lance 组合
 
         // 按距离排序敌人
         const enemiesInRange = EnemySystem.enemies.filter(e => e.alive);
@@ -1420,6 +1440,15 @@ const PlayerSystem = {
         });
 
         if (p.hp <= 0) {
+            // ====== 复活检查（水熊虫基因等） ======
+            if (p._revivePending > 0) {
+                p._revivePending--;
+                p.hp = Math.floor(p.maxHp * 0.5);  // 复活回复 50% HP
+                ParticleSystem.emit(p.x, p.y, 20, {
+                    speed: 150, color: '#00ff88', life: 0.5, size: 8, type: 'circle'
+                });
+                return 0;  // 抵消本次致命伤害
+            }
             p.hp = 0;
             p.alive = false;
             // 死亡动画: 渐缩为 0

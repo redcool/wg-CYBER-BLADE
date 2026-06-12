@@ -229,42 +229,108 @@ const UISystem = {
         document.getElementById('weaponSelectHint').textContent =
             _UI_STR.weapon_select_hint.replace('{0}', ch.name);
 
-        const affinities = ch.tags || ch.weaponAffinities || [];
-        // Bug3 Fix: 角色标签和武器标签使用同一套原始值 (gun/bow/magic/medic/lance/melee)
-        //   不要在这里 normalize weapon.tag, 否则 gunslinger(tag:gun) 会对不上 ranged
-        const basicWeapons = ShopSystem.allWeapons.filter(w =>
-            affinities.includes(w.tag) && UnlockSystem.basicWeaponIds.has(w.id)
+        // 安全兜底：如果 basicWeaponIds 为空（UnlockSystem 数据可能尚未加载），尝试重新加载
+        if (UnlockSystem.basicWeaponIds.size === 0 && typeof UnlockSystem.loadData === 'function') {
+            UnlockSystem.loadData();
+        }
+
+        // 标签归一化函数（武器 tag 是原始值如 gun/bow/magic，角色 tags 已在 character.js 被 normalizeTag 转换）
+        const normTag = typeof TagSystem !== 'undefined' && TagSystem.normalizeTag
+            ? (t) => TagSystem.normalizeTag(t) : (t) => t;
+
+        // 收集所有基础武器
+        this._weaponNormTag = normTag;
+        this._weaponAllBasic = ShopSystem.allWeapons.filter(w =>
+            UnlockSystem.basicWeaponIds.has(w.id)
         );
 
-        // 按武器原始标签排序 (与 affinities 词汇一致)
-        const tagOrder = ['melee', 'gun', 'bow', 'magic', 'medic', 'lance'];
-        basicWeapons.sort((a, b) => {
-            const ai = tagOrder.indexOf(a.tag);
-            const bi = tagOrder.indexOf(b.tag);
-            return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+        // 收集基础武器的所有规范标签（作为过滤选项）
+        const allTags = [...new Set(this._weaponAllBasic.map(w => normTag(w.tag)).filter(Boolean))];
+        allTags.sort((a, b) => {
+            const order = ['melee', 'ranged', 'fire', 'explosive', 'crit', 'tech', 'economy'];
+            return order.indexOf(a) - order.indexOf(b);
         });
+        this._weaponFilterTags = ['all', ...allTags];
+        this._weaponFilterTag = 'all';
 
-        // 优先选中角色初始武器，否则选第一个
+        // 优先选中角色初始武器（从全量基础武器中找）
         const startWp = ch.startingWeapons && ch.startingWeapons.length > 0 ? ch.startingWeapons[0] : null;
-        this._selectedWeaponId = startWp && basicWeapons.some(w => w.id === startWp)
+        const pickFrom = this._weaponAllBasic;
+        this._selectedWeaponId = startWp && pickFrom.some(w => w.id === startWp)
             ? startWp
-            : basicWeapons.length > 0 ? basicWeapons[0].id : 'pistol';
+            : pickFrom.length > 0 ? pickFrom[0].id : 'pistol';
 
         // 顶部详情面板
         this._showWeaponDetail(this._selectedWeaponId);
 
-        // 底部武器图标网格（点击图标 → 查看详情）
+        // 渲染过滤标签栏
+        this._renderWeaponFilterTabs();
+
+        // 渲染武器网格
+        this._refreshWeaponGrid();
+    },
+
+    /** 渲染武器过滤标签栏 */
+    _renderWeaponFilterTabs() {
+        const container = document.getElementById('weaponFilterTabs');
+        if (!container) return;
+        container.innerHTML = '';
+        for (const tag of this._weaponFilterTags) {
+            const label = tag === 'all' ? '全部'
+                : (TagSystem.getTagDef ? TagSystem.getTagDef(tag)?.name || tag : tag);
+            const el = document.createElement('span');
+            el.className = 'weapon-filter-tab' + (tag === this._weaponFilterTag ? ' active' : '');
+            el.dataset.tag = tag;
+            el.textContent = label;
+            el.addEventListener('click', () => {
+                this._weaponFilterTag = tag;
+                this._refreshWeaponGrid();
+            });
+            container.appendChild(el);
+        }
+    },
+
+    /** 根据当前过滤标签刷新武器网格 */
+    _refreshWeaponGrid() {
         const grid = document.getElementById('weaponSelectGrid');
+        if (!grid) return;
         grid.innerHTML = '';
 
-        if (basicWeapons.length === 0) {
+        // 应用过滤
+        let weapons = this._weaponAllBasic || [];
+        if (this._weaponFilterTag && this._weaponFilterTag !== 'all') {
+            const normTag = this._weaponNormTag;
+            weapons = weapons.filter(w => normTag(w.tag) === this._weaponFilterTag);
+        }
+
+        // 按规范标签排序（分组显示）
+        const tagOrder = ['melee', 'ranged', 'fire', 'explosive', 'crit', 'tech', 'economy'];
+        weapons.sort((a, b) => {
+            const ai = tagOrder.indexOf(this._weaponNormTag(a.tag));
+            const bi = tagOrder.indexOf(this._weaponNormTag(b.tag));
+            return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+        });
+
+        // 如果当前选中武器不在列表中，重置到第一个
+        if (this._selectedWeaponId && !weapons.some(w => w.id === this._selectedWeaponId)) {
+            this._selectedWeaponId = weapons.length > 0 ? weapons[0].id : 'pistol';
+            this._showWeaponDetail(this._selectedWeaponId);
+        }
+
+        // 渲染网格
+        if (weapons.length === 0) {
             const pistol = ShopSystem.allWeapons.find(w => w.id === 'pistol');
             if (pistol) this._renderWeaponIcon(grid, pistol, true);
         } else {
-            for (const w of basicWeapons) {
+            for (const w of weapons) {
                 this._renderWeaponIcon(grid, w, w.id === this._selectedWeaponId);
             }
         }
+
+        // 更新标签栏高亮
+        document.querySelectorAll('.weapon-filter-tab').forEach(el => {
+            el.classList.toggle('active', el.dataset.tag === this._weaponFilterTag);
+        });
     },
 
     /**
@@ -754,20 +820,23 @@ const UISystem = {
             }).filter(Boolean).join('');
             const passivesSection = passiveHTML ? `<div class="char-detail-passives"><div class="char-detail-section-title">被动技能</div>${passiveHTML}</div>` : '';
 
-            // 构建武器适配度展示
+            // 构建武器适配度展示（截断长列表防撑高布局）
             const classDefs = (cache && cache.classes) || (bundle && bundle.classes) || [];
             const prefClasses = ch.preferredClasses || [];
             const prefSubs = ch.preferredClasses_2 || [];
+            const MAX_SUBS = 12;
             let affinityHTML = '';
             if (prefClasses.length > 0 || prefSubs.length > 0) {
                 const classNames = prefClasses.map(cId => {
                     const d = classDefs.find(c => c.id === cId);
                     return d ? `${d['中文名']}(${cId})` : cId;
                 }).join(' / ');
-                const subsStr = prefSubs.length > 0 ? prefSubs.join(' · ') : '';
+                const subsDisplay = prefSubs.length > MAX_SUBS
+                    ? prefSubs.slice(0, MAX_SUBS).join(' · ') + ` … 共${prefSubs.length}种`
+                    : prefSubs.join(' · ');
                 affinityHTML = `<div class="char-detail-affinities"><div class="char-detail-section-title">适配武器</div>
                     <div class="char-affinity-item"><span style="color:#ffcc66">${classNames}</span></div>
-                    ${subsStr ? `<div class="char-affinity-item" style="font-size:0.85em;color:rgba(255,255,255,0.5);margin-top:2px">${subsStr}</div>` : ''}
+                    ${subsDisplay ? `<div class="char-affinity-item" style="font-size:0.85em;color:rgba(255,255,255,0.5);margin-top:2px">${subsDisplay}</div>` : ''}
                 </div>`;
             }
 
@@ -1504,8 +1573,8 @@ const UISystem = {
         // === 羁绊加成（先清理旧实例） ===
         const oldSyn = document.getElementById('wdSynergy');
         if (oldSyn) oldSyn.remove();
-        const TAG_NORMALIZE = { gun: 'ranged', bow: 'ranged', magic: 'fire', medic: 'tech', lance: 'melee' };
-        const synTag = TAG_NORMALIZE[def.tag] || def.tag;
+        const synTag = (typeof TagSystem !== 'undefined' && TagSystem.normalizeTag)
+            ? TagSystem.normalizeTag(def.tag) : def.tag;
         const synThresholds = (typeof TagSystem !== 'undefined' && TagSystem.synergyThresholds)
             ? TagSystem.synergyThresholds[synTag] : null;
         if (synThresholds) {
@@ -1831,9 +1900,9 @@ const UISystem = {
             const iconHtml = isWeapon ? AssetSystem.weaponIconHTML(item.id) : AssetSystem.itemIconHTML(item.id, 44);
             // 标签统一归一化（确保武器卡片布局一致）
             let tagHtml = '';
-            const TAG_NORMALIZE = { gun: 'ranged', bow: 'ranged', magic: 'fire', medic: 'tech', lance: 'melee' };
             if (isWeapon) {
-                const displayTag = TAG_NORMALIZE[item.tag] || item.tag;
+                const displayTag = (typeof TagSystem !== 'undefined' && TagSystem.normalizeTag)
+                    ? TagSystem.normalizeTag(item.tag) : item.tag;
                 const tDef = TagSystem.getTagDef(displayTag);
                 const tCol = tDef ? this._tagColor(tDef.id) : '#ffffff';
                 const tIcn = tDef ? tDef.icon : '🏷️';

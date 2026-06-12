@@ -57,13 +57,32 @@ const TagSystem = {
     },
 
     /**
-     * 标准化标签: 当前是 identity (csv 已写精确 tag: gun/bow/magic/melee/lance/medic 等)
-     * 保留此函数便于未来扩展标签集时插入映射, 不影响调用方
+     * 标准化标签: 将武器旧标签映射到 7 流派标签
+     *
+     * 旧→新映射:
+     *   melee → melee
+     *   gun   → ranged
+     *   bow   → ranged
+     *   magic → fire
+     *   medic → tech
+     *   lance → melee
+     *
+     * 道具标签（melee/ranged/fire/explosive/crit/tech/economy）保持不动
+     *
      * @param {string} tagId
      * @returns {string}
      */
+    _TAG_MAP: {
+        gun: 'ranged',
+        bow: 'ranged',
+        magic: 'fire',
+        medic: 'tech',
+        lance: 'melee',
+    },
     normalizeTag(tagId) {
-        return tagId;
+        if (!tagId) return tagId;
+        // 直接用映射表，如果映射为空则返回原值（identity）
+        return this._TAG_MAP[tagId] || tagId;
     },
 
     // -------------------------------------------------------

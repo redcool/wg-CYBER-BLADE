@@ -46,6 +46,7 @@ describe('ItemSystem - 数据加载', () => {
         expect(repl.triggers).toHaveLength(1);
         expect(repl.triggers[0].type).toBe('OnHit');
         expect(repl.triggers[0].effect.type).toBe('duplicateBullet');
+        expect(repl.triggers[0].chance).toBe(0.2); // 从 effect 自动提取 chance
     });
 
     it('I2: getItemDef 返回 null 对于不存在道具', () => {
@@ -60,6 +61,7 @@ describe('ItemSystem - 购买/移除', () => {
             { id: 'hpUp', name: '生命核心', statMods: { maxHp: 30 }, tags: [], unique: false, rarity: 'common' },
             { id: 'nirvana', name: '涅槃', statMods: { maxHp: 50 }, tags: [], unique: true, rarity: 'legendary' },
             { id: 'glass_cannon', name: '玻璃大炮', statMods: { damagePercent: 0.50, armor: -5 }, tags: ['ranged'], unique: false, rarity: 'rare' },
+            { id: 'anvil', name: '铁砧', statMods: {}, tags: [], unique: false, rarity: 'legendary', triggers: [{ type: 'OnBuy', chance: 1.0, effect: { type: 'heal', value: 20 } }] },
         ];
     });
 
@@ -89,7 +91,14 @@ describe('ItemSystem - 购买/移除', () => {
         expect(p.armor).toBe(5); // 10 - 5
     });
 
-    it('I7: removeItem 撤消 statMods', () => {
+    it('I7: buyItem 触发 OnBuy 效果', () => {
+        const p = { ...basePlayer, hp: 50, maxHp: 100 };
+        ItemSystem.buyItem('anvil', p);
+        expect(ItemSystem.hasItem('anvil')).toBe(true);
+        expect(p.hp).toBe(70); // heal 20 after buy
+    });
+
+    it('I8: removeItem 撤消 statMods', () => {
         const p = { ...basePlayer, maxHp: 100 };
         ItemSystem.buyItem('hpUp', p);
         expect(p.maxHp).toBe(130);
@@ -98,12 +107,12 @@ describe('ItemSystem - 购买/移除', () => {
         expect(ItemSystem.hasItem('hpUp')).toBe(false);
     });
 
-    it('I8: removeItem 不存在不报错', () => {
+    it('I9: removeItem 不存在不报错', () => {
         ItemSystem.removeItem('nonexistent', {});
         // Should not throw
     });
 
-    it('I9: reset 清空状态', () => {
+    it('I10: reset 清空状态', () => {
         const p = { ...basePlayer };
         ItemSystem.buyItem('hpUp', p);
         expect(ItemSystem.ownedItems.length).toBe(1);
@@ -122,19 +131,19 @@ describe('ItemSystem - 查询', () => {
         ];
     });
 
-    it('I10: getByRarity 过滤正确', () => {
+    it('I11: getByRarity 过滤正确', () => {
         const common = ItemSystem.getByRarity('common');
         expect(common).toHaveLength(1);
         expect(common[0].id).toBe('hpUp');
     });
 
-    it('I11: getByTag 过滤正确', () => {
+    it('I12: getByTag 过滤正确', () => {
         const fire = ItemSystem.getByTag('fire');
         expect(fire).toHaveLength(1);
         expect(fire[0].id).toBe('burn_spreader');
     });
 
-    it('I12: getBuyablePool 排除已持有 unique', () => {
+    it('I13: getBuyablePool 排除已持有 unique', () => {
         const p = { ...basePlayer };
         ItemSystem.buyItem('replicator', p);
         const pool = ItemSystem.getBuyablePool();
@@ -142,7 +151,7 @@ describe('ItemSystem - 查询', () => {
         expect(pool.find(i => i.id === 'hpUp')).toBeDefined();
     });
 
-    it('I13: hasItem 正确', () => {
+    it('I14: hasItem 正确', () => {
         expect(ItemSystem.hasItem('hpUp')).toBe(false);
         const p = { ...basePlayer };
         ItemSystem.buyItem('hpUp', p);
@@ -156,7 +165,7 @@ describe('ItemSystem - onEvent 触发器', () => {
         vi.restoreAllMocks();
     });
 
-    it('I14: onEvent 触发匹配的道具效果', () => {
+    it('I15: onEvent 触发匹配的道具效果', () => {
         ItemSystem.allItems = [
             { id: 'thorn', statMods: {}, tags: [], triggers: [{ type: 'OnDamageTaken', chance: 1.0, effect: { type: 'reflectDamage', percent: 0.3 } }] },
         ];
@@ -169,7 +178,7 @@ describe('ItemSystem - onEvent 触发器', () => {
         expect(attacker.hp).toBe(100 - Math.floor(50 * 0.3)); // 85
     });
 
-    it('I15: onEvent 不触发不匹配类型', () => {
+    it('I16: onEvent 不触发不匹配类型', () => {
         ItemSystem.allItems = [
             { id: 'thorn', statMods: {}, tags: [], triggers: [{ type: 'OnDamageTaken', chance: 1.0, effect: { type: 'reflectDamage', percent: 0.3 } }] },
         ];
@@ -181,7 +190,7 @@ describe('ItemSystem - onEvent 触发器', () => {
         expect(attacker.hp).toBe(100); // 未触发
     });
 
-    it('I16: onEvent 概率检查', () => {
+    it('I17: onEvent 概率检查', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0.9); // 高值 → 不触发
 
         ItemSystem.allItems = [
@@ -195,7 +204,7 @@ describe('ItemSystem - onEvent 触发器', () => {
         expect(attacker.hp).toBe(100); // 概率没中
     });
 
-    it('I17: onEvent ownedItems 为空不报错', () => {
+    it('I18: onEvent ownedItems 为空不报错', () => {
         ItemSystem.onEvent('OnHit', { ...basePlayer }, {});
         // Should not throw
     });
@@ -207,7 +216,7 @@ describe('ItemSystem - update 帧更新', () => {
         vi.restoreAllMocks();
     });
 
-    it('I18: update PerSecond 触发器按间隔触发', () => {
+    it('I19: update PerSecond 触发器按间隔触发', () => {
         const healEffect = { type: 'heal', value: 5 };
         ItemSystem.allItems = [
             { id: 'regen_trigger', statMods: {}, tags: [], triggers: [{ type: 'PerSecond', chance: 1.0, interval: 2.0, effect: healEffect }] },
@@ -224,7 +233,7 @@ describe('ItemSystem - update 帧更新', () => {
         expect(p.hp).toBe(55); // 回血 5
     });
 
-    it('I19: update OnLowHP 低血量触发', () => {
+    it('I20: update OnLowHP 低血量触发', () => {
         ItemSystem.allItems = [
             { id: 'berserker', statMods: {}, tags: ['melee'], triggers: [{ type: 'OnLowHP', chance: 1.0, effect: { type: 'heal', value: 30 } }] },
         ];
@@ -236,7 +245,7 @@ describe('ItemSystem - update 帧更新', () => {
         expect(p.hp).toBe(50); // 20 + 30
     });
 
-    it('I20: update OnLowHP 只触发一次', () => {
+    it('I21: update OnLowHP 只触发一次', () => {
         ItemSystem.allItems = [
             { id: 'berserker', statMods: {}, tags: ['melee'], triggers: [{ type: 'OnLowHP', chance: 1.0, effect: { type: 'heal', value: 30 } }] },
         ];
@@ -251,7 +260,7 @@ describe('ItemSystem - update 帧更新', () => {
         expect(p.hp).toBe(50); // 未变
     });
 
-    it('I21: update OnLowHP 恢复后重置', () => {
+    it('I22: update OnLowHP 恢复后重置', () => {
         ItemSystem.allItems = [
             { id: 'berserker', statMods: {}, tags: ['melee'], triggers: [{ type: 'OnLowHP', chance: 1.0, effect: { type: 'heal', value: 30 } }] },
         ];

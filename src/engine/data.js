@@ -61,7 +61,7 @@ const DataLoader = {
      * @returns {Promise<void>}
      */
     async preloadAll() {
-        const names = ['characters', 'characterLevel', 'weapons', 'items', 'enemies', 'bosses', 'waves', 'passives', 'level_duration', 'weaponStats', 'charStats', 'difficulty', 'debug', 'levelUpCards', 'rarityColors', 'rarity', 'audio', 'classes', 'system', 'synergies', 'bulletTypes'];
+        const names = ['characters', 'characterLevel', 'weapons', 'items', 'enemies', 'bosses', 'waves', 'passives', 'level_duration', 'weaponStats', 'charStats', 'difficulty', 'debug', 'levelUpCards', 'rarityColors', 'rarity', 'audio', 'classes', 'system', 'synergies', 'bulletTypes', 'sceneItems'];
         await Promise.all(names.map(n => this.load(n)));
         if (typeof SystemConfig !== 'undefined') await SystemConfig.load();
         if (typeof StatsSystem !== 'undefined' && StatsSystem.loadCaps) {
@@ -71,6 +71,15 @@ const DataLoader = {
             await TagSystem.loadSynergies();
         }
         console.log('[DataLoader] 全部数据预加载完成');
+    },
+
+    /**
+     * 同步读取已缓存数据（仅用于 preloadAll 之后的安全读取）
+     * @param {string} name - 数据名
+     * @returns {Object[]}
+     */
+    get(name) {
+        return this._cache[name] || [];
     },
 
     /**

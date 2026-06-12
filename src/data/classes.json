@@ -3,54 +3,552 @@
     "id": "Blade",
     "中文名": "利刃",
     "英文名": "Blade",
+    "parent_id": "",
+    "tag": "melee",
     "描述": "锋利而迅捷的近战斩击武器"
+  },
+  {
+    "id": "sword",
+    "中文名": "剑类",
+    "英文名": "Sword",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "标准平衡之剑"
+  },
+  {
+    "id": "dagger",
+    "中文名": "匕首",
+    "英文名": "Dagger",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "快速轻巧的短刃"
+  },
+  {
+    "id": "katana",
+    "中文名": "武士刀",
+    "英文名": "Katana",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "锋利的东洋刀"
+  },
+  {
+    "id": "saber",
+    "中文名": "军刀",
+    "英文名": "Saber",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "弧形单刃刀"
+  },
+  {
+    "id": "scimitar",
+    "中文名": "弯刀",
+    "英文名": "Scimitar",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "弧形弯刀"
+  },
+  {
+    "id": "rapier",
+    "中文名": "刺剑",
+    "英文名": "Rapier",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "轻巧精准的刺击剑"
+  },
+  {
+    "id": "machete",
+    "中文名": "砍刀",
+    "英文名": "Machete",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "厚重劈砍刀"
+  },
+  {
+    "id": "claws",
+    "中文名": "利爪",
+    "英文名": "Claws",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "锋利爪刃"
+  },
+  {
+    "id": "kris",
+    "中文名": "蛇形剑",
+    "英文名": "Kris",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "波浪形短剑"
+  },
+  {
+    "id": "stiletto",
+    "中文名": "短剑",
+    "英文名": "Stiletto",
+    "parent_id": "Blade",
+    "tag": "melee",
+    "描述": "轻巧穿刺短剑"
   },
   {
     "id": "Blunt",
     "中文名": "钝器",
     "英文名": "Blunt",
+    "parent_id": "",
+    "tag": "melee",
     "描述": "势大力沉的钝击系武器"
   },
   {
-    "id": "Precise",
-    "中文名": "精准",
-    "英文名": "Precise",
-    "描述": "追求一击致命的精密武器"
+    "id": "hammer",
+    "中文名": "重锤",
+    "英文名": "Hammer",
+    "parent_id": "Blunt",
+    "tag": "melee",
+    "描述": "金属类钝器击碎"
   },
   {
-    "id": "Elemental",
-    "中文名": "元素",
-    "英文名": "Elemental",
-    "描述": "蕴含元素之力的能量武器"
+    "id": "club",
+    "中文名": "棍棒",
+    "英文名": "Club",
+    "parent_id": "Blunt",
+    "tag": "melee",
+    "描述": "各类原始钝器"
+  },
+  {
+    "id": "flail",
+    "中文名": "连枷类",
+    "英文名": "Flail",
+    "parent_id": "Blunt",
+    "tag": "melee",
+    "描述": "多段攻击的链锤双节棍等"
+  },
+  {
+    "id": "staff",
+    "中文名": "杖",
+    "英文名": "Staff",
+    "parent_id": "Blunt",
+    "tag": "melee",
+    "描述": "长棍钝器和权杖"
+  },
+  {
+    "id": "tonfa",
+    "中文名": "拐",
+    "英文名": "Tonfa",
+    "parent_id": "Blunt",
+    "tag": "melee",
+    "描述": "防御格挡武器"
   },
   {
     "id": "Heavy",
     "中文名": "重武",
     "英文名": "Heavy",
+    "parent_id": "",
+    "tag": "melee",
     "描述": "威力绝伦的巨型武器"
+  },
+  {
+    "id": "greataxe",
+    "中文名": "巨斧",
+    "英文名": "Greataxe",
+    "parent_id": "Heavy",
+    "tag": "melee",
+    "描述": "双手巨斧"
+  },
+  {
+    "id": "warhammer",
+    "中文名": "战锤",
+    "英文名": "Warhammer",
+    "parent_id": "Heavy",
+    "tag": "melee",
+    "描述": "双手重锤"
+  },
+  {
+    "id": "war_staff",
+    "中文名": "战棍",
+    "英文名": "War Staff",
+    "parent_id": "Heavy",
+    "tag": "melee",
+    "描述": "重型长棍"
+  },
+  {
+    "id": "pike",
+    "中文名": "长枪",
+    "英文名": "Pike",
+    "parent_id": "Heavy",
+    "tag": "melee",
+    "描述": "长矛类极长距穿刺"
+  },
+  {
+    "id": "Axe",
+    "中文名": "战斧",
+    "英文名": "Axe",
+    "parent_id": "Heavy",
+    "tag": "melee",
+    "描述": "各类斧子战斧"
+  },
+  {
+    "id": "Gun",
+    "中文名": "枪械",
+    "英文名": "Gun",
+    "parent_id": "",
+    "tag": "ranged",
+    "描述": "以火药推进的远程武器"
+  },
+  {
+    "id": "pistol",
+    "中文名": "手枪",
+    "英文名": "Pistol",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "单手手枪"
+  },
+  {
+    "id": "revolver",
+    "中文名": "左轮",
+    "英文名": "Revolver",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "六发左轮"
+  },
+  {
+    "id": "smg",
+    "中文名": "冲锋枪",
+    "英文名": "SMG",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "高速冲锋枪"
+  },
+  {
+    "id": "rifle",
+    "中文名": "步枪",
+    "英文名": "Rifle",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "连射步枪"
+  },
+  {
+    "id": "shotgun",
+    "中文名": "霰弹枪",
+    "英文名": "Shotgun",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "扇形散射"
+  },
+  {
+    "id": "sniper",
+    "中文名": "狙击枪",
+    "英文名": "Sniper",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "远程精准"
+  },
+  {
+    "id": "lmg",
+    "中文名": "轻机枪",
+    "英文名": "LMG",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "轻量机枪"
+  },
+  {
+    "id": "hmg",
+    "中文名": "重机枪",
+    "英文名": "HMG",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "重型机枪加特林等"
+  },
+  {
+    "id": "grenadeLauncher",
+    "中文名": "榴弹枪",
+    "英文名": "GrenadeLauncher",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "发射爆炸榴弹"
+  },
+  {
+    "id": "laserGun",
+    "中文名": "激光枪",
+    "英文名": "LaserGun",
+    "parent_id": "Gun",
+    "tag": "ranged",
+    "描述": "发射能量束的高科技武器"
+  },
+  {
+    "id": "Bow",
+    "中文名": "弓箭",
+    "英文名": "Bow",
+    "parent_id": "",
+    "tag": "ranged",
+    "描述": "以弹射力驱动的远程武器"
+  },
+  {
+    "id": "longbow",
+    "中文名": "长弓",
+    "英文名": "Longbow",
+    "parent_id": "Bow",
+    "tag": "ranged",
+    "描述": "标准长弓"
+  },
+  {
+    "id": "recurve",
+    "中文名": "反曲弓",
+    "英文名": "Recurve",
+    "parent_id": "Bow",
+    "tag": "ranged",
+    "描述": "高速反曲弓"
+  },
+  {
+    "id": "composite",
+    "中文名": "复合弓",
+    "英文名": "Composite",
+    "parent_id": "Bow",
+    "tag": "ranged",
+    "描述": "现代化强力复合弓"
+  },
+  {
+    "id": "Crossbow",
+    "中文名": "弩",
+    "英文名": "Crossbow",
+    "parent_id": "",
+    "tag": "ranged",
+    "描述": "机械蓄力的远程武器"
+  },
+  {
+    "id": "handcrossbow",
+    "中文名": "手弩",
+    "英文名": "Hand Crossbow",
+    "parent_id": "Crossbow",
+    "tag": "ranged",
+    "描述": "单手弩"
+  },
+  {
+    "id": "heavycrossbow",
+    "中文名": "重弩",
+    "英文名": "Heavy Crossbow",
+    "parent_id": "Crossbow",
+    "tag": "ranged",
+    "描述": "重型穿刺弩"
+  },
+  {
+    "id": "repeating",
+    "中文名": "连弩",
+    "英文名": "Repeating Crossbow",
+    "parent_id": "Crossbow",
+    "tag": "ranged",
+    "描述": "多段连发弩"
+  },
+  {
+    "id": "Elemental",
+    "中文名": "元素",
+    "英文名": "Elemental",
+    "parent_id": "",
+    "tag": "magic",
+    "描述": "蕴含元素之力的能量武器"
+  },
+  {
+    "id": "fire",
+    "中文名": "火焰",
+    "英文名": "Fire",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "烈焰灼烧"
+  },
+  {
+    "id": "ice",
+    "中文名": "冰霜",
+    "英文名": "Ice",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "极寒冰封"
+  },
+  {
+    "id": "lightning",
+    "中文名": "闪电",
+    "英文名": "Lightning",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "电击连锁"
+  },
+  {
+    "id": "force",
+    "中文名": "能量",
+    "英文名": "Force",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "纯粹能量"
+  },
+  {
+    "id": "shadow",
+    "中文名": "暗影",
+    "英文名": "Shadow",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "暗影侵蚀"
+  },
+  {
+    "id": "wind",
+    "中文名": "风",
+    "英文名": "Wind",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "疾风席卷"
+  },
+  {
+    "id": "earth",
+    "中文名": "大地",
+    "英文名": "Earth",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "大地崩裂"
+  },
+  {
+    "id": "chaos",
+    "中文名": "混沌",
+    "英文名": "Chaos",
+    "parent_id": "Elemental",
+    "tag": "magic",
+    "描述": "混沌混乱"
   },
   {
     "id": "Medical",
     "中文名": "医疗",
     "英文名": "Medical",
+    "parent_id": "",
+    "tag": "magic",
     "描述": "以治疗守护为核心的武器"
   },
   {
-    "id": "Support",
-    "中文名": "支援",
-    "英文名": "Support",
-    "描述": "提供各类辅助效果的武器"
-  },
-  {
-    "id": "Primitive",
-    "中文名": "基础",
-    "英文名": "Primitive",
-    "描述": "原始原始的粗粝武器"
+    "id": "heal",
+    "中文名": "治愈",
+    "英文名": "Heal",
+    "parent_id": "Medical",
+    "tag": "magic",
+    "描述": "攻击敌人治疗自己"
   },
   {
     "id": "Tool",
     "中文名": "工具",
     "英文名": "Tool",
+    "parent_id": "",
+    "tag": "melee",
     "描述": "以工程学为核心的科技武器"
+  },
+  {
+    "id": "wrench",
+    "中文名": "扳手",
+    "英文名": "Wrench",
+    "parent_id": "Tool",
+    "tag": "melee",
+    "描述": "工程师标准工具创建炮塔"
+  },
+  {
+    "id": "mine",
+    "中文名": "地雷",
+    "英文名": "Mine",
+    "parent_id": "Tool",
+    "tag": "melee",
+    "描述": "部署爆炸装置"
+  },
+  {
+    "id": "Precise",
+    "中文名": "精准",
+    "英文名": "Precise",
+    "parent_id": "",
+    "tag": "melee",
+    "描述": "追求一击致命的精密武器"
+  },
+  {
+    "id": "shuriken",
+    "中文名": "手里剑",
+    "英文名": "Shuriken",
+    "parent_id": "Precise",
+    "tag": "melee",
+    "描述": "忍者投掷武器"
+  },
+  {
+    "id": "knife",
+    "中文名": "小刀",
+    "英文名": "Knife",
+    "parent_id": "Precise",
+    "tag": "melee",
+    "描述": "轻便的近战刺击武器"
+  },
+  {
+    "id": "drill",
+    "中文名": "钻头",
+    "英文名": "Drill",
+    "parent_id": "Precise",
+    "tag": "melee",
+    "描述": "高速旋转的钻头武器"
+  },
+  {
+    "id": "Explosive",
+    "中文名": "爆炸",
+    "英文名": "Explosive",
+    "parent_id": "",
+    "tag": "ranged",
+    "描述": "以爆炸杀伤为手段的武器"
+  },
+  {
+    "id": "grenade",
+    "中文名": "手雷",
+    "英文名": "Grenade",
+    "parent_id": "Explosive",
+    "tag": "ranged",
+    "描述": "投掷爆炸物"
+  },
+  {
+    "id": "rocket",
+    "中文名": "火箭炮",
+    "英文名": "Rocket",
+    "parent_id": "Explosive",
+    "tag": "ranged",
+    "描述": "火箭推进爆炸"
+  },
+  {
+    "id": "Support",
+    "中文名": "支援",
+    "英文名": "Support",
+    "parent_id": "",
+    "tag": "melee",
+    "描述": "提供各类辅助效果的武器"
+  },
+  {
+    "id": "fist",
+    "中文名": "拳套",
+    "英文名": "Fist",
+    "parent_id": "Support",
+    "tag": "melee",
+    "描述": "拳拳到肉的格斗武器各类拳套"
+  },
+  {
+    "id": "Primitive",
+    "中文名": "原始",
+    "英文名": "Primitive",
+    "parent_id": "",
+    "tag": "melee",
+    "描述": "粗犷原始的武器"
+  },
+  {
+    "id": "stone",
+    "中文名": "石",
+    "英文名": "Stone",
+    "parent_id": "Primitive",
+    "tag": "melee",
+    "描述": "原始石质武器"
+  },
+  {
+    "id": "bone",
+    "中文名": "骨",
+    "英文名": "Bone",
+    "parent_id": "Primitive",
+    "tag": "melee",
+    "描述": "骨质武器"
+  },
+  {
+    "id": "wood",
+    "中文名": "木",
+    "英文名": "Wood",
+    "parent_id": "Primitive",
+    "tag": "melee",
+    "描述": "木质武器"
   }
 ]

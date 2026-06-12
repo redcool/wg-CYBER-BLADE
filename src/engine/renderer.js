@@ -86,10 +86,14 @@ const Renderer = {
     /** 绘制世界边界 */
     drawWorldBounds() {
         const ctx = this.ctx;
-        ctx.strokeStyle = 'rgba(255, 0, 68, 0.15)';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([10, 15]);
+        ctx.save();
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = '#ff0044';
+        ctx.strokeStyle = 'rgba(255, 30, 80, 0.85)';
+        ctx.lineWidth = 5;
+        ctx.setLineDash([14, 18]);
         ctx.strokeRect(0, 0, GameWorld.width, GameWorld.height);
+        ctx.restore();
         ctx.setLineDash([]);
     },
 
@@ -498,8 +502,8 @@ const Renderer = {
                     ctx.drawImage(wpnImg, -ww / 2, -wh / 2, ww, wh);
                     ctx.restore();
                 } else {
-                    ctx.fillStyle = wp.tag === 'melee' || wp.tag === 'lance' ? '#ff8844' : '#44aaff';
-                    ctx.shadowColor = wp.tag === 'melee' || wp.tag === 'lance' ? '#ff8844' : '#44aaff';
+                    ctx.fillStyle = wp.tag === 'melee' ? '#ff8844' : '#44aaff';
+                    ctx.shadowColor = wp.tag === 'melee' ? '#ff8844' : '#44aaff';
                     ctx.shadowBlur = 8;
                     ctx.beginPath();
                     ctx.arc(wx, wy, 5 + (wp.slots || 1) * 2, 0, Math.PI * 2);
@@ -530,7 +534,7 @@ const Renderer = {
     _bulletImages: {},
 
     /** 懒加载子弹视觉配置 */
-    _getBulletConfig(behavior, tag) {
+    _getBulletConfig(behavior, tag, class_2) {
         if (!this._bulletConfigMap) {
             this._bulletConfigMap = {};
             let data = typeof window !== 'undefined' && window.__DATA_BUNDLE__ && window.__DATA_BUNDLE__.bulletTypes;
@@ -542,18 +546,22 @@ const Renderer = {
             }
             if (data) {
                 for (const row of data) {
-                    this._bulletConfigMap[`${row.behavior}|${row.tag}`] = row;
+                    const c2 = row.class_2 || '*';
+                    this._bulletConfigMap[`${row.behavior}|${row.tag}|${c2}`] = row;
                 }
             }
         }
-        // 精确匹配 → tag 通配 → behavior 默认 → 全局默认
-        const exact = this._bulletConfigMap?.[`${behavior}|${tag}`];
+        // 5 级降级: exact{behavior,tag,class_2} → class_2通配* → tag通配* → 默认behavior→全局默认
+        const c2 = class_2 || '*';
+        const exact = this._bulletConfigMap?.[`${behavior}|${tag}|${c2}`];
         if (exact) return exact;
-        const wild = this._bulletConfigMap?.[`${behavior}|*`];
-        if (wild) return wild;
-        const defaultExact = this._bulletConfigMap?.[`bullet|${tag}`];
-        if (defaultExact) return defaultExact;
-        return this._bulletConfigMap?.['bullet|*'] || null;
+        const classWild = this._bulletConfigMap?.[`${behavior}|${tag}|*`];
+        if (classWild) return classWild;
+        const tagWild = this._bulletConfigMap?.[`${behavior}|*|*`];
+        if (tagWild) return tagWild;
+        const defaultForTag = this._bulletConfigMap?.[`bullet|${tag}|*`];
+        if (defaultForTag) return defaultForTag;
+        return this._bulletConfigMap?.['bullet|*|*'] || null;
     },
 
     /** 懒加载子弹图片 */
@@ -573,7 +581,7 @@ const Renderer = {
 
         // 子弹颜色(优先级:外部传入 > 元素效果 > 武器类型)
         // 元素效果(冰/火/闪电/治疗)优先于武器类型默认色
-        // 武器类型:枪械(gun/bow)白;魔法(magic)淡黄;近战(melee/lance)黄;其他默认青
+        // 武器类型:远程(ranged)白;魔法(magic)淡黄;近战(melee)黄;其他默认青
         // 怪子弹(isPlayer=false): 大红色, 与玩家子弹明显区分
         let color = bullet.color || null;
         if (!color) {
@@ -593,32 +601,33 @@ const Renderer = {
             } else if (bullet.healOnHit > 0) {
                 // 治疗:绿
                 color = '#00ff88';
-            } else if (bullet.weaponTag === 'gun' || bullet.weaponTag === 'bow') {
-                // 枪械/弓:白
+            } else if (bullet.weaponTag === 'ranged') {
+                // 远程:白
                 color = '#ffffff';
             } else if (bullet.weaponTag === 'magic') {
                 // 魔法默认:淡黄
                 color = '#ffffaa';
-            } else if (bullet.weaponTag === 'melee' || bullet.weaponTag === 'lance') {
+            } else if (bullet.weaponTag === 'melee') {
                 // 近战:金黄
                 color = '#ffdd44';
-            } else if (bullet.weaponTag === 'medic') {
-                // 治疗系:浅绿
-                color = '#aaffaa';
             } else {
                 color = '#ffff44';
             }
         }
 
         // ====== 从 bulletTypes 配置驱动弹道形状 ======
-        const bConfig = bullet.behavior && this._getBulletConfig(bullet.behavior, bullet.weaponTag);
+        const bConfig = bullet.behavior && this._getBulletConfig(bullet.behavior, bullet.weaponTag, bullet.weaponClass2);
+
+        // 从表读取视觉尺寸（size = 实际像素宽），程序路径使用 size/2 作为半径
+        const cfgSize = bConfig ? (bConfig.size || 0) : 0;
+        const visualR = cfgSize > 0 ? cfgSize / 2 : (bullet.radius || 4);
 
         // 优先使用图片（非空 image 字段）
         if (bConfig && bConfig.image) {
             const img = this._loadBulletImage(bConfig.image);
             if (img && img.complete && img.naturalWidth > 0) {
                 const s = bConfig.size || 8;
-                ctx.drawImage(img, bullet.x - s, bullet.y - s, s * 2, s * 2);
+                ctx.drawImage(img, bullet.x - s / 2, bullet.y - s / 2, s, s);
                 ctx.restore();
                 return;
             }
@@ -635,13 +644,13 @@ const Renderer = {
         }
 
         if (shape === 'arrow') {
-            this._drawBulletArrow(ctx, bullet, color);
+            this._drawBulletArrow(ctx, bullet, color, visualR);
             ctx.restore();
             return;
         }
 
         if (shape === 'beam') {
-            this._drawBulletBeam(ctx, bullet, color);
+            this._drawBulletBeam(ctx, bullet, color, visualR);
             ctx.restore();
             return;
         }
@@ -651,15 +660,14 @@ const Renderer = {
         ctx.shadowColor = color;
         ctx.shadowBlur = 12;
         ctx.beginPath();
-        ctx.arc(bullet.x, bullet.y, bullet.radius || 4, 0, Math.PI * 2);
+        ctx.arc(bullet.x, bullet.y, visualR, 0, Math.PI * 2);
         ctx.fill();
         // 白色/浅色子弹加深色描边,让白在深背景上明显
-        const r = bullet.radius || 4;
         ctx.shadowBlur = 0;
         ctx.strokeStyle = 'rgba(0,0,0,0.55)';
         ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.arc(bullet.x, bullet.y, r, 0, Math.PI * 2);
+        ctx.arc(bullet.x, bullet.y, visualR, 0, Math.PI * 2);
         ctx.stroke();
 
         // 拖尾
@@ -758,8 +766,8 @@ const Renderer = {
     },
 
     /** 绘制箭头弹道（枪械/弓 — 小椭圆+方向尾迹） */
-    _drawBulletArrow(ctx, bullet, color) {
-        const r = bullet.radius || 4;
+    _drawBulletArrow(ctx, bullet, color, r) {
+        r = r || bullet.radius || 4;
         const angle = Math.atan2(bullet.vy, bullet.vx);
         ctx.save();
         ctx.translate(bullet.x, bullet.y);
@@ -789,8 +797,8 @@ const Renderer = {
     },
 
     /** 绘制光束弹道（魔法/冰/火 — 发光长条） */
-    _drawBulletBeam(ctx, bullet, color) {
-        const r = bullet.radius || 5;
+    _drawBulletBeam(ctx, bullet, color, r) {
+        r = r || bullet.radius || 5;
         const dx = bullet.x - bullet.startX;
         const dy = bullet.y - bullet.startY;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -886,76 +894,181 @@ const Renderer = {
         ctx.restore();
     },
 
-    /** 绘制炮塔 */
+    /** 炮塔图片缓存 */
+    _turretImages: {},
+
+    /** 懒加载炮塔图片 */
+    _getTurretImg(level) {
+        if (this._turretImages[level]) return this._turretImages[level];
+        const src = `assets/sceneItems/turret${level}.png?${CACHE_VER}`;
+        const img = new Image();
+        img.src = src;
+        this._turretImages[level] = img;
+        return img;
+    },
+
+    /** 绘制炮塔 — 不旋转,攻击时播放快速呼吸缩放 */
     drawTurret(turret) {
         if (!turret.alive) return;
         const ctx = this.ctx;
         ctx.save();
 
-        const r = turret.radius || 14;
+        const level = turret.level || 1;
+        const img = this._getTurretImg(level);
+        const r = turret.radius || 32;
+        const size = r * 2;
 
-        // 底座 (暗色金属)
-        ctx.fillStyle = '#445566';
-        ctx.shadowColor = '#ffaa44';
-        ctx.shadowBlur = 8;
-        roundRect(ctx, turret.x - r, turret.y - r * 0.6, r * 2, r * 1.2, 3);
-        ctx.fill();
+        // 攻击呼吸脉冲 (attackPulse 0.3→0)
+        const pulse = Math.max(0, turret.attackPulse || 0);
+        const animScale = pulse > 0 ? 1 + Math.sin(pulse * 20) * 0.05 * pulse * 4 : 1;
+        const drawSize = size * animScale;
 
-        // 旋转座 (亮色圆盘)
-        ctx.shadowBlur = 12;
-        ctx.fillStyle = '#667788';
-        ctx.beginPath();
-        ctx.arc(turret.x, turret.y - r * 0.2, r * 0.5, 0, Math.PI * 2);
-        ctx.fill();
+        // 底座阴影
+        ctx.shadowColor = level === 4 ? '#cc44ff' : level === 3 ? '#44ccff' : level === 2 ? '#ff6600' : '#ffaa44';
+        ctx.shadowBlur = 14;
 
-        // 炮管 (朝向角)
-        ctx.shadowBlur = 10;
-        ctx.strokeStyle = '#ffaa44';
-        ctx.lineWidth = 4;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        const barrelLen = r * 1.2;
-        ctx.moveTo(turret.x, turret.y - r * 0.2);
-        ctx.lineTo(
-            turret.x + Math.cos(turret.angle) * barrelLen,
-            turret.y - r * 0.2 + Math.sin(turret.angle) * barrelLen
-        );
-        ctx.stroke();
+        if (img.complete && img.naturalWidth > 0) {
+            // 有图片：居中绘制，不旋转
+            ctx.drawImage(img, turret.x - drawSize / 2, turret.y - drawSize / 2, drawSize, drawSize);
+        } else {
+            // 降级：简单几何绘制（居中，带呼吸缩放）
+            ctx.save();
+            ctx.translate(turret.x, turret.y);
+            ctx.scale(animScale, animScale);
 
-        // 炮口
-        ctx.shadowBlur = 15;
-        ctx.fillStyle = '#ffcc66';
-        ctx.beginPath();
-        ctx.arc(
-            turret.x + Math.cos(turret.angle) * barrelLen,
-            turret.y - r * 0.2 + Math.sin(turret.angle) * barrelLen,
-            3, 0, Math.PI * 2
-        );
-        ctx.fill();
+            ctx.fillStyle = '#445566';
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.arc(0, 0, r * 0.8, 0, Math.PI * 2);
+            ctx.fill();
+
+            const barrelColor = level === 4 ? '#cc44ff' : level === 3 ? '#44ccff' : level === 2 ? '#ff6600' : '#ffaa44';
+            ctx.strokeStyle = barrelColor;
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(r * 1.3, 0);
+            ctx.stroke();
+
+            ctx.fillStyle = barrelColor;
+            ctx.beginPath();
+            ctx.arc(r * 1.3, 0, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
 
         ctx.shadowBlur = 0;
         ctx.restore();
     },
 
-    /** 绘制炮塔子弹 */
+    /** 绘制炮塔子弹/弹道 — 按等级不同样式 */
     drawTurretBullet(bullet) {
         const ctx = this.ctx;
         ctx.save();
 
-        // 发光核心
-        ctx.shadowColor = '#ffaa44';
-        ctx.shadowBlur = 12;
-        ctx.fillStyle = '#ffcc66';
-        ctx.beginPath();
-        ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
-        ctx.fill();
+        const r = bullet.radius || 4;
+        const lv = bullet.level || 0;
 
-        // 白核心
-        ctx.shadowBlur = 6;
-        ctx.fillStyle = '#fff8e0';
+        if (lv === 1) {
+            // L1 炮击：橙色大炮弹 + 尾焰
+            ctx.shadowColor = '#ff6622';
+            ctx.shadowBlur = 14;
+            ctx.fillStyle = '#ff8844';
+            ctx.beginPath();
+            ctx.arc(bullet.x, bullet.y, r * 1.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffcc88';
+            ctx.beginPath();
+            ctx.arc(bullet.x, bullet.y, r * 0.6, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (lv === 2) {
+            // L2 喷火：橙红火焰弹，小 + 拖尾
+            ctx.shadowColor = '#ff4400';
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = '#ff6622';
+            ctx.beginPath();
+            ctx.arc(bullet.x, bullet.y, r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffcc44';
+            ctx.beginPath();
+            ctx.arc(bullet.x - bullet.vx * 0.01, bullet.y - bullet.vy * 0.01, r * 0.5, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (lv === 3) {
+            // L3 冷冻：蓝白冰晶
+            ctx.shadowColor = '#44ccff';
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = '#88eeff';
+            ctx.beginPath();
+            // 菱形冰晶
+            const s = r * 1.2;
+            ctx.moveTo(bullet.x, bullet.y - s);
+            ctx.lineTo(bullet.x + s * 0.7, bullet.y);
+            ctx.lineTo(bullet.x, bullet.y + s);
+            ctx.lineTo(bullet.x - s * 0.7, bullet.y);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(bullet.x, bullet.y, r * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            // 通用：发光圆点（旧版样式）
+            ctx.shadowColor = '#ffaa44';
+            ctx.shadowBlur = 12;
+            ctx.fillStyle = '#ffcc66';
+            ctx.beginPath();
+            ctx.arc(bullet.x, bullet.y, r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 6;
+            ctx.fillStyle = '#fff8e0';
+            ctx.beginPath();
+            ctx.arc(bullet.x, bullet.y, r * 0.5, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        ctx.shadowBlur = 0;
+        ctx.restore();
+    },
+
+    /** 绘制 L4 激光束 */
+    drawTurretBeam(turret) {
+        if (!turret.alive || turret.level !== 4) return;
+        const ctx = this.ctx;
+        ctx.save();
+
+        const len = turret.range;
+        const endX = turret.x + Math.cos(turret.angle) * len;
+        const endY = turret.y + Math.sin(turret.angle) * len;
+
+        // 外层光晕
+        ctx.shadowColor = '#cc44ff';
+        ctx.shadowBlur = 20;
+        ctx.strokeStyle = 'rgba(200, 80, 255, 0.25)';
+        ctx.lineWidth = 10;
+        ctx.lineCap = 'round';
         ctx.beginPath();
-        ctx.arc(bullet.x, bullet.y, bullet.radius * 0.5, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(turret.x, turret.y);
+        ctx.lineTo(endX, endY);
+        ctx.stroke();
+
+        // 激光主体
+        ctx.shadowBlur = 15;
+        ctx.strokeStyle = 'rgba(180, 60, 255, 0.6)';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(turret.x, turret.y);
+        ctx.lineTo(endX, endY);
+        ctx.stroke();
+
+        // 核心亮线
+        ctx.shadowBlur = 8;
+        ctx.strokeStyle = 'rgba(255, 200, 255, 0.9)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(turret.x, turret.y);
+        ctx.lineTo(endX, endY);
+        ctx.stroke();
 
         ctx.shadowBlur = 0;
         ctx.restore();

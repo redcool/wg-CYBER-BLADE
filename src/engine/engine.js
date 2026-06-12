@@ -58,6 +58,9 @@ const GameEngine = {
         Input.init();
         Renderer.init();
         UISystem.init();
+        if (typeof UnlockSystem !== 'undefined' && UnlockSystem.loadData) {
+            UnlockSystem.loadData();
+        }
         this._respawn();
         UISystem.showMenu();
         this.running = true;
@@ -131,6 +134,8 @@ const GameEngine = {
         Renderer.drawPlayer(player);
         for (const b of BulletSystem.bullets) Renderer.drawBullet(b);
         if (typeof TurretSystem !== 'undefined') {
+            // 先画激光（在炮塔下方），再画炮塔，最后画子弹
+            for (const t of TurretSystem.turrets) Renderer.drawTurretBeam(t);
             for (const t of TurretSystem.turrets) Renderer.drawTurret(t);
             for (const b of TurretSystem.bullets) Renderer.drawTurretBullet(b);
         }
