@@ -25,6 +25,8 @@ body {
     height: 100%;
     background: #0d0d24;
     cursor: crosshair;
+    /* 阻止浏览器拦截 canvas 上的触摸手势，确保 touchmove 连续 → 摇杆可用 */
+    touch-action: none;
 }
 
 /* === Overlays === */
@@ -98,14 +100,14 @@ body {
 /* --- 顶部详情面板 --- */
 .char-detail {
     display: flex;
-    gap: 16px;
-    align-items: center;
+    gap: 12px;
+    align-items: flex-start;
     background: rgba(20, 20, 50, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    padding: 14px 18px;
-    margin-bottom: 14px;
-    min-height: 100px;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    min-height: 80px;
     overflow: hidden;
 }
 .char-detail-radar {
@@ -118,22 +120,22 @@ body {
     flex-shrink: 0;
 }
 .char-detail-avatar img {
-    width: 80px;
-    height: 80px;
-    border-radius: 10px;
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
     border: 2px solid #ff8833;
     object-fit: cover;
     display: block;
 }
 .char-detail-avatar.locked {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.4em;
+    font-size: 2.2em;
     background: rgba(255,255,255,0.05);
-    border-radius: 10px;
+    border-radius: 8px;
     border: 2px solid rgba(255,255,255,0.15);
 }
 
@@ -151,12 +153,12 @@ body {
     margin-bottom: 4px;
 }
 .char-detail-name.locked {
-    color: rgba(255,255,255,0.3);
+    color: rgba(230, 235, 245, 0.9);
 }
 
 .char-detail-desc {
     font-size: 0.72em;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(230, 235, 245, 0.9);
     margin-bottom: 8px;
     line-height: 1.3;
     white-space: nowrap;
@@ -171,7 +173,7 @@ body {
 }
 .stat-item {
     font-size: 0.65em;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(230, 235, 245, 0.9);
     background: rgba(255, 255, 255, 0.06);
     padding: 2px 8px;
     border-radius: 6px;
@@ -195,7 +197,7 @@ body {
 }
 .char-detail-section-title {
     font-size: 0.7em;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 235, 245, 0.9);
     letter-spacing: 1px;
     margin-bottom: 4px;
     text-transform: uppercase;
@@ -206,16 +208,16 @@ body {
     gap: 6px;
     font-size: 0.65em;
     padding: 3px 0;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(230, 235, 245, 0.9);
 }
 .char-passive-icon { font-size: 1.1em; }
 .char-passive-name {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(230, 235, 245, 0.9);
     font-weight: 600;
     white-space: nowrap;
 }
 .char-passive-desc {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(230, 235, 245, 0.9);
     margin-left: auto;
     font-size: 0.95em;
     white-space: nowrap;
@@ -277,8 +279,8 @@ body {
     filter: grayscale(0.5);
 }
 .char-icon-card img {
-    width: 88%;
-    height: 88%;
+    width: 62%;
+    height: 62%;
     max-width: 100%;
     max-height: 100%;
     border-radius: 6px;
@@ -320,7 +322,7 @@ body {
 
 .char-desc {
     font-size: 0.6em;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 235, 245, 0.9);
     margin-bottom: 3px;
     line-height: 1.15;
     display: -webkit-box;
@@ -334,7 +336,7 @@ body {
     gap: 3px;
     justify-content: center;
     font-size: 0.5em;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(230, 235, 245, 0.9);
     flex-wrap: wrap;
 }
 
@@ -436,8 +438,8 @@ body {
     border: 2px solid;
 }
 .weapon-detail-avatar img {
-    width: 72px;
-    height: 72px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     display: block;
     border-radius: 4px;
@@ -462,7 +464,7 @@ body {
     font-weight: 700;
     font-size: 0.65em;
     line-height: 1.4;
-    color: rgba(255,255,255,0.45);
+    color: rgba(230, 235, 245, 0.9);
     border: none;
 }
 .wpn-detail-btn {
@@ -479,7 +481,7 @@ body {
 }
 .weapon-detail-tag {
     font-size: 0.62em;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 235, 245, 0.9);
     margin-bottom: 4px;
 }
 
@@ -546,7 +548,7 @@ body {
 }
 .weapon-detail-desc {
     font-size: 0.72em;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(230, 235, 245, 0.9);
     margin-bottom: 6px;
     line-height: 1.3;
 }
@@ -557,7 +559,7 @@ body {
 }
 .weapon-detail-stats .stat-item {
     font-size: 0.65em;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(230, 235, 245, 0.9);
     background: rgba(255, 255, 255, 0.06);
     padding: 2px 8px;
     border-radius: 6px;
@@ -587,14 +589,14 @@ body {
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     background: rgba(255, 255, 255, 0.06);
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(230, 235, 245, 0.9);
     cursor: pointer;
     transition: all 0.2s ease;
     user-select: none;
 }
 .weapon-filter-tab:hover {
     border-color: rgba(255, 136, 68, 0.4);
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(230, 235, 245, 0.9);
 }
 .weapon-filter-tab.active {
     border-color: #ff8833;
@@ -630,8 +632,8 @@ body {
     height: 100%;
 }
 .weapon-select-card .ws-icon img {
-    width: 100%;
-    height: 100%;
+    width: 70%;
+    height: 70%;
     object-fit: cover;
 }
 .ws-card-level {
@@ -643,7 +645,7 @@ body {
     font-size: 0.4em;
     line-height: 1.2;
     pointer-events: none;
-    color: rgba(255,255,255,0.45);
+    color: rgba(230, 235, 245, 0.9);
     z-index: 1;
 }
 .weapon-select-card:hover {
@@ -673,7 +675,7 @@ body {
     padding: 5px 12px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     background: rgba(0, 0, 0, 0.35);
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(230, 235, 245, 0.9);
     cursor: pointer;
     border-radius: 6px;
     font-family: 'Orbitron', monospace;
@@ -682,8 +684,8 @@ body {
     line-height: 1.4;
 }
 .back-btn-corner:hover {
-    border-color: rgba(255, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.75);
+    border-color: rgba(230, 235, 245, 0.9);
+    color: rgba(230, 235, 245, 0.9);
     background: rgba(255, 255, 255, 0.08);
 }
 
@@ -731,7 +733,7 @@ body {
 }
 .diff-detail-desc {
     font-size: 0.6em;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(230, 235, 245, 0.9);
     line-height: 1.4;
     margin-bottom: 5px;
 }
@@ -746,7 +748,7 @@ body {
     border: 1px solid rgba(255, 136, 68, 0.12);
     border-radius: 4px;
     padding: 1px 6px;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(230, 235, 245, 0.9);
     white-space: nowrap;
 }
 
@@ -769,7 +771,7 @@ body {
     font-family: 'Orbitron', monospace;
     font-size: 1.1em;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 235, 245, 0.9);
     transition: all 0.2s ease;
 }
 .diff-card:hover {
@@ -813,14 +815,14 @@ body {
     padding: 8px 20px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     background: transparent;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 235, 245, 0.9);
     cursor: pointer;
     transition: all 0.3s ease;
     border-radius: 6px;
 }
 .cyber-btn-secondary:hover {
-    border-color: rgba(255, 255, 255, 0.35);
-    color: rgba(255, 255, 255, 0.7);
+    border-color: rgba(230, 235, 245, 0.9);
+    color: rgba(230, 235, 245, 0.9);
     background: rgba(255, 255, 255, 0.06);
 }
 
@@ -891,13 +893,13 @@ body {
 
 .wave-reached {
     font-size: 1.2em;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(230, 235, 245, 0.9);
     margin-bottom: 16px;
 }
 
 .final-stats p {
     font-size: 1em;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(230, 235, 245, 0.9);
     margin: 4px 0;
 }
 .final-stats span { color: #00ffff; font-weight: 700; }
@@ -905,7 +907,7 @@ body {
 .section-label {
     font-family: 'Orbitron', monospace;
     font-size: 0.75em;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 235, 245, 0.9);
     margin: 10px 0 6px;
     letter-spacing: 1px;
 }
@@ -1019,7 +1021,7 @@ body {
 .hud-stat-value {
     font-family: 'Orbitron', monospace;
     font-size: 0.55em;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(230, 235, 245, 0.9);
 }
 .hud-stat.levelup-pending {
     animation: pulse-glow 0.6s ease-in-out infinite alternate;
@@ -1080,7 +1082,7 @@ body {
 .hud-value {
     font-family: 'Orbitron', monospace;
     font-size: 0.55em;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(230, 235, 245, 0.9);
 }
 .hud-hp-text {
     color: #ff6666;
@@ -1178,7 +1180,7 @@ body {
 .hud-kills {
     font-family: 'Orbitron', monospace;
     font-size: 0.7em;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(230, 235, 245, 0.9);
     background: rgba(0, 0, 0, 0.6);
     padding: 4px 10px;
     border-radius: 8px;
@@ -1235,7 +1237,7 @@ body {
     padding: 5px 8px;
     white-space: pre-wrap;
     line-height: 1.4;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(230, 235, 245, 0.9);
     max-height: 300px;
     overflow-y: auto;
 }
@@ -1279,7 +1281,7 @@ body {
 }
 .shop-topbar .shop-wave {
     font-size: 0.5em;
-    color: rgba(255,255,255,0.35);
+    color: rgba(230, 235, 245, 0.9);
     letter-spacing: 0;
     margin-left: 6px;
 }
@@ -1304,7 +1306,7 @@ body {
 .strip-label {
     font-family: 'Orbitron', monospace;
     font-size: 0.6em;
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(230, 235, 245, 0.9);
     white-space: nowrap;
     margin-right: 4px;
 }
@@ -1314,8 +1316,8 @@ body {
     flex: 1;
 }
 .equipped-weapon-slot {
-    width: 44px;
-    height: 44px;
+    width: 90px;
+    height: 90px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     background: rgba(0, 0, 0, 0.4);
@@ -1334,8 +1336,8 @@ body {
     box-shadow: 0 0 12px rgba(255, 100, 0, 0.15);
 }
 .equipped-weapon-slot img {
-    width: 32px;
-    height: 32px;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     pointer-events: none;
 }
@@ -1348,13 +1350,14 @@ body {
     padding: 0 3px;
     border-radius: 2px;
     border: 1px solid currentColor;
-    color: rgba(255,255,255,0.5);
+    color: rgba(230, 235, 245, 0.9);
+    pointer-events: none;
 }
 .equipped-weapon-slot .slot-level {
     position: absolute;
     bottom: -2px;
     left: -2px;
-    font-size: 0.45em;
+    font-size: 0.5em;
     font-family: 'Orbitron', monospace;
     background: rgba(0,0,0,0.85);
     color: #ffcc00;
@@ -1364,6 +1367,7 @@ body {
     font-weight: 700;
     pointer-events: none;
     z-index: 1;
+    /* 压缩显示，不加任何前缀文字 */
 }
 .equipped-weapon-slot .slot-sell {
     position: absolute;
@@ -1541,7 +1545,7 @@ body {
 }
 .slot-label {
     font-size: 0.45em;
-    color: rgba(255, 255, 255, 0.15);
+    color: rgba(230, 235, 245, 0.9);
     position: absolute;
     bottom: 1px;
     right: 4px;
@@ -1594,7 +1598,7 @@ body {
 .player-stats-list .stat-label {
     font-family: 'Rajdhani', sans-serif;
     font-size: 0.75em;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 235, 245, 0.9);
     min-width: 28px;
 }
 .player-stats-list .stat-value {
@@ -1610,7 +1614,7 @@ body {
 .player-stats-list .stat-value.at-cap { color: #ff4444; text-shadow: 0 0 8px rgba(255,68,68,0.4); }
 /* .player-stats-list .stat-note display moved below */
 .player-stats-list .stat-cap-bar { display: none; }
-.player-stats-list .stat-xp { font-size: 0.75em; color: rgba(255,255,255,0.25); margin-left: auto; }
+.player-stats-list .stat-xp { font-size: 0.75em; color: rgba(230, 235, 245, 0.9); margin-left: auto; }
 .player-stats-list .stat-item-armor { background: transparent; }
 .player-stats-list .stat-item-hp { background: rgba(255,0,68,0.06); border-radius: 3px; padding: 2px 4px; }
 .player-stats-list .stat-level-row {
@@ -1659,7 +1663,7 @@ body {
 }
 .player-stats-list .stat-note {
     font-size: 0.7em;
-    color: rgba(255,255,255,0.2);
+    color: rgba(230, 235, 245, 0.9);
     margin-left: auto;
     white-space: nowrap;
 }
@@ -1718,9 +1722,7 @@ body {
     background: rgba(0, 255, 136, 0.06);
 }
 .mixed-card.too-expensive {
-    opacity: 0.35;
     cursor: not-allowed;
-    filter: grayscale(0.4);
 }
 .mixed-card.too-expensive:hover {
     transform: none;
@@ -1842,7 +1844,7 @@ body {
 }
 .mixed-card .mc-desc {
     font-size: 0.45em;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 235, 245, 0.9);
     text-align: center;
     line-height: 1.2;
     margin-bottom: 1px;
@@ -1865,7 +1867,7 @@ body {
 }
 .mixed-card .mc-stats-grid .stats-grid .stat-item {
     font-size: 0.45em;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(230, 235, 245, 0.9);
     background: rgba(255, 255, 255, 0.04);
     padding: 1px 3px;
     border-radius: 3px;
@@ -1898,7 +1900,7 @@ body {
     font-size: 0.45em;
     cursor: pointer;
     pointer-events: all;
-    opacity: 0.35;
+    opacity: 0.9;
     transition: all 0.2s ease;
     padding: 1px 6px;
     border-radius: 3px;
@@ -1907,10 +1909,10 @@ body {
 .mixed-card .mc-lock:hover {
     opacity: 1;
     background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(230, 235, 245, 0.9);
 }
 .mixed-card .mc-lock.locked {
-    opacity: 1;
+    opacity: 0.9;
     background: rgba(255, 204, 0, 0.12);
     border-color: rgba(255, 204, 0, 0.3);
 }
@@ -1958,7 +1960,7 @@ body {
 .wd-fit-bar .wd-fit-fill.fit-100{ width: 100%; background: #44cc44; }
 .wd-fit-label {
     font-size: 0.75em;
-    color: rgba(255,255,255,0.5);
+    color: rgba(230, 235, 245, 0.9);
     margin-bottom: 2px;
 }
 .wd-fit-label .fit-0  { color: #ff4444; }
@@ -1973,7 +1975,7 @@ body {
 }
 .mixed-card .mc-owned {
     font-size: 0.4em;
-    color: rgba(255,255,255,0.3);
+    color: rgba(230, 235, 245, 0.9);
     text-align: center;
     width: 100%;
     line-height: 1.2;
@@ -2020,8 +2022,8 @@ body {
 .shop-items-panel .refresh-btn.disabled {
     opacity: 0.3;
     cursor: not-allowed;
-    border-color: rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(230, 235, 245, 0.9);
+    color: rgba(230, 235, 245, 0.9);
     background: transparent;
 }
 .shop-items-panel .refresh-btn.disabled:hover {
@@ -2059,7 +2061,7 @@ body {
     border: 1px solid rgba(0, 255, 136, 0.15);
     padding: 2px 8px;
     border-radius: 10px;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(230, 235, 245, 0.9);
     display: inline-flex;
     align-items: center;
     gap: 3px;
@@ -2107,11 +2109,11 @@ body {
 .shop-synergy-item .synergy-icon { font-size: 0.85em; }
 .shop-synergy-item .synergy-name { font-weight: 700; }
 .shop-synergy-item .synergy-count {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 235, 245, 0.9);
 }
 .shop-synergy-empty {
     font-size: 0.6em;
-    color: rgba(255, 255, 255, 0.2);
+    color: rgba(230, 235, 245, 0.9);
     font-style: italic;
 }
 
@@ -2142,7 +2144,7 @@ body {
 /* 空状态提示 */
 .owned-empty, .items-empty {
     font-size: 0.65em;
-    color: rgba(255, 255, 255, 0.2);
+    color: rgba(230, 235, 245, 0.9);
     font-style: italic;
     padding: 4px 0;
 }
@@ -2165,16 +2167,16 @@ body {
     display: flex;
     align-items: center;
     gap: 5px;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(230, 235, 245, 0.9);
 }
 
 .hud-synergy-item .synergy-icon { font-size: 0.9em; }
 .hud-synergy-item .synergy-count {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 235, 245, 0.9);
     font-size: 0.85em;
 }
 .hud-synergy-item .hud-synergy-bonus {
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(230, 235, 245, 0.9);
     font-size: 0.85em;
     margin-left: auto;
 }
@@ -2249,13 +2251,15 @@ body {
 }
 .chest-reward-choice-desc {
     font-size: 0.78em;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(230, 235, 245, 0.9);
 }
 
 /* === 武器详情 Modal === */
 .weapon-detail-content {
     max-width: 460px;
     width: 460px;
+    max-height: 85vh;
+    overflow-y: auto;
     padding: 20px 24px 22px;
     border: 2px solid rgba(120, 200, 255, 0.35);
     background: rgba(10, 16, 30, 0.96);
@@ -2263,6 +2267,16 @@ body {
     box-shadow: 0 0 40px rgba(120, 200, 255, 0.12), inset 0 0 30px rgba(120, 200, 255, 0.04);
     animation: wdIn 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
     color: #e0e8f0;
+}
+.weapon-detail-content::-webkit-scrollbar {
+    width: 4px;
+}
+.weapon-detail-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+.weapon-detail-content::-webkit-scrollbar-thumb {
+    background: rgba(120, 200, 255, 0.3);
+    border-radius: 2px;
 }
 @keyframes wdIn {
     from { opacity: 0; transform: scale(0.85) translateY(-12px); }
@@ -2277,8 +2291,8 @@ body {
     margin-bottom: 14px;
 }
 .wd-icon {
-    width: 56px;
-    height: 56px;
+    width: 80px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2288,8 +2302,8 @@ body {
     flex-shrink: 0;
 }
 .wd-icon img {
-    width: 48px;
-    height: 48px;
+    width: 72px;
+    height: 72px;
     image-rendering: pixelated;
 }
 .wd-header-text { flex: 1; min-width: 0; }
@@ -2349,7 +2363,7 @@ body {
     padding: 3px 0;
     border-bottom: 1px dashed rgba(120, 200, 255, 0.1);
 }
-.wd-stat-label { color: rgba(255, 255, 255, 0.6); }
+.wd-stat-label { color: rgba(230, 235, 245, 0.9); }
 .wd-stat-value { color: #e8f4ff; font-weight: 600; font-family: 'Orbitron', monospace; }
 .wd-stat-value.dmg  { color: #ff7a7a; }
 .wd-stat-value.cd   { color: #8ed8ff; }
@@ -2361,7 +2375,7 @@ body {
     border-left: 3px solid rgba(120, 200, 255, 0.4);
     padding: 8px 12px;
     font-size: 0.85em;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(230, 235, 245, 0.9);
     line-height: 1.5;
     border-radius: 4px;
     margin-bottom: 14px;
@@ -2375,7 +2389,7 @@ body {
     margin: 4px 0 10px;
     border-radius: 4px;
     font-size: 0.78em;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(230, 235, 245, 0.9);
 }
 .wd-dmg-breakdown-title {
     color: rgba(255, 200, 100, 0.7);
@@ -2419,10 +2433,10 @@ body {
     line-height: 1.5;
 }
 .wd-syn-tier.wd-syn-active {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(230, 235, 245, 0.9);
 }
 .wd-syn-tier.wd-syn-inactive {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(230, 235, 245, 0.9);
 }
 .wd-syn-tier-label {
     min-width: 2.5em;
@@ -2479,7 +2493,7 @@ body {
 }
 .wd-btn-cancel {
     background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(230, 235, 245, 0.9);
     color: #ccc;
 }
 .wd-btn-cancel:hover {
@@ -2515,7 +2529,7 @@ body {
 
 .levelup-info {
     font-size: 0.9em;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(230, 235, 245, 0.9);
     margin-bottom: 16px;
 }
 
@@ -2563,7 +2577,7 @@ body {
 
 .levelup-choice-desc {
     font-size: 0.8em;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(230, 235, 245, 0.9);
     line-height: 1.3;
 }
 
@@ -2630,13 +2644,13 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(230, 235, 245, 0.9);
     cursor: pointer;
     pointer-events: all;
     transition: all 0.2s ease;
 }
 .reroll-btn:hover {
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(230, 235, 245, 0.9);
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
 }
@@ -2661,7 +2675,7 @@ body {
     width: 100%;
     font-family: 'Rajdhani', sans-serif;
     font-size: 0.5em;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(230, 235, 245, 0.9);
     background: rgba(0, 255, 255, 0.06);
     border: 1px solid rgba(0, 255, 255, 0.08);
     padding: 1px 6px;
@@ -2749,79 +2763,10 @@ body {
 
 .mixed-card .weapon-affix {
     font-size: 0.42em;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 235, 245, 0.9);
     background: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 255, 255, 0.06);
     padding: 1px 4px;
-}
-
-/* === 战斗日志 === */
-.combat-log {
-    position: fixed;
-    right: 12px;
-    top: 70px;
-    width: 260px;
-    max-height: 280px;
-    overflow: hidden;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 8px;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    z-index: 55;
-    pointer-events: none;
-    display: flex;
-    flex-direction: column;
-}
-
-.combat-log-header {
-    font-family: 'Orbitron', monospace;
-    font-size: 0.55em;
-    color: rgba(255, 255, 255, 0.3);
-    padding: 5px 10px 3px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    letter-spacing: 1px;
-}
-
-.combat-log-entries {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 2px 6px;
-}
-
-.combat-log-entry {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 4px;
-    font-size: 0.65em;
-    line-height: 1.3;
-    opacity: 1;
-    transition: opacity 0.5s ease;
-    animation: logEntryIn 0.3s ease-out;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.combat-log-entry .log-icon {
-    font-size: 0.9em;
-    flex-shrink: 0;
-    width: 18px;
-    text-align: center;
-}
-
-.combat-log-entry .log-text {
-    font-family: 'Rajdhani', sans-serif;
-    color: rgba(255, 255, 255, 0.8);
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-@keyframes logEntryIn {
-    from { opacity: 0; transform: translateX(20px); }
-    to { opacity: 1; transform: translateX(0); }
 }
 
 /* === 中止界面 (ESC 暂停) === */
@@ -2843,7 +2788,7 @@ body {
     text-shadow: 0 0 16px rgba(255, 200, 80, 0.5);
 }
 .pause-info {
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(230, 235, 245, 0.9);
     margin: 0 0 24px;
     font-size: 0.95em;
 }
@@ -2859,7 +2804,7 @@ body {
     padding: 10px 16px;
 }
 .pause-hint {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 235, 245, 0.9);
     font-size: 0.8em;
     margin: 0;
 }
@@ -2902,17 +2847,296 @@ body {
     .hud-level-tag { font-size: 0.45em; padding: 2px 5px; }
     .hud-kills { font-size: 0.45em; padding: 2px 5px; }
     .hud-materials { font-size: 0.45em; padding: 2px 5px; }
-    .combat-log { right: 4px; top: 52px; width: 140px; max-height: 160px; }
 }
 
-/* 竖屏模式：保证文字可读 */
+/* ===== 竖屏模式 (1080x1920 设计基准) =====
+ * 竖屏下 --ui-scale = viewportWidth/1080 (无下限),
+ * 内容可能被 transform:scale 缩小到 0.36 甚至更小.
+ * 以下 override 用 calc(N / var(--ui-scale)) 做反比补偿,
+ * 使缩放后视觉尺寸 ≈ N px, 保证可读性和触控友好.
+ */
 @media (orientation: portrait) {
-    .health-value { font-size: 1em; }
-    .hud-timer { font-size: 1em; padding: 3px 12px; }
-    .hud-level-tag, .hud-kills, .hud-materials { font-size: 0.7em; padding: 4px 8px; }
-    .hud-top-left { max-width: 80%; gap: 3px; padding: 5px 8px; }
-    .health-bar-bg { width: 55px; }
-    .xp-bar-bg { width: 55px; }
-    .combat-log { font-size: 0.85em; right: 4px; top: 54px; width: 150px; max-height: 180px; }
-    .damage-text { font-size: 11px; }
+
+    /* --- 竖屏铺满：所有内容容器宽度撑满屏幕 --- */
+    .menu-content, .shop-content, .levelup-content,
+    .weapon-select-content, .chest-reward-content,
+    .pause-content, .diff-content, .weapon-detail-content,
+    .gameover-content, .victory-content {
+        width: calc(100% / var(--ui-scale));
+        max-width: calc(100% / var(--ui-scale));
+        max-height: calc(80vh / var(--ui-scale));
+        flex-shrink: 0;
+        min-width: 0;
+    }
+
+    /* --- 覆盖层内容容器: 字体反比补偿 --- */
+    .menu-content, .shop-content, .levelup-content,
+    .weapon-select-content, .chest-reward-content,
+    .pause-content, .diff-content, .weapon-detail-content,
+    .gameover-content, .victory-content {
+        font-size: calc(16px / var(--ui-scale));
+    }
+
+    /* --- 角色网格: 5 列 (原 10 列) → 每格触控友好 --- */
+    .char-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    /* --- 武器选择网格: 5 列 (原 10 列) --- */
+    .weapon-select-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    /* --- 商店: 960px → 自然居中, 侧栏 200px 等比例缩小 --- */
+    .shop-content {
+        padding: 16px calc(14px / var(--ui-scale));
+    }
+    /* 武器条允许溢出滚动(竖屏下可用空间窄) */
+    .shop-weapon-strip {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+    /* --- HUD 三区缩小到 0.65 防重叠 --- */
+    .hud-top {
+        justify-content: center;
+        gap: 0;
+        align-items: stretch;
+    }
+    /* 左：信息竖排分行 */
+    .hud-top-left {
+        flex: 4.2 1 0;
+        min-width: 0;
+        padding: calc(3px / var(--ui-scale)) calc(6px / var(--ui-scale));
+        max-width: none;
+        border-radius: 6px;
+        gap: calc(2px / var(--ui-scale));
+        transform: scale(0.65);
+        transform-origin: left center;
+    }
+    .hud-stat-full {
+        gap: calc(2px / var(--ui-scale));
+    }
+    .hud-stat-row {
+        display: flex;
+        gap: calc(3px / var(--ui-scale));
+    }
+    .hud-stat {
+        gap: calc(2px / var(--ui-scale));
+    }
+    .hud-stat-icon {
+        font-size: calc(9px / var(--ui-scale));
+    }
+    .hud-stat-value {
+        font-size: calc(8px / var(--ui-scale));
+    }
+    .health-value {
+        display: inline;
+        font-size: calc(8px / var(--ui-scale));
+    }
+    .hud-xp-compact {
+        display: flex;
+    }
+    .health-bar-bg {
+        width: calc(30px / var(--ui-scale));
+        height: calc(4px / var(--ui-scale));
+    }
+    .xp-bar-bg {
+        width: calc(30px / var(--ui-scale));
+        height: calc(4px / var(--ui-scale));
+    }
+    .level-display {
+        margin-left: 0;
+        font-size: calc(8px / var(--ui-scale));
+    }
+    #hudExpPct {
+        font-size: calc(8px / var(--ui-scale));
+    }
+    .hud-materials {
+        font-size: calc(9px / var(--ui-scale));
+        padding: calc(1px / var(--ui-scale)) calc(4px / var(--ui-scale));
+        margin-left: 0;
+    }
+
+    /* 中：关卡 + 倒计时 */
+    .hud-center {
+        position: static;
+        transform: scale(0.65);
+        transform-origin: center center;
+        flex: 4.2 1 0;
+        min-width: 0;
+        justify-content: center;
+        gap: calc(3px / var(--ui-scale));
+    }
+    .hud-timer {
+        font-size: calc(11px / var(--ui-scale));
+        padding: calc(1px / var(--ui-scale)) calc(4px / var(--ui-scale));
+    }
+    .hud-level-tag {
+        font-size: calc(8px / var(--ui-scale));
+        padding: calc(1px / var(--ui-scale)) calc(4px / var(--ui-scale));
+    }
+
+    /* 右：击杀数 */
+    .hud-right {
+        flex: 1 1 0;
+        min-width: 0;
+        justify-content: flex-end;
+        transform: scale(0.65);
+        transform-origin: right center;
+    }
+    .hud-kills {
+        font-size: calc(9px / var(--ui-scale));
+        padding: calc(1px / var(--ui-scale)) calc(4px / var(--ui-scale));
+    }
+
+    .damage-text { font-size: calc(11px / var(--ui-scale)); }
+
+} /* @media (orientation: portrait) */
+
+/* ===== 横屏模式 =====
+ * 类似竖屏，用 width/height 反比补偿使内容铺满屏幕
+ */
+@media (orientation: landscape) {
+    .menu-content, .shop-content, .levelup-content,
+    .weapon-select-content, .chest-reward-content,
+    .pause-content, .diff-content, .weapon-detail-content,
+    .gameover-content, .victory-content {
+        width: calc(100% / var(--ui-scale));
+        max-width: calc(100% / var(--ui-scale));
+        max-height: calc(96vh / var(--ui-scale));
+        flex-shrink: 0;
+        min-width: 0;
+    }
+
+    /* --- 详情面板紧凑化（横屏空间较矮） --- */
+    .char-detail {
+        padding: 10px;
+        gap: 10px;
+        margin-bottom: 8px;
+        min-height: 60px;
+    }
+    .char-detail-avatar img {
+        width: 90px;
+        height: 90px;
+    }
+    .char-detail-avatar.locked {
+        width: 90px;
+        height: 90px;
+        font-size: 2em;
+    }
+    .char-detail-name {
+        font-size: 0.85em;
+    }
+    .char-detail-desc {
+        font-size: 0.65em;
+        margin-bottom: 4px;
+    }
+    .char-detail-stats {
+        gap: 2px 8px;
+    }
+    .char-detail-stats .stat-item {
+        font-size: 0.58em;
+        padding: 1px 6px;
+    }
+    .char-detail-affinities {
+        margin-top: 4px;
+        padding-top: 3px;
+    }
+    .char-affinity-item {
+        font-size: 0.65em;
+    }
+    .char-detail-passives {
+        margin-top: 4px;
+        padding-top: 3px;
+    }
+    .char-passive-item {
+        font-size: 0.58em;
+        padding: 2px 0;
+    }
+    .char-detail-section-title {
+        font-size: 0.6em;
+    }
+    .char-detail-radar {
+        transform: scale(0.75);
+        transform-origin: center center;
+    }
+
+    /* --- 武器详情面板紧凑化 --- */
+    .weapon-detail {
+        padding: 10px;
+        gap: 10px;
+    }
+    .weapon-detail-avatar img {
+        width: 90px;
+        height: 90px;
+    }
+    .weapon-detail-name {
+        font-size: 0.85em;
+    }
+    .weapon-detail-desc {
+        font-size: 0.65em;
+        margin-bottom: 4px;
+    }
+    .weapon-detail-stats .stat-item {
+        font-size: 0.58em;
+        padding: 1px 6px;
+    }
+    .weapon-detail-tag {
+        font-size: 0.55em;
+        margin-bottom: 2px;
+    }
+    .weapon-detail-radar {
+        transform: scale(0.75);
+        transform-origin: center center;
+    }
+
+    /* --- 标题紧凑化 --- */
+    .section-title {
+        font-size: 0.65em;
+        margin-bottom: 4px;
+    }
+    .weapon-select-title {
+        font-size: 1.1em;
+        margin-bottom: 0;
+    }
+    .subtitle {
+        font-size: 0.55em;
+        margin-bottom: 4px;
+    }
+    .char-select-section {
+        margin-bottom: 6px;
+    }
+
+    /* --- 网格紧凑化 --- */
+    .char-grid {
+        gap: 4px;
+        margin-bottom: 6px;
+    }
+    .char-icon-card {
+        border-radius: 8px;
+    }
+    .char-icon-card img {
+        width: 48%;
+        height: 48%;
+    }
+    .weapon-select-grid {
+        gap: 4px;
+        margin: 0 0 6px;
+    }
+    .weapon-select-card {
+        border-radius: 8px;
+    }
+    .weapon-select-card .ws-icon img {
+        width: 48%;
+        height: 48%;
+    }
+    .weapon-filter-tabs {
+        gap: 3px;
+        margin-bottom: 4px;
+    }
+    .weapon-filter-tab {
+        font-size: 0.55em;
+        padding: 2px 8px;
+    }
 }

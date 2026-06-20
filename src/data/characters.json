@@ -424,7 +424,7 @@
     "name": "工程师",
     "desc": "扳手近战·搭建防御基地",
     "icon": "🔧",
-    "unlocked": false,
+    "unlocked": true,
     "maxWeapons": 6,
     "maxHp": 28,
     "hpRegen": 0.1,

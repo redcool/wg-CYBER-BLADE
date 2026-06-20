@@ -121,6 +121,11 @@ const GameEngine = {
         Renderer.drawBackground();
         Renderer.drawWorldBounds();
 
+        // 第1层：炮塔、场景物体（在角色下方）
+        if (typeof TurretSystem !== 'undefined') {
+            for (const t of TurretSystem.turrets) Renderer.drawTurretBeam(t);
+            for (const t of TurretSystem.turrets) Renderer.drawTurret(t);
+        }
         for (const mat of GameWorld.materials) Renderer.drawMaterial(mat);
         if (typeof ContainerSystem !== 'undefined') {
             for (const crate of ContainerSystem.crates) Renderer.drawCrate(crate);
@@ -133,18 +138,18 @@ const GameEngine = {
                 if (chest.alive) Renderer.drawChest(chest);
             }
         }
+
+        // 第2层：角色和怪
         for (const enemy of EnemySystem.enemies) Renderer.drawEnemy(enemy);
         for (const p of ParticleSystem.particles) Renderer.drawParticle(p);
         Renderer.drawPlayer(player);
 
+        // 第3层：武器子弹
         // Boss 波红色关门屏障（Brotato 风格）
         const hasActiveBoss = EnemySystem.enemies.some(e => e.alive && e.isBoss);
         if (hasActiveBoss) Renderer.drawBossBarrier();
         for (const b of BulletSystem.bullets) Renderer.drawBullet(b);
         if (typeof TurretSystem !== 'undefined') {
-            // 先画激光（在炮塔下方），再画炮塔，最后画子弹
-            for (const t of TurretSystem.turrets) Renderer.drawTurretBeam(t);
-            for (const t of TurretSystem.turrets) Renderer.drawTurret(t);
             for (const b of TurretSystem.bullets) Renderer.drawTurretBullet(b);
         }
 

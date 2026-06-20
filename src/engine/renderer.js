@@ -12,6 +12,11 @@ const Renderer = {
         this.ctx = this.canvas.getContext('2d');
         this._resize();
         window.addEventListener('resize', () => this._resize());
+        // iOS 旋转后 resize 有时不触发或触发了但尺寸未更新
+        // orientationchange + setTimeout 确保拿到旋转后的正确 window.innerWidth/Height
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => this._resize(), 150);
+        });
     },
 
     _resize() {
@@ -82,8 +87,10 @@ const Renderer = {
         const endX = this.cameraX + this.width + gridSize;
         const endY = this.cameraY + this.height + gridSize;
 
-        ctx.strokeStyle = 'rgba(0, 255, 255, 0.04)';
-        ctx.lineWidth = 1;
+        // PC vs 移动设备: 网格线亮度不同 (PC 暗, 移动端亮一些便于可见)
+        const gridAlpha = (typeof DeviceDetect !== 'undefined' && DeviceDetect.isMobile()) ? '0.2' : '0.04';
+        ctx.strokeStyle = `rgba(0, 255, 255, ${gridAlpha})`;
+        ctx.lineWidth = 2;
         for (let x = startX; x <= endX; x += gridSize) {
             ctx.beginPath();
             ctx.moveTo(x, startY);

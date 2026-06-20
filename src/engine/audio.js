@@ -21,7 +21,7 @@ const AudioSystem = {
     _bgmTimer: null,
 
     // ---- 音量配置（默认值，会被 gameConfig.json 覆盖） ----
-    _bgmVolume: 0.8,
+    _bgmVolume: 1.0,
     _sfxVolume: 0.5,
 
     // ---- BGM duck（商店场景的音量缩放） ----
@@ -37,6 +37,9 @@ const AudioSystem = {
     _currentTrackId: null, // 当前曲目 ID
     _tracksLoaded: false,  // 是否已加载清单
 
+    // ---- iOS 静音开关绕过：HTMLAudioElement 不受静音开关影响 ----
+    _bgmAudio: null,       // HTMLAudioElement 实例
+
     // ---- 数据驱动配置 ----
     _sfxTypeMap: {},       // { type: seId } 从 audio.json sfx_type 行构建
     _sfxFileMap: {},       // { seId: {file, categoryTag} } 从 audio.json sfx_file 行构建
@@ -44,6 +47,8 @@ const AudioSystem = {
     // ---- SFX 文件音效 ----
     _sfxBuffers: {},       // { seId: AudioBuffer }
     _sfxTableLoaded: false, // 音效表是否已加载
+
+    // ---- 锁屏恢复（_bgmPaused 由 pauseBGM 设置，是唯一的状态真相源） ----
 
     /** 初始化 AudioContext（需用户交互后才能创建） */
     init() {
@@ -56,7 +61,6 @@ const AudioSystem = {
         }
         try {
             this._ctx = new (window.AudioContext || window.webkitAudioContext)();
-
             this._bgmGain = this._ctx.createGain();
             this._bgmGain.gain.value = this._bgmVolume;
             this._bgmGain.connect(this._ctx.destination);
@@ -72,6 +76,56 @@ const AudioSystem = {
             if (this._ctx.state === 'suspended') {
                 this._ctx.resume().catch(() => {});
             }
+
+            // 锁屏/切后台后回来：自动恢复 AudioContext + 重启 BGM
+            const _tryResume = (fromGesture) => {
+                if (document.hidden) return;
+                // 恢复 AudioContext：处理 'closed'（长时间后台导致）和 'suspended' 状态
+                this._ensure();
+                // 如果 BGM 被锁屏暂停了（_bgmPaused），尝试恢复
+                if (this._bgmPaused) {
+                    // 清理失效的 Web Audio 节点（锁屏时 pauseBGM 已经清理了大部分）
+                    if (this._bgmSourceNode) {
+                        try { this._bgmSourceNode.onended = null; this._bgmSourceNode.stop(); this._bgmSourceNode.disconnect(); } catch(e) {}
+                        this._bgmSourceNode = null;
+                    }
+                    if (this._bgmNodes.length > 0) {
+                        for (const n of this._bgmNodes) { try { n.stop(); n.disconnect(); } catch(e) {} }
+                        this._bgmNodes = [];
+                    }
+                    // fromGesture=true 说明在用户手势栈内（pointerdown），
+                    // iOS 允许 Web Audio 和 HTMLAudioElement.play()
+                    if (fromGesture) {
+                        this._bgmPaused = false;
+                        this.startBGM(this._currentTrackId);
+                    } else {
+                        // 非手势（visibilitychange/focus）：乐观尝试恢复（Android 可以）
+                        if (this._bgmAudio) {
+                            this._bgmAudio.play().then(() => {
+                                // Android 恢复成功 → 清除暂停标记, 避免 tap 时重复启动
+                                this._bgmPaused = false;
+                            }).catch(() => {
+                                // iOS 静默失败, 保持 _bgmPaused, 等 tap 时重启
+                            });
+                        }
+                    }
+                }
+            };
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    // 锁屏/切后台时暂停音乐（避免空耗电量）
+                    if (this._bgmPlaying) {
+                        this.pauseBGM();
+                    }
+                } else {
+                    _tryResume(false);
+                }
+            });
+            // 某些浏览器锁屏不触发 visibilitychange（如部分 Android），用 focus 兜底
+            window.addEventListener('focus', () => _tryResume(false));
+            window.addEventListener('pageshow', () => _tryResume(false));
+            // iOS: visibilitychange/focus 都不是用户手势栈, 等用户下次触摸时强制重启
+            document.addEventListener('pointerdown', () => _tryResume(true));
 
             // 从配置文件加载音量设置
             this._loadVolumeConfig();
@@ -169,6 +223,17 @@ const AudioSystem = {
 
     /** 确保 AudioContext 已创建并恢复（同步检查，fire-and-forget resume） */
     _ensure() {
+        // 处理浏览器关闭 AudioContext（长时间后台后）
+        if (this._ctx && this._ctx.state === 'closed') {
+            console.log('[AudioSystem] AudioContext 已关闭，重新创建');
+            this._ctx = null;
+            this._bgmGain = null;
+            this._sfxGain = null;
+            this._bgmBuffer = null;
+            this._bgmSourceNode = null;
+            this._bgmNodes = [];
+            this._bgmAudio = null;
+        }
         if (!this._ctx) this.init();
         if (this._ctx && this._ctx.state === 'suspended') {
             this._ctx.resume();
@@ -925,8 +990,13 @@ const AudioSystem = {
      * 用 linearRampToValueAtTime 做平滑过渡（避免咔哒声）
      */
     _applyBGMVolume() {
-        if (!this._bgmGain || !this._ctx) return;
         const target = this._bgmVolume * this._bgmDuckMultiplier;
+        // HTMLAudioElement 路径：直接设置 volume
+        if (this._bgmAudio) {
+            this._bgmAudio.volume = target;
+        }
+        // Web Audio API 路径：GainNode 平滑过渡
+        if (!this._bgmGain || !this._ctx) return;
         const now = this._ctx.currentTime;
         try {
             this._bgmGain.gain.cancelScheduledValues(now);
@@ -947,6 +1017,9 @@ const AudioSystem = {
         if (this._bgmSourceNode) {
             try { this._bgmSourceNode.onended = null; this._bgmSourceNode.stop(); this._bgmSourceNode.disconnect(); } catch(e) {}
             this._bgmSourceNode = null;
+        }
+        if (this._bgmAudio) {
+            this._bgmAudio.pause();
         }
         if (this._bgmNodes.length > 0) {
             for (const n of this._bgmNodes) {
@@ -993,36 +1066,61 @@ const AudioSystem = {
             try { this._bgmSourceNode.onended = null; this._bgmSourceNode.stop(); this._bgmSourceNode.disconnect(); } catch(e) {}
             this._bgmSourceNode = null;
         }
+        if (this._bgmAudio) {
+            this._bgmAudio.pause();
+            this._bgmAudio = null;
+        }
         this._bgmBuffer = null;
         this._playFileBGM(track);
     },
 
-    /** 尝试播放文件 BGM（使用 fetch + decodeAudioData） */
+    /**
+     * 播放文件 BGM — 统一使用 Web Audio API 解码播放
+     *
+     * 好处：
+     *   1. iOS 上绕过硬件静音开关 ✓（HTMLAudioElement 尊重静音开关，所以不用它）
+     *   2. Android/桌面 切后台时 AudioContext 自动挂起 → 音乐停止 ✓
+     *      （用户期望：锁屏/切 app 音乐就停止）
+     *   3. 无需平台检测，所有浏览器一致行为
+     *
+     * 注意：Web Audio 失败时直接走程序化 BGM，跳过 HTMLAudioElement
+     */
     async _playFileBGM(track) {
-        try {
-            console.log('[AudioSystem] 加载 BGM 文件:', track.file);
-
-            const response = await fetch(track.file);
-            if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            const arrayBuffer = await response.arrayBuffer();
-
-            const buffer = await this._ctx.decodeAudioData(arrayBuffer);
-            console.log('[AudioSystem] BGM 解码成功:', track.file, `(${buffer.duration.toFixed(1)}s)`);
-
-            // 异步完成期间用户可能已经切歌或停止，检查当前索引
-            // 注:比较 id 而非对象引用 — _loadAudioConfig 异步完成时会重建 BGM_TRACKS(对象引用变化)
-            const currentTrack = BGM_TRACKS[this._bgmPlaylistIndex];
-            if (!this._bgmPlaying || !currentTrack || currentTrack.id !== track.id) {
-                console.log('[AudioSystem] 解码完成时曲目已变更/已停止，丢弃');
-                return;
-            }
-            this._bgmBuffer = buffer;
-            this._scheduleFileBGM();
-        } catch (e) {
-            if (!this._bgmPlaying) return;
-            console.warn('[AudioSystem] BGM 文件加载/解码失败:', e.message);
-            this._bgmBuffer = null;
+        const ok = await this._playFileBGMWebAudio(track);
+        if (!ok) {
+            console.warn('[AudioSystem] Web Audio 失败，直接走程序化 BGM（跳过 HTMLAudio，避免静音开关影响）');
             this._fallbackToProgrammatic();
+        }
+    },
+
+    /**
+     * 使用 Web Audio API 解码 + 播放
+     * @returns {Promise<boolean>} true=成功, false=失败（由调用方决定 fallback）
+     */
+    async _playFileBGMWebAudio(track) {
+        // 清除旧的 audio 元素
+        if (this._bgmAudio) {
+            this._bgmAudio.pause();
+            this._bgmAudio = null;
+        }
+        try {
+            const resp = await fetch(track.file);
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            const arrayBuffer = await resp.arrayBuffer();
+            const audioBuffer = await this._ctx.decodeAudioData(arrayBuffer);
+            this._bgmBuffer = audioBuffer;
+            // 清理旧的 Web Audio 节点
+            if (this._bgmSourceNode) {
+                try { this._bgmSourceNode.onended = null; this._bgmSourceNode.stop(); this._bgmSourceNode.disconnect(); } catch(e) {}
+                this._bgmSourceNode = null;
+            }
+            this._scheduleFileBGM();
+            return true;
+        } catch (e) {
+            console.warn('[AudioSystem] Web Audio BGM 加载失败:', e.message);
+            this._bgmBuffer = null;
+            this._bgmAudio = null;
+            return false;
         }
     },
 
@@ -1063,6 +1161,48 @@ const AudioSystem = {
         source.start(0);
         this._bgmSourceNode = source;
         console.log('[AudioSystem] ▶ 文件 BGM 开始播放:', BGM_TRACKS[this._bgmPlaylistIndex].id);
+    },
+
+    /** iOS 路径：使用 HTMLAudioElement 播放 BGM（绕过静音开关） */
+    _playFileBGMBrowser(track) {
+        // 清除旧的 audio 元素
+        if (this._bgmAudio) {
+            this._bgmAudio.pause();
+            this._bgmAudio = null;
+        }
+        this._bgmBuffer = null; // 不用 decodeAudioData
+
+        try {
+            const audio = new Audio(track.file);
+            audio.preload = 'auto';
+
+            if (BGM_TRACKS.length > 1) {
+                // 多曲列表循环：播完自动切下一首
+                audio.loop = false;
+                audio.addEventListener('ended', () => {
+                    if (!this._bgmPlaying || this._bgmPaused) return;
+                    const nextIdx = (this._bgmPlaylistIndex + 1) % BGM_TRACKS.length;
+                    console.log('[AudioSystem] 曲目结束，切换到下一首:', BGM_TRACKS[nextIdx].id);
+                    this._switchToTrack(nextIdx);
+                });
+            } else {
+                audio.loop = true;
+            }
+
+            audio.volume = this._bgmVolume * this._bgmDuckMultiplier;
+            audio.play().catch(e => {
+                console.warn('[AudioSystem] HTMLAudio 播放失败:', e.message, '→ fallback');
+                this._bgmAudio = null;
+                this._fallbackToProgrammatic();
+            });
+
+            this._bgmAudio = audio;
+            console.log('[AudioSystem] ▶ BGM (HTMLAudio):', track.file);
+        } catch (e) {
+            console.warn('[AudioSystem] HTMLAudio 创建失败:', e.message, '→ fallback');
+            this._bgmAudio = null;
+            this._fallbackToProgrammatic();
+        }
     },
 
     /** 回退到程序化生成的 BGM */
@@ -1149,6 +1289,11 @@ const AudioSystem = {
         if (this._bgmSourceNode) {
             try { this._bgmSourceNode.stop(); this._bgmSourceNode.disconnect(); } catch(e) {}
             this._bgmSourceNode = null;
+        }
+        if (this._bgmAudio) {
+            this._bgmAudio.pause();
+            this._bgmAudio.currentTime = 0;
+            this._bgmAudio = null;
         }
         this._bgmBuffer = null;
 

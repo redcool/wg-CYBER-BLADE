@@ -873,10 +873,10 @@ const UISystem = {
             }
         } else {
             let unlockDesc = '';
-            const cond = ch.unlockCondition;
-            if (cond) {
-                if (cond.type === 'maxLevel') unlockDesc = _UI_STR.unlock_level.replace('{0}', cond.value);
-                else if (cond.type === 'totalKills') unlockDesc = _UI_STR.unlock_kills.replace('{0}', cond.value);
+            if (ch.unlockType === 'maxLevel' && ch.unlockValue) {
+                unlockDesc = _UI_STR.unlock_level.replace('{0}', ch.unlockValue);
+            } else if (ch.unlockType === 'totalKills' && ch.unlockValue) {
+                unlockDesc = _UI_STR.unlock_kills.replace('{0}', ch.unlockValue);
             }
             detail.innerHTML = `
                 <div class="char-detail-avatar locked">🔒</div>
@@ -1480,22 +1480,13 @@ const UISystem = {
             div.innerHTML = `
                 ${AssetSystem.weaponIconHTML(def.id)}
                 ${tagHtml}
-                <span class="slot-level" style="color:${lvlColor};border-color:${lvlColor};background:${lvlBg}">Lv.${level}</span>
-                <span class="slot-actions" data-idx="${idx}">
-                    <button class="slot-dropdown-btn" data-idx="${idx}" title="查看详情">▾</button>
-                </span>
+                <span class="slot-level" style="color:${lvlColor};border-color:${lvlColor};background:${lvlBg}">${level}</span>
             `;
 
-            // ▾ 点击 → 打开武器详情 Modal
-            const dropdownBtn = div.querySelector('.slot-dropdown-btn');
-            dropdownBtn.addEventListener('click', (e) => {
+            // 点击武器槽任意位置 → 显示武器详情（用 pointerdown 替代 click，触摸更可靠）
+            div.addEventListener('pointerdown', (e) => {
                 e.stopPropagation();
                 this._showWeaponDetailModal(idx, player, ownedWeapons);
-            });
-
-            div.addEventListener('click', (e) => {
-                if (e.target.closest('.slot-actions')) return;
-                this._handleWeaponClick(idx, ownedWeapons, player);
             });
 
             container.appendChild(div);
@@ -1532,7 +1523,7 @@ const UISystem = {
             : null;
 
         // === 填充上半详情 ===
-        document.getElementById('wdIcon').innerHTML = AssetSystem.weaponIconHTML(def.id, 48);
+        document.getElementById('wdIcon').innerHTML = AssetSystem.weaponIconHTML(def.id, 72);
         document.getElementById('wdName').textContent = def.name;
         const detailLvlEntry = RarityColorSystem.getByLevel(level);
         const detailLvlEl = document.getElementById('wdLevel');

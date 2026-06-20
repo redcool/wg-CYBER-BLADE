@@ -3,7 +3,7 @@
     "timeScale": 1
   },
   "Audio": {
-    "bgmVolume": 0.8,
-    "sfxVolume": 0.5
+    "bgmVolume": 1.0,
+    "sfxVolume": 0.25
   }
 }
