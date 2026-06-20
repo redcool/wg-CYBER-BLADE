@@ -464,30 +464,61 @@ const Renderer = {
                     const AIM_END = 0.25; // 瞄准阶段占动画 25%
 
                     if (wp._attackBehavior === 'melee_thrust') {
-                        // 瞄准阶段: 位置在轨道不动, 旋转朝向目标
-                        // 刺出阶段: 从轨道向外伸展到 weaponRange 距离再收回（武器在角色上方飞过）
+                        // 新弹道: 瞄准转向 → 从轨道位置飞向目标 → 返回轨道
+                        // 武器直接从自身轨道位置沿 attackAngle 飞出，不经过角色中心
                         if (progress < AIM_END) {
-                            angle = orbitAngle;
+                            // 瞄准阶段: 轨道位置不动, 平滑旋转朝向目标
+                            const p = progress / AIM_END;
+                            angle = orbitAngle + (aa - orbitAngle) * p;
                             drawDist = dist;
+                            drawRotation = aa;
                         } else {
-                            const strikeP = (progress - AIM_END) / (1 - AIM_END);
-                            const extendDist = weaponRange > dist ? weaponRange : dist + weaponRange * 0.7;
-                            drawDist = dist + (extendDist - dist) * Math.sin(strikeP * Math.PI);
-                            angle = aa;
+                            // 飞出阶段: orbitPos → targetPos → orbitPos
+                            const flyP = (progress - AIM_END) / (1 - AIM_END);
+                            const ox = Math.cos(orbitAngle) * dist;
+                            const oy = Math.sin(orbitAngle) * dist;
+                            const endDist = Math.max(weaponRange, dist + 20); // 至少超过轨道
+                            const tx = Math.cos(aa) * endDist;
+                            const ty = Math.sin(aa) * endDist;
+                            let fx, fy;
+                            if (flyP < 0.5) {
+                                // 飞出: 轨道→目标方向 (easeOut)
+                                const p = flyP / 0.5;
+                                const ease = 1 - (1 - p) * (1 - p);
+                                fx = ox + (tx - ox) * ease;
+                                fy = oy + (ty - oy) * ease;
+                            } else {
+                                // 返回: 目标方向→轨道 (easeIn)
+                                const p = (flyP - 0.5) / 0.5;
+                                const ease = p * p;
+                                fx = tx + (ox - tx) * ease;
+                                fy = ty + (oy - ty) * ease;
+                            }
+                            angle = Math.atan2(fy, fx);
+                            drawDist = Math.sqrt(fx * fx + fy * fy);
+                            drawRotation = aa;
                         }
-                        drawRotation = aa;
                     } else if (wp._attackBehavior === 'melee_sweep') {
-                        // 瞄准阶段: 位置在轨道不动, 旋转朝向目标
-                        // 横扫阶段: 从轨道向外伸展做弧线扫掠（武器在角色上方飞过）
+                        // 瞄准阶段: 轨道位置不动, 平滑旋转朝向目标
+                        // 横扫阶段: 绕角色弧线扫掠（从武器轨道位置伸展）
                         if (progress < AIM_END) {
-                            angle = orbitAngle;
+                            const p = progress / AIM_END;
+                            angle = orbitAngle + (aa - orbitAngle) * p;
                             drawDist = dist;
+                            drawRotation = aa;
                         } else {
                             const sweepP = (progress - AIM_END) / (1 - AIM_END);
-                            drawDist = dist + weaponRange * 0.7;
-                            angle = aa - Math.PI / 2 + sweepP * Math.PI;
+                            // 从轨道位置向外伸展做弧线扫掠
+                            const ox = Math.cos(orbitAngle) * dist;
+                            const oy = Math.sin(orbitAngle) * dist;
+                            const arcDist = dist + weaponRange * 0.7;
+                            const a = aa - Math.PI / 2 + sweepP * Math.PI;
+                            const fx = Math.cos(a) * arcDist;
+                            const fy = Math.sin(a) * arcDist;
+                            angle = Math.atan2(fy, fx);
+                            drawDist = Math.sqrt(fx * fx + fy * fy);
+                            drawRotation = aa;
                         }
-                        drawRotation = aa;
                     } else {
                         // 远程（含射击/魔法等）: 轨道位置不动，只旋转朝向目标
                         angle = orbitAngle;
@@ -865,32 +896,42 @@ const Renderer = {
         ctx.restore();
     },
 
-    /** 绘制医药箱 */
+    /** 绘制医药箱 — 从 sceneItems 表读取图片 */
     drawCrate(crate) {
         if (!crate.alive) return;
         const ctx = this.ctx;
         ctx.save();
 
         const size = crate.radius || 18;
-        ctx.fillStyle = '#00bb66';
-        ctx.shadowColor = '#00ff88';
-        ctx.shadowBlur = 10;
-        roundRect(ctx, crate.x - size, crate.y - size, size * 2, size * 2, 4);
-        ctx.fill();
-        ctx.shadowBlur = 0;
 
-        // 十字标记
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 3;
-        const cx = crate.x, cy = crate.y;
-        ctx.beginPath();
-        ctx.moveTo(cx - 8, cy);
-        ctx.lineTo(cx + 8, cy);
-        ctx.moveTo(cx, cy - 8);
-        ctx.lineTo(cx, cy + 8);
-        ctx.stroke();
+        // 从 sceneItems 表加载的图片
+        const img = (typeof AssetSystem !== 'undefined') ? AssetSystem.sceneItemIcons['medic_kit'] : null;
+        if (img && img.complete && img.naturalWidth > 0) {
+            ctx.shadowColor = '#00ff88';
+            ctx.shadowBlur = 10;
+            ctx.drawImage(img, crate.x - size, crate.y - size, size * 2, size * 2);
+            ctx.shadowBlur = 0;
+        } else {
+            // 兜底：绿色方块 + 十字
+            ctx.fillStyle = '#00bb66';
+            ctx.shadowColor = '#00ff88';
+            ctx.shadowBlur = 10;
+            roundRect(ctx, crate.x - size, crate.y - size, size * 2, size * 2, 4);
+            ctx.fill();
+            ctx.shadowBlur = 0;
 
-        // HP 条
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 3;
+            const cx = crate.x, cy = crate.y;
+            ctx.beginPath();
+            ctx.moveTo(cx - 8, cy);
+            ctx.lineTo(cx + 8, cy);
+            ctx.moveTo(cx, cy - 8);
+            ctx.lineTo(cx, cy + 8);
+            ctx.stroke();
+        }
+
+        // HP 条（保留，图片不覆盖）
         const barW = size * 1.5;
         const barH = 3;
         const barX = crate.x - barW / 2;
@@ -904,20 +945,27 @@ const Renderer = {
         ctx.restore();
     },
 
-    /** 绘制医疗包掉落物 */
+    /** 绘制医疗包掉落物 — 从 sceneItems 表读取图片 */
     drawHealthPickup(pickup) {
         const ctx = this.ctx;
         ctx.save();
 
         const alpha = Math.min(1, pickup.lifeTimer / 2);
         ctx.globalAlpha = alpha;
-        ctx.fillStyle = '#44ff88';
-        ctx.shadowColor = '#44ff88';
-        ctx.shadowBlur = 8;
-        ctx.font = '12px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('❤️', pickup.x, pickup.y);
+
+        const img = (typeof AssetSystem !== 'undefined') ? AssetSystem.sceneItemIcons['health_pickup'] : null;
+        if (img && img.complete && img.naturalWidth > 0) {
+            const s = 20; // 与 sceneItems 表 width/height 一致
+            ctx.drawImage(img, pickup.x - s / 2, pickup.y - s / 2, s, s);
+        } else {
+            // 兜底：绿色圆点
+            ctx.fillStyle = '#44ff88';
+            ctx.shadowColor = '#44ff88';
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.arc(pickup.x, pickup.y, 6, 0, Math.PI * 2);
+            ctx.fill();
+        }
         ctx.shadowBlur = 0;
 
         ctx.restore();

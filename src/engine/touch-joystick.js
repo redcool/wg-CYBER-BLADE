@@ -31,6 +31,8 @@ const TouchJoystick = {
 
     init() {
         if (this._base) return; // 已初始化
+        // PC 不显示虚拟摇杆（使用 DeviceDetect 模块统一判断）
+        if (typeof DeviceDetect !== 'undefined' && DeviceDetect.isPC()) return;
 
         const cfg = this.CONFIG;
         const baseSize = cfg.baseSize;

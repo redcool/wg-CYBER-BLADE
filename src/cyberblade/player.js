@@ -503,23 +503,52 @@ const PlayerSystem = {
         if (wp._attackAnimTimer && wp._attackAnimTimer > 0 && wp._attackAnimDuration > 0) {
             const progress = 1 - (wp._attackAnimTimer / wp._attackAnimDuration);
             const aa = wp._attackAngle;
+            const orbitAngle = (i / count) * Math.PI * 2 - Math.PI / 2;
             const AIM_END = 0.25;
             if (wp._attackBehavior === 'melee_thrust') {
                 if (progress < AIM_END) {
-                    angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+                    // 瞄准: 轨道位置不动, 旋转朝向目标
+                    const p = progress / AIM_END;
+                    angle = orbitAngle + (aa - orbitAngle) * p;
                     drawDist = dist;
                 } else {
-                    const strikeP = (progress - AIM_END) / (1 - AIM_END);
-                    const maxDist = dist + ((wp.attackRange ?? 80) + (p.attackRange ?? 0)) * 0.7;
-                    drawDist = dist + (maxDist - dist) * Math.sin(strikeP * Math.PI);
-                    angle = aa;
+                    // 飞出: orbitPos → targetDir → orbitPos
+                    const flyP = (progress - AIM_END) / (1 - AIM_END);
+                    const ox = Math.cos(orbitAngle) * dist;
+                    const oy = Math.sin(orbitAngle) * dist;
+                    const weaponRange = (wp.attackRange ?? 80) + (p.attackRange ?? 0);
+                    const endDist = Math.max(weaponRange, dist + 20);
+                    const tx = Math.cos(aa) * endDist;
+                    const ty = Math.sin(aa) * endDist;
+                    let fx, fy;
+                    if (flyP < 0.5) {
+                        const ease = 1 - (1 - flyP / 0.5) * (1 - flyP / 0.5);
+                        fx = ox + (tx - ox) * ease;
+                        fy = oy + (ty - oy) * ease;
+                    } else {
+                        const ease = ((flyP - 0.5) / 0.5) * ((flyP - 0.5) / 0.5);
+                        fx = tx + (ox - tx) * ease;
+                        fy = ty + (oy - ty) * ease;
+                    }
+                    angle = Math.atan2(fy, fx);
+                    drawDist = Math.sqrt(fx * fx + fy * fy);
                 }
             } else if (wp._attackBehavior === 'melee_sweep') {
                 if (progress < AIM_END) {
-                    angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+                    const p = progress / AIM_END;
+                    angle = orbitAngle + (aa - orbitAngle) * p;
+                    drawDist = dist;
                 } else {
                     const sweepP = (progress - AIM_END) / (1 - AIM_END);
-                    angle = aa - Math.PI / 2 + sweepP * Math.PI;
+                    const ox = Math.cos(orbitAngle) * dist;
+                    const oy = Math.sin(orbitAngle) * dist;
+                    const weaponRange = (wp.attackRange ?? 80) + (p.attackRange ?? 0);
+                    const arcDist = dist + weaponRange * 0.7;
+                    const a = aa - Math.PI / 2 + sweepP * Math.PI;
+                    const fx = Math.cos(a) * arcDist;
+                    const fy = Math.sin(a) * arcDist;
+                    angle = Math.atan2(fy, fx);
+                    drawDist = Math.sqrt(fx * fx + fy * fy);
                 }
             } else {
                 angle = aa;

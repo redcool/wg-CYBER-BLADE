@@ -2904,3 +2904,15 @@ body {
     .hud-materials { font-size: 0.45em; padding: 2px 5px; }
     .combat-log { right: 4px; top: 52px; width: 140px; max-height: 160px; }
 }
+
+/* 竖屏模式：保证文字可读 */
+@media (orientation: portrait) {
+    .health-value { font-size: 1em; }
+    .hud-timer { font-size: 1em; padding: 3px 12px; }
+    .hud-level-tag, .hud-kills, .hud-materials { font-size: 0.7em; padding: 4px 8px; }
+    .hud-top-left { max-width: 80%; gap: 3px; padding: 5px 8px; }
+    .health-bar-bg { width: 55px; }
+    .xp-bar-bg { width: 55px; }
+    .combat-log { font-size: 0.85em; right: 4px; top: 54px; width: 150px; max-height: 180px; }
+    .damage-text { font-size: 11px; }
+}

@@ -58,6 +58,10 @@ const GameEngine = {
         Input.init();
         Renderer.init();
         UISystem.init();
+        // 触屏虚拟摇杆（无论是否有触摸设备，init 内部有 DOM 创建保护）
+        if (typeof TouchJoystick !== 'undefined') {
+            TouchJoystick.init();
+        }
         if (typeof UnlockSystem !== 'undefined' && UnlockSystem.loadData) {
             UnlockSystem.loadData();
         }

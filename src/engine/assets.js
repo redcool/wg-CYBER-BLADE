@@ -31,6 +31,8 @@ const AssetSystem = {
     charLoader: null,
     /** @type {ResourceLoader} */
     enemyLoader: null,
+    /** @type {Object<string,HTMLImageElement>} */
+    sceneItemIcons: {},
 
     // 向后兼容缓存引用（renderer 通过 AssetSystem.weaponIcons[id] 直接访问）
     weaponIcons: {},
@@ -94,6 +96,7 @@ const AssetSystem = {
         this.characterIcons = this.charLoader.cache;
         this.enemyIcons = this.enemyLoader.cache;
         this._charFailedIds = this.charLoader.failedIds;
+        this.sceneItemIcons = {}; // 场景物品图片由 _preloadSceneItems 填充
 
         // 并行加载所有资源类型
         const _v = Date.now();
@@ -195,6 +198,27 @@ const AssetSystem = {
                     }, true);
                 }
             }
+        }
+
+        // ---------- 场景物品（sceneItems 表驱动） ----------
+        let sceneItemDefs = [];
+        if (typeof DataLoader !== 'undefined' && DataLoader._cache && Array.isArray(DataLoader._cache.sceneItems)) {
+            sceneItemDefs = DataLoader._cache.sceneItems;
+        } else if (typeof window !== 'undefined' && window.__DATA_BUNDLE__ && Array.isArray(window.__DATA_BUNDLE__.sceneItems)) {
+            sceneItemDefs = window.__DATA_BUNDLE__.sceneItems;
+        }
+        for (const def of sceneItemDefs) {
+            const imgPath = def.image;
+            if (!imgPath) continue;
+            total++;
+            const id = def.id;
+            this._loadImage(`assets/sceneItems/${imgPath}?v=${_v}`, (img) => {
+                this.sceneItemIcons[id] = img;
+                onLoad();
+            }, false, () => {
+                // 图片缺失不阻塞
+                onLoad();
+            });
         }
 
         if (total === 0) {
